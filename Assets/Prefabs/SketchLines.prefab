@@ -50,7 +50,7 @@ MonoBehaviour:
     queue: 2003
     depthTest: 1
   - name: entities
-    color: {r: 0.255, g: 0.255, b: 0.255, a: 1}
+    color: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 1}
     width: 2
     queue: 2002
     depthTest: 1
