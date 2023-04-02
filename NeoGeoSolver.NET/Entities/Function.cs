@@ -1,68 +1,47 @@
-﻿using System.Numerics;
-using System.Xml;
+﻿using System.Diagnostics;
+using System.Numerics;
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
-[Serializable]
 public class Function : Entity, ISegmentaryEntity {
-
 	public Point p0;
 	public Point p1;
 	public Point c;
 
-	string function_x;
-	string function_y;
-	int subdivision_ = 16;
+	private string function_x;
+	private string function_y;
+	private int subdivision_ = 16;
 	public int subdivision {
 		get {
 			return subdivision_;
 		}
 		set {
 			subdivision_ = value;
-			sketch.MarkDirtySketch(entities:true);
 		}
 	}
-	ExpressionBasis2d basis = new ExpressionBasis2d();
 
-	bool tBeginFixed_ = false;
+	private ExpressionBasis2d basis = new ExpressionBasis2d();
+
+	private bool tBeginFixed_ = false;
 	public bool tBeginFixed {
 		get {
 			return tBeginFixed_;
 		}
 		set {
 			tBeginFixed_ = value;
-			sketch.MarkDirtySketch(entities:true, topo:true);
 		}
 	}
 
-	bool tEndFixed_ = false;
+	private bool tEndFixed_ = false;
 	public bool tEndFixed {
 		get {
 			return tEndFixed_;
 		}
 		set {
 			tEndFixed_ = value;
-			sketch.MarkDirtySketch(entities:true, topo:true);
-		}
-	}
-
-	public double tBegin {
-		get {
-			return t0.value;
-		}
-		set {
-			t0.value = value;
-		}
-	}
-
-	public double tEnd {
-		get {
-			return t1.value;
-		}
-		set {
-			t1.value = value;
+			//sketch.(entities:true, topo:true);
 		}
 	}
 
@@ -94,19 +73,18 @@ public class Function : Entity, ISegmentaryEntity {
 			var e = parser.Parse();
 			if(e != null) {
 				exp.y = e;
-				Debug.Log("y = " + e.ToString());
-				sketch.MarkDirtySketch(entities:true, topo:true);
+				// TODO		Debug.Log("y = " + e.ToString());
 			}
 		}
 	}
 
-	ExpressionParser parser;
-	ExpressionVector exp = new ExpressionVector(0.0, 0.0, 0.0);
-	Param t = new Param("t");
-	Param t0 = new Param("t0", 0.0);
-	Param t1 = new Param("t1", 1.0);
+	private ExpressionParser parser;
+	private ExpressionVector exp = new ExpressionVector(0.0, 0.0, 0.0);
+	private Param t = new Param("t");
+	private Param t0 = new Param("t0", 0.0);
+	private Param t1 = new Param("t1", 1.0);
 
-	void InitParser() {
+	private void InitParser() {
 		parser = new ExpressionParser("0");
 		parser.parameters.Add(t);
 		x = "t";
@@ -122,8 +100,7 @@ public class Function : Entity, ISegmentaryEntity {
 	}
 
 	public override IEntityType type { get { return IEntityType.Function; } }
-
-
+	
 	public ExpressionVector GetExpClone(Expression t) {
 		var e = new ExpressionVector(exp.x.DeepClone(), exp.y.DeepClone(), 0.0);
 		if(t != null) {
@@ -155,7 +132,6 @@ public class Function : Entity, ISegmentaryEntity {
 			yield return eqc.y;
 
 			foreach(var e in basis.equations) yield return e;
-
 		}
 	}
 
@@ -175,10 +151,6 @@ public class Function : Entity, ISegmentaryEntity {
 		}
 	}
 
-	public override bool IsChanged() {
-		return p0.IsChanged() || p1.IsChanged() || c.IsChanged() || t0.changed || t1.changed;
-	}
-
 	public Point begin { get { return p0; } }
 	public Point end { get { return p1; } }
 	public IEnumerable<Vector3> segmentPoints {
@@ -192,19 +164,6 @@ public class Function : Entity, ISegmentaryEntity {
 			}
 		}
 	}	
-
-	//public override BBox bbox { get { return new BBox(center.pos, (float)radius); } }
-
-	/*
-protected override Entity OnSplit(Vector3 position) {
-	var part = new ArcEntity(sketch);
-	part.center.pos = center.pos;
-	part.p1.pos = p1.pos;
-	p1.pos = position;
-	part.p0.pos = p1.pos;
-	return part;
-}
-*/
 
 	public override ExpressionVector PointOn(Expression t) {
 		var newt = t0.exp + (t1.exp - t0.exp) * t;
@@ -221,27 +180,5 @@ protected override Entity OnSplit(Vector3 position) {
 
 	public override ExpressionVector Center() {
 		return null;
-	}
-
-	protected override void OnWrite(XmlTextWriter xml) {
-		xml.WriteAttributeString("x", x);
-		xml.WriteAttributeString("y", y);
-		xml.WriteAttributeString("t0", t0.value.ToStr());
-		xml.WriteAttributeString("t1", t1.value.ToStr());
-		xml.WriteAttributeString("t0fix", tBeginFixed_.ToString());
-		xml.WriteAttributeString("t1fix", tEndFixed_.ToString());
-		xml.WriteAttributeString("subdiv", subdivision_.ToString());
-		xml.WriteAttributeString("basis", basis.ToString());
-	}
-
-	protected override void OnRead(XmlNode xml) {
-		x = xml.Attributes["x"].Value;
-		y = xml.Attributes["y"].Value;
-		t0.value = xml.Attributes["t0"].Value.ToDouble();
-		t1.value = xml.Attributes["t1"].Value.ToDouble();
-		tBeginFixed_ = Convert.ToBoolean(xml.Attributes["t0fix"].Value);
-		tEndFixed_ = Convert.ToBoolean(xml.Attributes["t1fix"].Value);
-		subdivision_ = Convert.ToInt32(xml.Attributes["subdiv"].Value);
-		basis.FromString(xml.Attributes["basis"].Value);
 	}
 }

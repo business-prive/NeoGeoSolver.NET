@@ -15,7 +15,7 @@ public class ExpressionVector {
 	}
 
 	public static implicit operator ExpressionVector(Vector3 v) {
-		return  new ExpressionVector(v.x, v.y, v.z);
+		return  new ExpressionVector(v.X, v.Y, v.Z);
 	}
 
 	public static ExpressionVector operator+(ExpressionVector a, ExpressionVector b) { return new ExpressionVector(a.x + b.x, a.y + b.y, a.z + b.z); } 
@@ -47,7 +47,7 @@ public class ExpressionVector {
 
 	public static float PointLineDistance(Vector3 point, Vector3 l0, Vector3 l1) {
 		var d = l0 - l1;
-		return Vector3.Cross(d, l0 - point).magnitude / d.magnitude;
+		return Vector3.Cross(d, l0 - point).Length() / d.Length();
 	}
 
 	public static ExpressionVector ProjectPointToLine(ExpressionVector p, ExpressionVector l0, ExpressionVector l1) {
@@ -92,14 +92,13 @@ public class ExpressionVector {
 	}
 
 	public static Vector3 RotateAround(Vector3 point, Vector3 axis, Vector3 origin, float angle) {
-		var a = axis.normalized;
-		var c = Mathf.Cos(angle);
-		var s = Mathf.Sin(angle);
-		var u = new Vector3(c + (1 - c) * a.x * a.x, (1 - c) * a.y * a.x + s * a.z, (1 - c) * a.z * a.x - s * a.y);
-		var v = new Vector3((1 - c) * a.x * a.y - s * a.z, c + (1 - c) * a.y * a.y, (1 - c) * a.z * a.y + s * a.x);
-		var n = new Vector3((1 - c) * a.x * a.z + s * a.y, (1 - c) * a.y * a.z - s * a.x, c + (1 - c) * a.z * a.z);
+		var a = axis / axis.Length();
+		var c = Math.Cos(angle);
+		var s = Math.Sin(angle);
+		var u = new Vector3((float) (c + (1 - c) * a.X * a.X), (float) ((1 - c) * a.Y * a.X + s * a.Z), (float) ((1 - c) * a.Z * a.X - s * a.Y));
+		var v = new Vector3((float) ((1 - c) * a.X * a.Y - s * a.Z), (float) (c + (1 - c) * a.Y * a.Y), (float) ((1 - c) * a.Z * a.Y + s * a.X));
+		var n = new Vector3((float) ((1 - c) * a.X * a.Z + s * a.Y), (float) ((1 - c) * a.Y * a.Z - s * a.X), (float) (c + (1 - c) * a.Z * a.Z));
 		var p = point - origin;
-		return p.x * u + p.y * v + p.z * n + origin;
+		return p.X * u + p.Y * v + p.Z * n + origin;
 	}
-
 }

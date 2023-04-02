@@ -1,12 +1,9 @@
-﻿using System.Numerics;
-using System.Xml;
-using NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-[Serializable]
 public class Diameter : Value {
 
 	public Diameter(Sketch.Sketch sk) : base(sk) { }
@@ -19,8 +16,7 @@ public class Diameter : Value {
 		Satisfy();
 	}
 
-	Expression radius { get { return GetEntity(0).Radius(); } }
-	ExpressionVector center { get { return GetEntity(0).CenterInPlane(null); } }
+	private Expression radius { get { return GetEntity(0).Radius(); } }
 
 	public override IEnumerable<Expression> equations {
 		get {
@@ -35,47 +31,4 @@ public class Diameter : Value {
 	public override double ValueToLabel(double value) {
 		return showAsRadius ? value * 2.0 : value;
 	}
-
-	protected override void OnDraw(LineCanvas canvas) {
-		var p = GetEntity(0).CenterInPlane(null).Eval();
-		var lo = getPlane().projectVectorInto(getLabelOffset());
-		var dir = (lo - p).normalized;
-		
-		float r = (float)value.exp.Eval() / 2f;
-
-
-		
-		if(showAsRadius) {
-			var rpt = p + dir * r;
-			drawPointsDistance(p, p + dir * r, canvas, Camera.main, arrow0: false, arrow1: true);
-			canvas.DrawLine(rpt, lo);
-		} else {
-			drawPointsDistance(p - dir * r, p + dir * r, canvas, Camera.main);
-		}
-		
-		//drawLabel(renderer, camera, "Ø" + getValueString());
-
-	}
-
-	protected override string OnGetLabelValue() {
-		return (showAsRadius ? "R" : "Ø") + base.OnGetLabelValue();
-	}
-
-	protected override Matrix4x4 OnGetBasis() {
-		return sketch.plane.GetTransform() * Matrix4x4.Translate(GetEntity(0).CenterInPlane(sketch.plane).Eval());
-	}
-
-	protected override void OnWriteValueConstraint(XmlTextWriter xml) {
-		xml.WriteAttributeString("showAsRadius", showAsRadius.ToString());
-	}
-
-	protected override void OnReadValueConstraint(XmlNode xml) {
-		if(xml.Attributes["showAsRadius"] != null) {
-			var value = GetValue();
-			showAsRadius = Convert.ToBoolean(xml.Attributes["showAsRadius"].Value);
-			SetValue(value);
-		}
-	}
-
-
 }

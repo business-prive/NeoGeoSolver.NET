@@ -3,9 +3,9 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Solver;
 
 public class ExpressionBasis2d {
-  Param px, py;
-  Param ux, uy;
-  Param vx, vy;
+  private Param px, py;
+  private Param ux, uy;
+  private Param vx, vy;
 
   public ExpressionVector u { get; private set; }
   public ExpressionVector v { get; private set; }
@@ -32,13 +32,6 @@ public class ExpressionBasis2d {
     p.x = px;
     p.y = py;
   }
-
-  /*
-	public Matrix4x4 matrix {
-		get {
-			return UnityExt.Basis(u.Eval(), v.Eval(), n.Eval(), p.Eval());
-		}
-	}*/
 
   public IEnumerable<Param> parameters {
     get {

@@ -4,10 +4,10 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Solver;
 
 public class ExpressionBasis {
-	Param px, py, pz;
-	Param ux, uy, uz;
-	Param vx, vy, vz;
-	Param nx, ny, nz;
+	private Param px, py, pz;
+	private Param ux, uy, uz;
+	private Param vx, vy, vz;
+	private Param nx, ny, nz;
 
 	public ExpressionVector u { get; private set; }
 	public ExpressionVector v { get; private set; }

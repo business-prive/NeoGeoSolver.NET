@@ -1,11 +1,9 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-[Serializable]
 public class CirclesDistance : Value {
 
 	public enum Option {
@@ -14,7 +12,7 @@ public class CirclesDistance : Value {
 		SecondInside,
 	}
 
-	Option option_;
+	private Option option_;
 	public Option option { get { return option_; } set { option_ = value; sketch.MarkDirtySketch(topo:true); } }
 
 	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }
@@ -29,13 +27,13 @@ public class CirclesDistance : Value {
 		Satisfy();
 	}
 
-	Point getCenterPoint(IEntity e) {
+	private Point getCenterPoint(IEntity e) {
 		if(e is Circle) return (e as Circle).center;
 		if(e is Arc) return (e as Arc).center;
 		return null;
 	}
 
-	bool isCentersCoincident(IEntity c0, IEntity c1) {
+	private bool isCentersCoincident(IEntity c0, IEntity c1) {
 		var cp0 = getCenterPoint(c0);
 		var cp1 = getCenterPoint(c1);
 		return cp0 != null && cp1 != null && cp0.IsCoincidentWith(cp1);
@@ -63,42 +61,4 @@ public class CirclesDistance : Value {
 			}
 		}
 	}
-	
-	protected override void OnDraw(LineCanvas canvas) {
-		var c0 = GetEntity(0);
-		var c1 = GetEntity(1);
-		var c0c = c0.CenterInPlane(null).Eval();
-		var c1c = c1.CenterInPlane(null).Eval();
-		var c0r = (float)c0.Radius().Eval();
-		var c1r = (float)c1.Radius().Eval();
-		var dir = (c0c - c1c).normalized;
-
-		if(option == Option.FirstInside) {
-			dir = -dir;
-		}
-
-		if(isCentersCoincident(c0, c1)) {
-			dir = c0c - getLabelOffset();
-			if(length(dir) < EPSILON) dir = sketch.plane.u;
-			dir = normalize(dir);
-		}
-
-		var p0 = c0c - dir * c0r;
-		var dir2 = (p0 - c1c).normalized;
-		var p1 = c1c + dir2 * c1r;
-
-		drawPointsDistance(p0, p1, canvas, Camera.main, false, true, true, 0);
-	}
-
-	protected override Matrix4x4 OnGetBasis() {
-		var c0 = GetEntity(0);
-		var c1 = GetEntity(1);
-		var c0c = c0.CenterInPlane(null).Eval();
-		var c1c = c1.CenterInPlane(null).Eval();
-		if(isCentersCoincident(c0, c1)) {
-			return sketch.plane.GetTransform() * Matrix4x4.Translate(c0c);
-		}
-		return getPointsDistanceBasis(c0c, c1c, sketch.plane);
-	}
-
 }

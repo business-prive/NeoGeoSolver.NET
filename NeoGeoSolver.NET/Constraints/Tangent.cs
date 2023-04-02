@@ -1,22 +1,18 @@
-﻿using System.Numerics;
-using System.Xml;
-using NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-[Serializable]
 public class Tangent : Constraint {
-
 	public enum Option {
 		Codirected,
 		Antidirected
 	}
 
-	Option option_;
-	Param t0 = new Param("t0");
-	Param t1 = new Param("t1");
+	private Option option_;
+	private Param t0 = new Param("t0");
+	private Param t1 = new Param("t1");
 
 	public Option option { get { return option_; } set { option_ = value; sketch.MarkDirtySketch(topo:true); } }
 	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }
@@ -45,7 +41,7 @@ public class Tangent : Constraint {
 		ChooseBestOption();
 	}
 
-	bool Satisfy() {
+	private bool Satisfy() {
 		EquationSystem sys = new EquationSystem();
 		sys.AddParameters(parameters);
 		addAngle = false;
@@ -73,7 +69,7 @@ public class Tangent : Constraint {
 		return true;
 	}
 
-	bool IsCoincident(ref double tv0, ref double tv1, ref Expression c, ref Param p) {
+	private bool IsCoincident(ref double tv0, ref double tv1, ref Expression c, ref Param p) {
 		var l0 = GetEntity(0);
 		var l1 = GetEntity(1);
 		var s0 = l0 as ISegmentaryEntity;
@@ -96,7 +92,8 @@ public class Tangent : Constraint {
 		}
 		return false;
 	}
-	bool addAngle = true;
+
+	private bool addAngle = true;
 	public override IEnumerable<Expression> equations {
 		get {
 			var l0 = GetEntity(0);
@@ -135,45 +132,4 @@ public class Tangent : Constraint {
 			}
 		}
 	}
-
-	protected virtual bool OnSatisfy() {
-		EquationSystem sys = new EquationSystem();
-		sys.revertWhenNotConverged = false;
-		sys.AddParameter(t0);
-		sys.AddParameter(t1);
-		sys.AddEquations(equations);
-		return sys.Solve() == EquationSystem.SolveResult.OKAY;
-	}
-
-
-	protected override void OnDraw(LineCanvas canvas) {
-		var l0 = GetEntity(0);
-		var dir = l0.TangentAt(t0).Eval();
-		dir = l0.plane.DirFromPlane(dir).normalized;
-		var perp = Vector3.Cross(dir, sketch.plane.n).normalized;
-		var pos = l0.PointOnInPlane(t0, null).Eval();
-
-		ref_points[0] = ref_points[1] = sketch.plane.ToPlane(pos);
-		var size = getPixelSize() * 10f;
-		perp *= size;
-		dir *= size;
-
-		canvas.DrawLine(pos + dir, pos - dir);
-		canvas.DrawLine(pos - perp, pos + perp);
-
-		//GetEntity(0).DrawExtend(canvas, t0.value, 0.05);
-		//GetEntity(1).DrawExtend(canvas, t1.value, 0.05);
-
-	}
-
-	protected override void OnWrite(XmlTextWriter xml) {
-		xml.WriteAttributeString("t0", t0.value.ToStr());
-		xml.WriteAttributeString("t1", t1.value.ToStr());
-	}
-
-	protected override void OnRead(XmlNode xml) {
-		t0.value = xml.Attributes["t0"].Value.ToDouble();
-		t1.value = xml.Attributes["t1"].Value.ToDouble();
-	}
-
 }

@@ -1,13 +1,10 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-[Serializable]
 public class LineCircleDistance : Value {
-
 	public IEntity line { get { return GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity circle { get { return GetEntity(1); } set { SetEntity(1, value); } }
 
@@ -15,21 +12,16 @@ public class LineCircleDistance : Value {
 	public ExpressionVector lineP0Exp { get { return line.PointsInPlane(sketch.plane).ToArray()[0]; } }
 	public ExpressionVector lineP1Exp { get { return line.PointsInPlane(sketch.plane).ToArray()[1]; } }
 
-	public Vector3 centerPos { get { return circle.CenterInPlane(null).Eval(); } }
-	public Vector3 lineP0Pos { get { return line.PointsInPlane(null).ToArray()[0].Eval(); } }
-	public Vector3 lineP1Pos { get { return line.PointsInPlane(null).ToArray()[1].Eval(); } }
-
 	public enum Option {
 		Positive,
 		Negative
 	}
 
-	Option option_;
+	private Option option_;
 	public Option option { get { return option_; } set { option_ = value; sketch.MarkDirtySketch(topo:true); } }
 
 	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }	public LineCircleDistance(Sketch.Sketch sk) : base(sk) { }
-
-
+	
 	public LineCircleDistance(Sketch.Sketch sk, IEntity line, IEntity circle) : base(sk) {
 		AddEntity(line);
 		AddEntity(circle);
@@ -46,29 +38,4 @@ public class LineCircleDistance : Value {
 			}
 		}
 	}
-
-	protected override void OnDraw(LineCanvas canvas) {
-		
-		var lip0 = sketch.plane.projectVectorInto(lineP0Pos);
-		var lip1 = sketch.plane.projectVectorInto(lineP1Pos);
-		var c = sketch.plane.projectVectorInto(centerPos);
-		var n = Vector3.Cross(lip1 - lip0, c - lip0).normalized;
-		var perp = Vector3.Cross(lip1 - lip0, n).normalized;
-		var p0 = c + perp * (float)circle.Radius().Eval();
-		
-		if(GetValue() == 0.0) {
-			drawCameraCircle(canvas, Camera.main, p0, R_CIRLE_R * getPixelSize()); 
-		} else {
-			drawPointLineDistance(lip0, lip1, p0, canvas, Camera.main);
-			//drawLineExtendInPlane(getPlane(), renderer, lip0, lip1, p0, R_DASH * camera->getPixelSize()); 
-		}
-	}
-
-	protected override Matrix4x4 OnGetBasis() {
-		var lip0 = lineP0Pos;
-		var lip1 = lineP1Pos;
-		var p0 = centerPos;
-		return getPointLineDistanceBasis(lip0, lip1, p0, getPlane());
-	}
-
 }

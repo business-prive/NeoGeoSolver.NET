@@ -4,7 +4,7 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public interface IEntity : ICADObject {
+public interface IEntity {
   IEnumerable<ExpressionVector> points { get; }			// enough for dragging
   IEnumerable<Vector3> segments { get; }			// enough for drawing
   ExpressionVector PointOn(Expression t);						// enough for constraining
@@ -12,6 +12,5 @@ public interface IEntity : ICADObject {
   Expression Length();
   Expression Radius();
   ExpressionVector Center();
-  IPlane plane { get; }
   IEntityType type { get; }
 }

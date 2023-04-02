@@ -22,10 +22,6 @@ public class Line : Entity, ISegmentaryEntity {
 		}
 	}
 
-	public override bool IsChanged() {
-		return p0.IsChanged() || p1.IsChanged();
-	}
-
 	public Point begin { get { return p0; } }
 	public Point end { get { return p1; } }
 	public IEnumerable<Vector3> segmentPoints {
@@ -33,28 +29,6 @@ public class Line : Entity, ISegmentaryEntity {
 			yield return p0.GetPosition();
 			yield return p1.GetPosition();
 		}
-	}
-
-	public override BBox bbox { get { return new BBox(p0.pos, p1.pos); } }
-
-	protected override Entity OnSplit(Vector3 position) {
-		var part = new Line(sketch);
-		part.p1.pos = p1.pos;
-		p1.pos = position;
-		part.p0.pos = p1.pos;
-		return part;
-	}
-
-	protected override double OnSelect(Vector3 mouse, Camera camera, Matrix4x4 tf) {
-		var ap = camera.WorldToScreenPoint(tf.MultiplyPoint(p0.GetPosition()));
-		var bp = camera.WorldToScreenPoint(tf.MultiplyPoint(p1.GetPosition()));
-		return GeomUtils.DistancePointSegment2D(mouse, ap, bp);
-	}
-
-	protected override bool OnMarqueeSelect(Rect rect, bool wholeObject, Camera camera, Matrix4x4 tf) {
-		var ap = camera.WorldToScreenPoint(tf.MultiplyPoint(p0.GetPosition()));
-		var bp = camera.WorldToScreenPoint(tf.MultiplyPoint(p1.GetPosition()));
-		return MarqueeSelectSegment(rect, wholeObject, ap, bp);
 	}
 
 	public override ExpressionVector PointOn(Expression t) {

@@ -3,8 +3,7 @@
 namespace NeoGeoSolver.NET.Utils;
 
 public class ExpressionParser {
-    
-	Dictionary <string, Expression.Op> functions = new Dictionary<string, Expression.Op> {
+	private Dictionary <string, Expression.Op> functions = new Dictionary<string, Expression.Op> {
 		{ "sin",	Expression.Op.Sin },
 		{ "cos",	Expression.Op.Cos },
 		{ "atan2",	Expression.Op.Atan2 },
@@ -20,21 +19,21 @@ public class ExpressionParser {
 		{ "sfres",	Expression.Op.SFres },
 		{ "cfres",	Expression.Op.CFres },
 	};
-    
-	Dictionary <char, Expression.Op> operators = new Dictionary<char, Expression.Op> {
+
+	private Dictionary <char, Expression.Op> operators = new Dictionary<char, Expression.Op> {
 		{ '+', Expression.Op.Add },
 		{ '-', Expression.Op.Sub },
 		{ '*', Expression.Op.Mul },
 		{ '/', Expression.Op.Div },
 	};
 
-	Dictionary <string, double> constants = new Dictionary<string, double> {
+	private Dictionary <string, double> constants = new Dictionary<string, double> {
 		{ "pi", Math.PI },
 		{ "e", Math.E },
 	};
-   
-	string toParse;
-	int index = 0;
+
+	private string toParse;
+	private int index = 0;
     
 	public List<Param> parameters = new List<Param>();
     
@@ -55,7 +54,7 @@ public class ExpressionParser {
 		foreach(var e in exps) {
 			var parser = new ExpressionParser(e);
 			var exp = parser.Parse();
-			Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\"");
+			// TODO		Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\"");
 		}
 
 		Dictionary<string, double> results = new Dictionary<string, double> {
@@ -78,9 +77,11 @@ public class ExpressionParser {
 		foreach(var e in results) {
 			var parser = new ExpressionParser(e.Key);
 			var exp = parser.Parse();
-			Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\" = " + exp.Eval().ToStr());
+			//TODO		Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\" = " + exp.Eval().ToStr());
 			if(exp.Eval() != e.Value) {
-				Debug.Log("result fail: get \"" + exp.Eval() + "\" excepted: \"" + e.Value + "\"");
+				{
+					// TODO		Debug.Log("result fail: get \"" + exp.Eval() + "\" excepted: \"" + e.Value + "\"");
+				}
 			}
 		}
 
@@ -94,47 +95,47 @@ public class ExpressionParser {
 		toParse = str;
 		index = 0;
 	}
-    
-	char next {
+
+	private char next {
 		get {
 			return toParse[index];
 		}
 	}
 
-	bool IsSpace(char c) {
+	private bool IsSpace(char c) {
 		return Char.IsWhiteSpace(c);
 	}
 
-	bool IsDigit(char c) {
+	private bool IsDigit(char c) {
 		return Char.IsDigit(c);
 	}
 
-	bool IsDelimiter(char c) {
+	private bool IsDelimiter(char c) {
 		return c == '.';
 	}
 
-	bool IsAlpha(char c) {
+	private bool IsAlpha(char c) {
 		return Char.IsLetter(c);
 	}
 
-	void SkipSpaces() {
+	private void SkipSpaces() {
 		if(!HasNext()) return;
 		while(HasNext() && IsSpace(next)) index++;
 	}
-    
-	Param GetParam(string name) {
+
+	private Param GetParam(string name) {
 		return parameters.Find(p => p.name == name);
 	}
-    
-	void Skip(char c) {
+
+	private void Skip(char c) {
 		SkipSpaces();
 		if(!HasNext() || next != c) {
 			error("\"" + c + "\" excepted!");
 		}
 		index++;
 	}
-    
-	bool SkipIf(char c) {
+
+	private bool SkipIf(char c) {
 		SkipSpaces();
 		if(!HasNext() || next != c) {
 			return false;
@@ -142,8 +143,8 @@ public class ExpressionParser {
 		index++;
 		return true;
 	}
-    
-	bool ParseDigits(ref double digits) {
+
+	private bool ParseDigits(ref double digits) {
 		SkipSpaces();
 		if(!HasNext()) error("operand exepted");
 		if(!IsDigit(next)) return false;
@@ -153,8 +154,8 @@ public class ExpressionParser {
 		digits = str.ToDouble();
 		return true;
 	}
-    
-	bool ParseAlphas(ref string alphas) {
+
+	private bool ParseAlphas(ref string alphas) {
 		SkipSpaces();
 		if(!HasNext()) error("operand exepted");
 		if(!IsAlpha(next)) return false;
@@ -163,32 +164,32 @@ public class ExpressionParser {
 		alphas = toParse.Substring(start, index - start);
 		return true;
 	}
-    
-	Expression.Op GetFunction(string name) {
+
+	private Expression.Op GetFunction(string name) {
 		if(functions.ContainsKey(name)) {
 			return functions[name];
 		}
 		return Expression.Op.Undefined;
 	}
 
-	Expression GetConstant(string name) {
+	private Expression GetConstant(string name) {
 		if(constants.ContainsKey(name)) {
 			return constants[name];
 		}
 		return null;
 	}
-    
-	void error(string error = "") {
+
+	private void error(string error = "") {
 		var str = toParse;
 		if(index < str.Length) {
 			str.Insert(index, "?");
 		}
 		var msg = error + " (error in \"" + str + "\")";
-		Debug.Log(msg);
+		// TODO		Debug.Log(msg);
 		throw new System.Exception(msg);
 	}
-    
-	Expression ParseValue() {
+
+	private Expression ParseValue() {
         
 		double digits = 0.0;
 		if(ParseDigits(ref digits)) {
@@ -227,8 +228,8 @@ public class ExpressionParser {
 		error("valid operand excepted");
 		return null;
 	}
-    
-	int OrderOf(Expression.Op op) {
+
+	private int OrderOf(Expression.Op op) {
 		switch(op) {
 			case Expression.Op.Add:
 			case Expression.Op.Sub:
@@ -240,8 +241,8 @@ public class ExpressionParser {
 				return 0;
 		}
 	}
-	
-	Expression.Op ParseOp() {
+
+	private Expression.Op ParseOp() {
 		SkipSpaces();
 		if(operators.ContainsKey(next)) {
 			var result = operators[next];
@@ -251,11 +252,11 @@ public class ExpressionParser {
 		return Expression.Op.Undefined;
 	}
 
-	bool HasNext() {
+	private bool HasNext() {
 		return index < toParse.Length;
 	}
 
-	Expression.Op ParseUnary() {
+	private Expression.Op ParseUnary() {
 		SkipSpaces();
 		if(next == '+') {
 			index++;
@@ -267,8 +268,8 @@ public class ExpressionParser {
 		}
 		return Expression.Op.Undefined;
 	}
-	    
-	Expression ParseExp(ref bool braced) {
+
+	private Expression ParseExp(ref bool braced) {
 
 		var uop = ParseUnary();
 				
@@ -313,5 +314,4 @@ public class ExpressionParser {
 			return null;
 		}
 	}
-    
 }

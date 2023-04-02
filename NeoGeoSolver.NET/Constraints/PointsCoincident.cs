@@ -1,21 +1,11 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Entities;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-[Serializable]
 public class PointsCoincident : Constraint {
-
 	public IEntity p0 { get { return GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity p1 { get { return GetEntity(1); } set { SetEntity(1, value); } }
-
-	public PointsCoincident(Sketch.Sketch sk) : base(sk) { }
-
-	public PointsCoincident(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
-		AddEntity(p0);
-		AddEntity(p1);
-	}
 
 	public override IEnumerable<Expression> equations {
 		get {
@@ -30,15 +20,5 @@ public class PointsCoincident : Constraint {
 	public IEntity GetOtherPoint(IEntity p) {
 		if(p0 == p) return p1;
 		return p0;
-	}
-
-	protected override double OnSelect(Vector3 mouse, Camera camera, Matrix4x4 tf) {
-		return -1;
-	}
-
-	protected override bool OnMarqueeSelect(Rect rect, bool wholeObject, Camera camera, Matrix4x4 tf) {
-		var pos = p0.GetPointAtInPlane(0, null).Eval();
-		Vector2 pp = camera.WorldToScreenPoint(tf.MultiplyPoint(pos));
-		return rect.Contains(pp);
 	}
 }

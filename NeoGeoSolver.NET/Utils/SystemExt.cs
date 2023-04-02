@@ -3,7 +3,7 @@
 namespace NeoGeoSolver.NET.Utils;
 
 public static class SystemExt {
-	static NumberFormatInfo nfi = new NumberFormatInfo();
+	private static NumberFormatInfo nfi = new NumberFormatInfo();
 
 	static SystemExt() {
 		nfi.NumberDecimalSeparator = ".";

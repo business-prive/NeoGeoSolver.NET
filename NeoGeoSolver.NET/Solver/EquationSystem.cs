@@ -1,7 +1,6 @@
 ﻿namespace NeoGeoSolver.NET.Solver;
 
 public class EquationSystem  {
-
 	public enum SolveResult {
 		OKAY,
 		DIDNT_CONVEGE,
@@ -9,28 +8,28 @@ public class EquationSystem  {
 		POSTPONE
 	}
 
-	bool isDirty = true;
+	private bool isDirty = true;
 
 	public bool IsDirty { get { return isDirty; } }
 	public int maxSteps = 20;
 	public int dragSteps = 3;
 	public bool revertWhenNotConverged = true;
 
-	Expression[,] J;
-	double[,] A;
-	double[,] AAT;
-	double[] B;
-	double[] X;
-	double[] Z;
-	double[] oldParamValues;
+	private Expression[,] J;
+	private double[,] A;
+	private double[,] AAT;
+	private double[] B;
+	private double[] X;
+	private double[] Z;
+	private double[] oldParamValues;
 
-	List<Expression> sourceEquations = new List<Expression>();
-	List<Param> parameters = new List<Param>();
+	private List<Expression> sourceEquations = new List<Expression>();
+	private List<Param> parameters = new List<Param>();
 
-	List<Expression> equations = new List<Expression>();
-	List<Param> currentParams = new List<Param>();
+	private List<Expression> equations = new List<Expression>();
+	private List<Param> currentParams = new List<Param>();
 
-	Dictionary<Param, Param> subs;
+	private Dictionary<Param, Param> subs;
 
 	public void AddEquation(Expression eq) {
 		sourceEquations.Add(eq);
@@ -94,19 +93,19 @@ public class EquationSystem  {
 		return true;
 	}
 
-	void StoreParams() {
+	private void StoreParams() {
 		for(int i = 0; i < parameters.Count; i++) {
 			oldParamValues[i] = parameters[i].value;
 		}
 	}
 
-	void RevertParams() {
+	private void RevertParams() {
 		for(int i = 0; i < parameters.Count; i++) {
 			parameters[i].value = oldParamValues[i];
 		}
 	}
 
-	static Expression[,] WriteJacobian(List<Expression> equations, List<Param> parameters) {
+	private static Expression[,] WriteJacobian(List<Expression> equations, List<Param> parameters) {
 		var J = new Expression[equations.Count, parameters.Count];
 		for(int r = 0; r < equations.Count; r++) {
 			var eq = equations[r];
@@ -148,7 +147,6 @@ public class EquationSystem  {
 		var rows = A.GetLength(0);
 		var cols = A.GetLength(1);
 
-		var time = Time.realtimeSinceStartup;
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < rows; c++) {
 				double sum = 0.0;
@@ -188,7 +186,7 @@ public class EquationSystem  {
 		return rank == A.GetLength(0);
 	}
 
-	void UpdateDirty() {
+	private void UpdateDirty() {
 		if(isDirty) {
 			equations = sourceEquations.Select(e => e.DeepClone()).ToList();
 			currentParams = parameters.ToList();
@@ -211,7 +209,7 @@ public class EquationSystem  {
 		}
 	}
 
-	void BackSubstitution(Dictionary<Param, Param> subs) {
+	private void BackSubstitution(Dictionary<Param, Param> subs) {
 		if(subs == null) return;
 		for(int i = 0; i < parameters.Count; i++) {
 			var p = parameters[i];
@@ -220,7 +218,7 @@ public class EquationSystem  {
 		}
 	}
 
-	Dictionary<Param, Param> SolveBySubstitution() {
+	private Dictionary<Param, Param> SolveBySubstitution() {
 		var subs = new Dictionary<Param, Param>();
 
 		for(int i = 0; i < equations.Count; i++) {
@@ -275,7 +273,7 @@ public class EquationSystem  {
 			if(IsConverged(checkDrag: isDragStep)) {
 				if(steps > 0) {
 					dofChanged = true;
-					Debug.Log(String.Format("solved {0} equations with {1} unknowns in {2} steps", equations.Count, currentParams.Count, steps));
+					// TODO		Debug.Log(String.Format("solved {0} equations with {1} unknowns in {2} steps", equations.Count, currentParams.Count, steps));
 				}
 				stats = String.Format("eqs:{0}\nunkn: {1}", equations.Count, currentParams.Count);
 				BackSubstitution(subs);

@@ -1,8 +1,6 @@
 ﻿using System.Numerics;
-using System.Xml;
 using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Solver;
-using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
@@ -11,16 +9,6 @@ public class Point : Entity {
 	public Param x = new Param("x");
 	public Param y = new Param("y");
 	public Param z = new Param("z");
-
-	public bool is3d {
-		get {
-			return sketch.is3d;
-		}
-	}
-
-	public Point(Sketch.Sketch sk) : base(sk) {
-		
-	}
 
 	public override IEntityType type { get { return IEntityType.Point; } }
 
@@ -33,9 +21,8 @@ public class Point : Entity {
 
 	public void SetPosition(Vector3 pos) {
 		if(transform != null) return;
-		x.value = pos.x;
-		y.value = pos.y;
-		if(is3d) z.value = pos.z;
+		x.value = pos.X;
+		y.value = pos.Y;
 	}
 
 	public override IEnumerable<Vector3> segments {
@@ -53,7 +40,7 @@ public class Point : Entity {
 		}
 	}
 
-	ExpressionVector exp_;
+	private ExpressionVector exp_;
 	public ExpressionVector exp {
 		get {
 			if(exp_ == null) {
@@ -70,7 +57,6 @@ public class Point : Entity {
 		get {
 			yield return x;
 			yield return y;
-			if(is3d) yield return z;
 		}
 	}
 
@@ -78,16 +64,6 @@ public class Point : Entity {
 		get {
 			yield return this;
 		}
-	}
-
-	public override bool IsChanged() {
-		return x.changed || y.changed || z.changed;
-	}
-
-	protected override void OnDrag(Vector3 delta) {
-		x.value += delta.x;
-		y.value += delta.y;
-		if(is3d) z.value += delta.z;
 	}
 
 	public bool IsCoincidentWithCurve(IEntity curve, ref PointOn pOn) {
@@ -127,56 +103,10 @@ public class Point : Entity {
 			}
 		}
 		return false;
-		/*
-	return constraints.
-		OfType<PointsCoincident>().
-		Select(c => c.GetOtherPoint(this)).
-		Any(p => p == point || p != exclude && p.IsCoincidentWith(point, this));
-	*/
 	}
 
 	public bool IsCoincidentWith(IEntity point) {
 		return IsCoincidentWith(point, null);
-	}
-
-	protected override void OnWrite(XmlTextWriter xml) {
-		xml.WriteAttributeString("x", x.value.ToStr());
-		xml.WriteAttributeString("y", y.value.ToStr());
-		if(is3d) xml.WriteAttributeString("z", z.value.ToStr());
-	}
-
-	protected override void OnRead(XmlNode xml) {
-		x.value = xml.Attributes["x"].Value.ToDouble();
-		y.value = xml.Attributes["y"].Value.ToDouble();
-		if(is3d) z.value = xml.Attributes["z"].Value.ToDouble();
-	}
-
-	public static double IsSelected(Vector3 pos, Vector3 mouse, Camera camera, Matrix4x4 tf) {
-		var pp = camera.WorldToScreenPoint(tf.MultiplyPoint(pos));
-		pp.z = 0f;
-		mouse.z = 0f;
-		var dist = (pp - mouse).magnitude - 5;
-		if(dist < 0.0) return 0.0;
-		return dist;
-	}
-
-	protected override double OnSelect(Vector3 mouse, Camera camera, Matrix4x4 tf) {
-		var pp = camera.WorldToScreenPoint(tf.MultiplyPoint(pos));
-		pp.z = 0f;
-		mouse.z = 0f;
-		var dist = (pp - mouse).magnitude - 5;
-		if(dist < 0.0) return 0.0;
-		return dist;
-	}
-
-	protected override bool OnMarqueeSelect(Rect rect, bool wholeObject, Camera camera, Matrix4x4 tf) {
-		Vector2 pp = camera.WorldToScreenPoint(tf.MultiplyPoint(pos));
-		return rect.Contains(pp);
-	}
-
-	protected override void OnDraw(LineCanvas canvas) {
-		canvas.SetStyle("points");
-		canvas.DrawPoint(pos);
 	}
 
 	public override ExpressionVector PointOn(Expression t) {

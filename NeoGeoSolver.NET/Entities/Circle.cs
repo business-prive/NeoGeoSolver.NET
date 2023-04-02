@@ -1,11 +1,8 @@
 ﻿using System.Numerics;
-using System.Xml;
 using NeoGeoSolver.NET.Solver;
-using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
-[Serializable]
 public class Circle : Entity, ILoopEntity {
 
 	public Point c;
@@ -17,16 +14,10 @@ public class Circle : Entity, ILoopEntity {
 		c = AddChild(new Point(sk));
 	}
 
-	public double rad { get { return radius.value; } set { radius.value = value; } } 
-
 	public override IEnumerable<Point> points {
 		get {
 			yield return c;
 		}
-	}
-
-	public override bool IsChanged() {
-		return c.IsChanged() || radius.changed;
 	}
 
 	public override IEnumerable<Param> parameters {
@@ -50,18 +41,6 @@ public class Circle : Entity, ILoopEntity {
 		}
 	}
 
-	public override bool IsCrossed(Entity e, ref Vector3 itr) {
-		return false;
-	}
-
-	protected override void OnWrite(XmlTextWriter xml) {
-		xml.WriteAttributeString("r", Math.Abs(radius.value).ToStr());
-	}
-
-	protected override void OnRead(XmlNode xml) {
-		radius.value = xml.Attributes["r"].Value.ToDouble();
-	}
-
 	public override ExpressionVector PointOn(Expression t) {
 		var angle = t * 2.0 * Math.PI;
 		return c.exp + new ExpressionVector(Expression.Cos(angle), Expression.Sin(angle), 0.0) * Radius();
@@ -83,5 +62,4 @@ public class Circle : Entity, ILoopEntity {
 	public override ExpressionVector Center() {
 		return center.exp;
 	}
-
 }

@@ -1,32 +1,14 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-[Serializable]
 public class PointOn : Value {
-
 	public IEntity point { get { return GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity on { get { return GetEntity(1); } set { SetEntity(1, value); } }
 
 	public ExpressionVector pointExp { get { return point.PointExpInPlane(sketch.plane); } }
-	public Vector3 pointPos { get { return point.PointExpInPlane(null).Eval(); } }
-	public override bool valueVisible { get { return !reference; } }
-
-	public PointOn(Sketch.Sketch sk) : base(sk) {
-		selectByRefPoints = true;
-	}
-
-	public PointOn(Sketch.Sketch sk, IEntity point, IEntity on) : base(sk) {
-		reference = true;
-		AddEntity(point);
-		AddEntity(on);
-		SetValue(0.51);
-		Satisfy();
-		selectByRefPoints = true;
-	}
 
 	protected override bool OnSatisfy() {
 		EquationSystem sys = new EquationSystem();
@@ -57,24 +39,6 @@ public class PointOn : Value {
 			yield return eq.y;
 			if(sketch.is3d) yield return eq.z;
 		}
-	}
-
-	protected override void OnDraw(LineCanvas canvas) {
-		var p0 = pointPos;
-		drawCameraCircle(canvas, Camera.main, p0, R_CIRLE_R * getPixelSize());
-		if(!reference) {
-			pos = on.OffsetAt(value.value, 20f * getPixelSize()).Eval();
-		} else {
-			pos = on.PointOn(value.value).Eval();
-		}
-		ref_points[0] = ref_points[1] = sketch.plane.ToPlane(p0);
-		//on.DrawExtend(canvas, value.value, 0.05);
-	}
-
-	protected override Matrix4x4 OnGetBasis() {
-		var p0 = point.PointExpInPlane(sketch.plane).Eval();
-		if(!sketch.is3d) p0.z = 0;
-		return getPlane().GetTransform() * Matrix4x4.Translate(p0);
 	}
 
 	public override double LabelToValue(double label) {

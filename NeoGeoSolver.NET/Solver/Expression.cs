@@ -1,7 +1,6 @@
 namespace NeoGeoSolver.NET.Solver;
 
 public class Expression {
-
   public enum Op {
     Undefined,
     Const,
@@ -43,7 +42,7 @@ public class Expression {
   public Param param;
   public double value;
 
-  Expression() { }
+  private Expression() { }
 
   public Expression(double value) {
     this.value = value;
@@ -145,17 +144,6 @@ public class Expression {
     var ax = Math.Abs(x);
     var ax2 = ax * ax;
     var ax3 = ax2 * ax;
-
-    /*
-		return (
-			-Math.Cos(PI * ax2 / 2.0) / 
-			(PI * (ax + 16.7312774552827 * PI * Math.Exp(-1.57638860756614 * PI * Math.Sqrt(ax))))
-
-			+ 8.0 / 25.0 * (1.0 - Math.Exp(-0.608707749430681 * PI * ax3))
-			+ 2.0 / 25.0 * (1.0 - Math.Exp(-1.71402838165388  * PI * ax2))
-			+ 1.0 / 10.0 * (1.0 - Math.Exp(-9.0 / 10.0        * PI * ax ))
-		) * Math.Sign(x);
-		*/
     return Math.Sign(x) * (
       1.0 / 2.0 - ((1 + 0.926 * ax) / (2 + 1.792 * ax + 3.104 * ax2)) * Math.Cos(Math.PI * ax2 / 2)
                 -(1 / (2 + 4.142 + 3.492 * ax2 + 6.67 * ax3)) * Math.Sin(Math.PI * ax2 / 2)
@@ -260,19 +248,19 @@ public class Expression {
     return false;
   }
 
-  string Quoted() {
+  private string Quoted() {
     if(IsUnary()) return ToString();
     return "(" + ToString() + ")";
   }
 
-  string QuotedAdd() {
+  private string QuotedAdd() {
     if(!IsAdditive()) return ToString();
     return "(" + ToString() + ")";
   }
 
   public override string ToString() {
     switch(op) {
-      case Op.Const:	return value.ToStr();
+      case Op.Const:	return value.ToString();
       case Op.Param:	return param.name;
       case Op.Add:	return a.ToString() + " + " + b.ToString();
       case Op.Sub:	return a.ToString() + " - " + b.QuotedAdd();
@@ -315,7 +303,7 @@ public class Expression {
     return d(p);
   }
 
-  Expression d(Param p) {
+  private Expression d(Param p) {
     switch(op) {
       case Op.Const:	return zero;
       case Op.Param:	return (param == p) ? one : zero;
@@ -440,5 +428,4 @@ public class Expression {
   public Op GetOp() {
     return op;
   }
-
 }
