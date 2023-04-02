@@ -6,12 +6,6 @@ using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public enum HVOrientation {
-	OX,
-	OY,
-	OZ
-}
-
 [Serializable]
 public class HVConstraint : Constraint {
 
