@@ -1,4 +1,5 @@
-﻿using NeoGeoSolver.NET.Utils;
+﻿using System.Numerics;
+using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Solver;
 

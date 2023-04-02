@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Xml;
 using NeoGeoSolver.NET.Sketch;
 using NeoGeoSolver.NET.Solver;

@@ -1,4 +1,5 @@
-﻿using NeoGeoSolver.NET.Entities;
+﻿using System.Numerics;
+using NeoGeoSolver.NET.Entities;
 using NeoGeoSolver.NET.Sketch;
 using NeoGeoSolver.NET.Solver;
 

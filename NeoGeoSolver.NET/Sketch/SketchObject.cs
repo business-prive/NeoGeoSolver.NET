@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Numerics;
+using System.Xml;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Sketch;
