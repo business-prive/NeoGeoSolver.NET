@@ -129,7 +129,6 @@ public class EquationSystem  {
 
 	public void EvalJacobian(Expression[,] J, ref double[,] A, bool clearDrag) {
 		UpdateDirty();
-		UnityEngine.Profiling.Profiler.BeginSample("EvalJacobian");
 		for(int r = 0; r < J.GetLength(0); r++) {
 			if(clearDrag && equations[r].IsDrag()) {
 				for(int c = 0; c < J.GetLength(1); c++) {
@@ -141,7 +140,6 @@ public class EquationSystem  {
 				A[r, c] = J[r, c].Eval();
 			}
 		}
-		UnityEngine.Profiling.Profiler.EndSample();
 	}
 
 	public void SolveLeastSquares(double[,] A, double[] B, ref double[] X) {
@@ -150,7 +148,6 @@ public class EquationSystem  {
 		var rows = A.GetLength(0);
 		var cols = A.GetLength(1);
 
-		UnityEngine.Profiling.Profiler.BeginSample("SolveLeastSquares: A^T * A");
 		var time = Time.realtimeSinceStartup;
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < rows; c++) {
@@ -162,8 +159,6 @@ public class EquationSystem  {
 				AAT[r, c] = sum;
 			}
 		}
-		//Debug.Log("AAT time " + (Time.realtimeSinceStartup - time) * 1000);
-		UnityEngine.Profiling.Profiler.EndSample();
 
 		GaussianMethod.Solve(AAT, B, ref Z);
 
