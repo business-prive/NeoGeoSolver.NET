@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
 
-using System.Linq;
-using System;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class PointLineDistance : ValueConstraint {
@@ -17,9 +17,9 @@ public class PointLineDistance : ValueConstraint {
 	public Vector3 lineP0Pos { get { return line.PointsInPlane(null).ToArray()[0].Eval(); } }
 	public Vector3 lineP1Pos { get { return line.PointsInPlane(null).ToArray()[1].Eval(); } }
 
-	public PointLineDistance(Sketch sk) : base(sk) { }
+	public PointLineDistance(Sketch.Sketch sk) : base(sk) { }
 
-	public PointLineDistance(Sketch sk, IEntity p0, IEntity p1) : base(sk) {
+	public PointLineDistance(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
 		AddEntity(p0);
 		AddEntity(p1);
 		SetValue(1.0);

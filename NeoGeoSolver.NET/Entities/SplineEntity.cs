@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Solver;
 
-using System.Linq;
+namespace NeoGeoSolver.NET.Entities;
 
 public class SplineEntity : Entity, ISegmentaryEntity {
 
 	public PointEntity[] p = new PointEntity[4];
 
-	public SplineEntity(Sketch sk) : base(sk) {
+	public SplineEntity(Sketch.Sketch sk) : base(sk) {
 		for(int i = 0; i < p.Length; i++) {
 			p[i] = AddChild(new PointEntity(sk));
 		}
@@ -33,11 +31,11 @@ public class SplineEntity : Entity, ISegmentaryEntity {
 	public IEnumerable<Vector3> segmentPoints {
 		get {
 			/*var e = PointOn(1.0);
-			var box = bbox;
-			var d = box.max - box.min;
-			var eps = d.magnitude * 0.002;
-			return subdivision(0.0, 1.0, PointOn(0.0), PointOn(1.0), (float)eps).Concat(Enumerable.Repeat(e, 1));
-			*/
+		var box = bbox;
+		var d = box.max - box.min;
+		var eps = d.magnitude * 0.002;
+		return subdivision(0.0, 1.0, PointOn(0.0), PointOn(1.0), (float)eps).Concat(Enumerable.Repeat(e, 1));
+		*/
 			return getSegments(32, t => PointOn(t));
 		}
 	}
@@ -64,15 +62,15 @@ public class SplineEntity : Entity, ISegmentaryEntity {
 		}
 	}
 	/*
-	protected override Entity OnSplit(Vector3 position) {
-		var part = new ArcEntity(sketch);
-		part.center.pos = center.pos;
-		part.p1.pos = p1.pos;
-		p1.pos = position;
-		part.p0.pos = p1.pos;
-		return part;
-	}
-	*/
+protected override Entity OnSplit(Vector3 position) {
+	var part = new ArcEntity(sketch);
+	part.center.pos = center.pos;
+	part.p1.pos = p1.pos;
+	p1.pos = position;
+	part.p0.pos = p1.pos;
+	return part;
+}
+*/
 	public override ExpVector PointOn(Exp t) {
 		var p0 = p[0].exp;
 		var p1 = p[1].exp;

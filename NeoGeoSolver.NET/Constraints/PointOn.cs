@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
-using System;
-using System.Linq;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class PointOn : ValueConstraint {
@@ -13,11 +14,11 @@ public class PointOn : ValueConstraint {
 	public Vector3 pointPos { get { return point.PointExpInPlane(null).Eval(); } }
 	public override bool valueVisible { get { return !reference; } }
 
-	public PointOn(Sketch sk) : base(sk) {
+	public PointOn(Sketch.Sketch sk) : base(sk) {
 		selectByRefPoints = true;
 	}
 
-	public PointOn(Sketch sk, IEntity point, IEntity on) : base(sk) {
+	public PointOn(Sketch.Sketch sk, IEntity point, IEntity on) : base(sk) {
 		reference = true;
 		AddEntity(point);
 		AddEntity(on);

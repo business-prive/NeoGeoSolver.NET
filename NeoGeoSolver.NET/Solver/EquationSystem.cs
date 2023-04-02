@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Linq;
+﻿namespace NeoGeoSolver.NET.Solver;
 
 public class EquationSystem  {
 
@@ -117,10 +114,10 @@ public class EquationSystem  {
 				var u = parameters[c];
 				J[r, c] = eq.Deriv(u);
 				/*
-				if(!J[r, c].IsZeroConst()) {
-					Debug.Log(J[r, c].ToString() + "\n");
-				}
-				*/
+			if(!J[r, c].IsZeroConst()) {
+				Debug.Log(J[r, c].ToString() + "\n");
+			}
+			*/
 			}
 		}
 		return J;
@@ -201,9 +198,9 @@ public class EquationSystem  {
 			equations = sourceEquations.Select(e => e.DeepClone()).ToList();
 			currentParams = parameters.ToList();
 			/*
-			foreach(var e in equations) {
-				e.ReduceParams(currentParams);
-			}*/
+		foreach(var e in equations) {
+			e.ReduceParams(currentParams);
+		}*/
 			//currentParams = parameters.Where(p => equations.Any(e => e.IsDependOn(p))).ToList();
 			subs = SolveBySubstitution();
 
@@ -275,11 +272,11 @@ public class EquationSystem  {
 			bool isDragStep = steps <= dragSteps;
 			Eval(ref B, clearDrag: !isDragStep);
 			/*
-			if(steps > 0) {
-				BackSubstitution(subs);
-				return SolveResult.POSTPONE;
-			}
-			*/
+		if(steps > 0) {
+			BackSubstitution(subs);
+			return SolveResult.POSTPONE;
+		}
+		*/
 			if(IsConverged(checkDrag: isDragStep)) {
 				if(steps > 0) {
 					dofChanged = true;

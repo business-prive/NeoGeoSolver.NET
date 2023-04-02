@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 public enum HVOrientation {
 	OX,
@@ -33,14 +36,14 @@ public class HVConstraint : Constraint {
 
 	public HVOrientation orientation = HVOrientation.OX;
 
-	public HVConstraint(Sketch sk) : base(sk) { }
+	public HVConstraint(Sketch.Sketch sk) : base(sk) { }
 
-	public HVConstraint(Sketch sk, IEntity p0, IEntity p1) : base(sk) {
+	public HVConstraint(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
 		AddEntity(p0);
 		AddEntity(p1);
 	}
 
-	public HVConstraint(Sketch sk, IEntity line) : base(sk) {
+	public HVConstraint(Sketch.Sketch sk, IEntity line) : base(sk) {
 		AddEntity(line);
 	}
 

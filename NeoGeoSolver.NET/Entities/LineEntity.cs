@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Entities;
 
 public class LineEntity : Entity, ISegmentaryEntity {
 
 	public PointEntity p0;
 	public PointEntity p1;
 
-	public LineEntity(Sketch sk) : base(sk) {
+	public LineEntity(Sketch.Sketch sk) : base(sk) {
 		p0 = AddChild(new PointEntity(sk));
 		p1 = AddChild(new PointEntity(sk));
 	}

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
-using System.Xml;
+namespace NeoGeoSolver.NET.Entities;
 
 [Serializable]
 public class FunctionEntity : Entity, ISegmentaryEntity {
@@ -113,7 +113,7 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 
 	}
 
-	public FunctionEntity(Sketch sk) : base(sk) {
+	public FunctionEntity(Sketch.Sketch sk) : base(sk) {
 		p0 = AddChild(new PointEntity(sk));
 		p1 = AddChild(new PointEntity(sk));
 		c = AddChild(new PointEntity(sk));
@@ -142,11 +142,11 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 			yield return eq0.y;
 
 			//if(!p0.IsCoincidentWith(p1)) {
-				ExpVector e1 = basis.TransformPosition(GetExpClone(t1));
+			ExpVector e1 = basis.TransformPosition(GetExpClone(t1));
 
-				var eq1 = e1 - p1.exp;
-				yield return eq1.x;
-				yield return eq1.y;
+			var eq1 = e1 - p1.exp;
+			yield return eq1.x;
+			yield return eq1.y;
 			//}
 
 			var eqc = basis.p - c.exp;
@@ -195,15 +195,15 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 	//public override BBox bbox { get { return new BBox(center.pos, (float)radius); } }
 
 	/*
-	protected override Entity OnSplit(Vector3 position) {
-		var part = new ArcEntity(sketch);
-		part.center.pos = center.pos;
-		part.p1.pos = p1.pos;
-		p1.pos = position;
-		part.p0.pos = p1.pos;
-		return part;
-	}
-	*/
+protected override Entity OnSplit(Vector3 position) {
+	var part = new ArcEntity(sketch);
+	part.center.pos = center.pos;
+	part.p1.pos = p1.pos;
+	p1.pos = position;
+	part.p0.pos = p1.pos;
+	return part;
+}
+*/
 
 	public override ExpVector PointOn(Exp t) {
 		var newt = t0.exp + (t1.exp - t0.exp) * t;

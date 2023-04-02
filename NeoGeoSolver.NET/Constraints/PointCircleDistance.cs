@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
 
-using System;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class PointCircleDistance : ValueConstraint {
 
-	public PointCircleDistance(Sketch sk) : base(sk) { }
+	public PointCircleDistance(Sketch.Sketch sk) : base(sk) { }
 
-	public PointCircleDistance(Sketch sk, IEntity pt, IEntity c) : base(sk) {
+	public PointCircleDistance(Sketch.Sketch sk, IEntity pt, IEntity c) : base(sk) {
 		AddEntity(pt);
 		AddEntity(c);
 		Satisfy();

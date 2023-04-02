@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
+namespace NeoGeoSolver.NET.Entities;
 
 [Serializable]
 public class EllipseEntity : Entity, ILoopEntity {
@@ -14,7 +14,7 @@ public class EllipseEntity : Entity, ILoopEntity {
 
 	public override IEntityType type { get { return IEntityType.Ellipse; } }
 
-	public EllipseEntity(Sketch sk) : base(sk) {
+	public EllipseEntity(Sketch.Sketch sk) : base(sk) {
 		c = AddChild(new PointEntity(sk));
 		basis.SetPosParams(c.x, c.y);
 	}

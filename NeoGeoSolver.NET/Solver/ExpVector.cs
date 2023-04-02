@@ -1,6 +1,5 @@
 ﻿
-using System;
-
+namespace NeoGeoSolver.NET.Solver;
 
 public class ExpVector {
 	public Exp x;
@@ -75,8 +74,8 @@ public class ExpVector {
 
 	public bool ValuesEquals(ExpVector o, double eps) {
 		return Math.Abs(x.Eval() - o.x.Eval()) < eps &&
-			   Math.Abs(y.Eval() - o.y.Eval()) < eps &&
-			   Math.Abs(z.Eval() - o.z.Eval()) < eps;
+		       Math.Abs(y.Eval() - o.y.Eval()) < eps &&
+		       Math.Abs(z.Eval() - o.z.Eval()) < eps;
 	}
 
 	public static ExpVector RotateAround(ExpVector point, ExpVector axis, ExpVector origin, Exp angle) {

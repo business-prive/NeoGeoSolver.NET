@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
-using System.Linq;
-using System;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class Length : ValueConstraint {
@@ -9,9 +10,9 @@ public class Length : ValueConstraint {
 	public ExpVector p0exp { get { return GetPointInPlane(0, sketch.plane); } }
 	public ExpVector p1exp { get { return GetPointInPlane(1, sketch.plane); } }
 
-	public Length(Sketch sk) : base(sk) { }
+	public Length(Sketch.Sketch sk) : base(sk) { }
 
-	public Length(Sketch sk, IEntity e) : base(sk) {
+	public Length(Sketch.Sketch sk, IEntity e) : base(sk) {
 		AddEntity(e);
 		Satisfy();
 	}

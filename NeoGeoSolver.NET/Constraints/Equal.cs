@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class Equal : ValueConstraint {
 
-	public Equal(Sketch sk) : base(sk) { selectByRefPoints = true; }
+	public Equal(Sketch.Sketch sk) : base(sk) { selectByRefPoints = true; }
 
 	[Serializable]
 	public enum LengthType {
@@ -45,7 +48,7 @@ public class Equal : ValueConstraint {
 		}
 	}
 
-	public Equal(Sketch sk, IEntity l0, IEntity l1) : base(sk) {
+	public Equal(Sketch.Sketch sk, IEntity l0, IEntity l1) : base(sk) {
 		AddEntity(l0);
 		AddEntity(l1);
 		value.value = 1.0;

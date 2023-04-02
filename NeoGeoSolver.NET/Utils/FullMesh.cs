@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-
+﻿namespace NeoGeoSolver.NET.Utils;
 
 public struct Pair<A, B> {
 	public A a;
@@ -471,4 +467,3 @@ public class MeshCheck {
 	}
 		
 };
-

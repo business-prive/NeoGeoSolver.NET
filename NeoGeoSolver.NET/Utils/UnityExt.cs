@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
+﻿namespace NeoGeoSolver.NET.Utils;
 
 public static class UnityExt {
 	public static void SetMatrix(this Transform tf, Matrix4x4 mtx) {

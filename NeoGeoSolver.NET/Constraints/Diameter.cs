@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
-using System;
-using System.Xml;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class Diameter : ValueConstraint {
 
-	public Diameter(Sketch sk) : base(sk) { }
+	public Diameter(Sketch.Sketch sk) : base(sk) { }
 
 	public bool showAsRadius = false;
 
-	public Diameter(Sketch sk, IEntity c) : base(sk) {
+	public Diameter(Sketch.Sketch sk, IEntity c) : base(sk) {
 		showAsRadius = (c.type == IEntityType.Arc);
 		AddEntity(c);
 		Satisfy();

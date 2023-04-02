@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Constraints;
+using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Entities;
 
 public class ArcEntity : Entity, ISegmentaryEntity {
 
@@ -9,7 +9,7 @@ public class ArcEntity : Entity, ISegmentaryEntity {
 	public PointEntity p1;
 	public PointEntity c;
 
-	public ArcEntity(Sketch sk) : base(sk) {
+	public ArcEntity(Sketch.Sketch sk) : base(sk) {
 		p0 = AddChild(new PointEntity(sk));
 		p1 = AddChild(new PointEntity(sk));
 		c = AddChild(new PointEntity(sk));
@@ -95,29 +95,29 @@ public class ArcEntity : Entity, ISegmentaryEntity {
 	}
 
 	/*
-	protected override double OnSelect(Vector3 mouse, Camera camera, Matrix4x4 tf) {
-		float angle = GetAngle() * Mathf.Rad2Deg;
-		Debug.Log(angle);
-		var cp = c.pos;
-		var rv = p0.pos - cp;
-		int subdiv = (int)Math.Ceiling(angle / 30);
-		var vz = Vector3.forward;
-		var rot = Quaternion.AngleAxis(angle / (subdiv - 1), vz);
-		var prev = Vector3.zero;
-		double min = -1;
-		for(int i = 0; i < subdiv; i++) {
-			var pos =  camera.WorldToScreenPoint(tf.MultiplyPoint(rv + cp));
-			if(i > 0) {
-				var dist = GeomUtils.DistancePointSegment2D(mouse, prev, pos);
-				if(min > 0 && dist > min) continue;
-				min = dist;
-			}
-			prev = pos;
-			rv = rot * rv;
+protected override double OnSelect(Vector3 mouse, Camera camera, Matrix4x4 tf) {
+	float angle = GetAngle() * Mathf.Rad2Deg;
+	Debug.Log(angle);
+	var cp = c.pos;
+	var rv = p0.pos - cp;
+	int subdiv = (int)Math.Ceiling(angle / 30);
+	var vz = Vector3.forward;
+	var rot = Quaternion.AngleAxis(angle / (subdiv - 1), vz);
+	var prev = Vector3.zero;
+	double min = -1;
+	for(int i = 0; i < subdiv; i++) {
+		var pos =  camera.WorldToScreenPoint(tf.MultiplyPoint(rv + cp));
+		if(i > 0) {
+			var dist = GeomUtils.DistancePointSegment2D(mouse, prev, pos);
+			if(min > 0 && dist > min) continue;
+			min = dist;
 		}
-		return min;
+		prev = pos;
+		rv = rot * rv;
 	}
-	*/
+	return min;
+}
+*/
 
 	public override ExpVector PointOn(Exp t) {
 		var angle = GetAngleExp();

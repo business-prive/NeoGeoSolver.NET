@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
+namespace NeoGeoSolver.NET.Entities;
 
 [Serializable]
 public class CircleEntity : Entity, ILoopEntity {
@@ -12,7 +12,7 @@ public class CircleEntity : Entity, ILoopEntity {
 
 	public override IEntityType type { get { return IEntityType.Circle; } }
 
-	public CircleEntity(Sketch sk) : base(sk) {
+	public CircleEntity(Sketch.Sketch sk) : base(sk) {
 		c = AddChild(new PointEntity(sk));
 	}
 

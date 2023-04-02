@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class Tangent : Constraint {
@@ -34,9 +35,9 @@ public class Tangent : Constraint {
 		}
 	}
 
-	public Tangent(Sketch sk) : base(sk) { }
+	public Tangent(Sketch.Sketch sk) : base(sk) { }
 
-	public Tangent(Sketch sk, IEntity l0, IEntity l1) : base(sk) {
+	public Tangent(Sketch.Sketch sk, IEntity l0, IEntity l1) : base(sk) {
 		AddEntity(l0);
 		AddEntity(l1);
 		Satisfy();

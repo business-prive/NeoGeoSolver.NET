@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 public static class ConstraintExp {
 

@@ -1,6 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class Perpendicular : Constraint {
@@ -15,9 +17,9 @@ public class Perpendicular : Constraint {
 	public Option option { get { return option_; } set { option_ = value; sketch.MarkDirtySketch(topo:true); } }
 	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }
 
-	public Perpendicular(Sketch sk) : base(sk) { }
+	public Perpendicular(Sketch.Sketch sk) : base(sk) { }
 
-	public Perpendicular(Sketch sk, IEntity l0, IEntity l1) : base(sk) {
+	public Perpendicular(Sketch.Sketch sk, IEntity l0, IEntity l1) : base(sk) {
 		AddEntity(l0);
 		AddEntity(l1);
 		ChooseBestOption();
@@ -52,16 +54,16 @@ public class Perpendicular : Constraint {
 		canvas.DrawLine(pos + dir - perp, pos - dir - perp);
 	}
 	/*
-	protected override void OnDraw(LineCanvas canvas) {
-		var l0 = GetEntityOfType(IEntityType.Line, 0);
-		var l1 = GetEntityOfType(IEntityType.Line, 1);
-		DrawStroke(canvas, l0, 0);
-		DrawStroke(canvas, l1, 1);
-		if(DetailEditor.instance.hovered == this) {
-			DrawReferenceLink(canvas, Camera.main);
-		}
+protected override void OnDraw(LineCanvas canvas) {
+	var l0 = GetEntityOfType(IEntityType.Line, 0);
+	var l1 = GetEntityOfType(IEntityType.Line, 1);
+	DrawStroke(canvas, l0, 0);
+	DrawStroke(canvas, l1, 1);
+	if(DetailEditor.instance.hovered == this) {
+		DrawReferenceLink(canvas, Camera.main);
 	}
-	*/
+}
+*/
 	protected override void OnDraw(LineCanvas canvas) {
 
 		var line0 = GetEntityOfType(IEntityType.Line, 0);

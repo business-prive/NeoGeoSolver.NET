@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Constraints;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
-using System.Linq;
-using System.Xml;
-using System;
+namespace NeoGeoSolver.NET.Entities;
 
 public class PointEntity : Entity {
 
@@ -16,7 +17,7 @@ public class PointEntity : Entity {
 		}
 	}
 
-	public PointEntity(Sketch sk) : base(sk) {
+	public PointEntity(Sketch.Sketch sk) : base(sk) {
 		
 	}
 
@@ -107,7 +108,7 @@ public class PointEntity : Entity {
 			var p = c.GetOtherPoint(this);
 			PointOn pOn1 = null;
 			if(!p.IsSameAs(exclude) && p is PointEntity && (p as PointEntity).IsCoincidentWithCurve(curve, ref pOn1, this)) {
-				 pOn = pOn1;
+				pOn = pOn1;
 				return true;
 			}
 		}
@@ -126,11 +127,11 @@ public class PointEntity : Entity {
 		}
 		return false;
 		/*
-		return constraints.
-			OfType<PointsCoincident>().
-			Select(c => c.GetOtherPoint(this)).
-			Any(p => p == point || p != exclude && p.IsCoincidentWith(point, this));
-		*/
+	return constraints.
+		OfType<PointsCoincident>().
+		Select(c => c.GetOtherPoint(this)).
+		Any(p => p == point || p != exclude && p.IsCoincidentWith(point, this));
+	*/
 	}
 
 	public bool IsCoincidentWith(IEntity point) {

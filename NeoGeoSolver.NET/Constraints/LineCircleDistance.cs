@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
-using System.Linq;
-using System;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class LineCircleDistance : ValueConstraint {
@@ -25,10 +26,10 @@ public class LineCircleDistance : ValueConstraint {
 	Option option_;
 	public Option option { get { return option_; } set { option_ = value; sketch.MarkDirtySketch(topo:true); } }
 
-	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }	public LineCircleDistance(Sketch sk) : base(sk) { }
+	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }	public LineCircleDistance(Sketch.Sketch sk) : base(sk) { }
 
 
-	public LineCircleDistance(Sketch sk, IEntity line, IEntity circle) : base(sk) {
+	public LineCircleDistance(Sketch.Sketch sk, IEntity line, IEntity circle) : base(sk) {
 		AddEntity(line);
 		AddEntity(circle);
 		SetValue(1.0);

@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
-using System.Linq;
-using System;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class PointsDistance : ValueConstraint {
@@ -9,15 +10,15 @@ public class PointsDistance : ValueConstraint {
 	public ExpVector p0exp { get { return GetPointInPlane(0, sketch.plane); } }
 	public ExpVector p1exp { get { return GetPointInPlane(1, sketch.plane); } }
 
-	public PointsDistance(Sketch sk) : base(sk) { }
+	public PointsDistance(Sketch.Sketch sk) : base(sk) { }
 
-	public PointsDistance(Sketch sk, IEntity p0, IEntity p1) : base(sk) {
+	public PointsDistance(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
 		AddEntity(p0);
 		AddEntity(p1);
 		Satisfy();
 	}
 
-	public PointsDistance(Sketch sk, IEntity line) : base(sk) {
+	public PointsDistance(Sketch.Sketch sk, IEntity line) : base(sk) {
 		AddEntity(line);
 		Satisfy();
 	}

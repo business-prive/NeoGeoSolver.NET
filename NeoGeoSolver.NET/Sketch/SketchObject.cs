@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Xml;
-using System;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Sketch;
 
 public interface ICADObject {
 	IdPath id { get; }

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class PointsCoincident : Constraint {
@@ -8,9 +9,9 @@ public class PointsCoincident : Constraint {
 	public IEntity p0 { get { return GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity p1 { get { return GetEntity(1); } set { SetEntity(1, value); } }
 
-	public PointsCoincident(Sketch sk) : base(sk) { }
+	public PointsCoincident(Sketch.Sketch sk) : base(sk) { }
 
-	public PointsCoincident(Sketch sk, IEntity p0, IEntity p1) : base(sk) {
+	public PointsCoincident(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
 		AddEntity(p0);
 		AddEntity(p1);
 	}

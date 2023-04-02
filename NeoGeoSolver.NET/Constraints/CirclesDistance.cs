@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
-using System.Linq;
-using System;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class CirclesDistance : ValueConstraint {
@@ -17,9 +18,9 @@ public class CirclesDistance : ValueConstraint {
 
 	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }
 
-	public CirclesDistance(Sketch sk) : base(sk) { }
+	public CirclesDistance(Sketch.Sketch sk) : base(sk) { }
 
-	public CirclesDistance(Sketch sk, IEntity c0, IEntity c1) : base(sk) {
+	public CirclesDistance(Sketch.Sketch sk, IEntity c0, IEntity c1) : base(sk) {
 		AddEntity(c0);
 		AddEntity(c1);
 		value.value = 1;

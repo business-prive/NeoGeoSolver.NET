@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Constraints;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
+using Entity = NeoGeoSolver.NET.Entities.Entity;
 
-
-using System.Linq;
-using System.IO;
-using System.Xml;
-using System.Collections;
+namespace NeoGeoSolver.NET.Sketch;
 
 public interface IPlane {
 	Vector3 u { get; }

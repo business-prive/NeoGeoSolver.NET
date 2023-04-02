@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
+﻿using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class EqualValue : ValueConstraint {
 
-	public EqualValue(Sketch sk) : base(sk) {
+	public EqualValue(Sketch.Sketch sk) : base(sk) {
 	}
 
 	protected override bool OnSatisfy() {
@@ -18,7 +18,7 @@ public class EqualValue : ValueConstraint {
 		return true;
 	}
 
-	public EqualValue(Sketch sk, ValueConstraint c0, ValueConstraint c1) : base(sk) {
+	public EqualValue(Sketch.Sketch sk, ValueConstraint c0, ValueConstraint c1) : base(sk) {
 		AddConstraint(c0);
 		AddConstraint(c1);
 		value.value = 1.0;

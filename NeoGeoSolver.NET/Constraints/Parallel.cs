@@ -1,6 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class Parallel : Constraint {
@@ -15,9 +17,9 @@ public class Parallel : Constraint {
 	public Option option { get { return option_; } set { option_ = value; sketch.MarkDirtySketch(topo:true); } }
 	protected override Enum optionInternal { get { return option; } set { option = (Option)value; } }
 
-	public Parallel(Sketch sk) : base(sk) { }
+	public Parallel(Sketch.Sketch sk) : base(sk) { }
 
-	public Parallel(Sketch sk, IEntity l0, IEntity l1) : base(sk) {
+	public Parallel(Sketch.Sketch sk, IEntity l0, IEntity l1) : base(sk) {
 		AddEntity(l0);
 		AddEntity(l1);
 		ChooseBestOption();

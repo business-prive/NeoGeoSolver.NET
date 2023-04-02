@@ -1,4 +1,4 @@
-﻿using System;
+﻿namespace NeoGeoSolver.NET.Solver;
 
 public static class GaussianMethod {
 
@@ -90,12 +90,12 @@ public static class GaussianMethod {
 
 			// normalize
 			/*
-			double scale = A[r, r];
-			for(int c = 0; c < cols; c++) {
-				A[r, c] /= scale;
-			}
-			B[r] /= scale;
-			*/
+		double scale = A[r, r];
+		for(int c = 0; c < cols; c++) {
+			A[r, c] /= scale;
+		}
+		B[r] /= scale;
+		*/
 
 			// 
 			for(int rr = r + 1; rr < rows; rr++) {

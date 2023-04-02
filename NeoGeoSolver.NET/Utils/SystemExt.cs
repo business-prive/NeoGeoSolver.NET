@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
+
+namespace NeoGeoSolver.NET.Utils;
 
 public static class SystemExt {
 	static NumberFormatInfo nfi = new NumberFormatInfo();

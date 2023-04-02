@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Constraints;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
 
-using System.Linq;
-using System.Xml;
-using System;
+namespace NeoGeoSolver.NET.Entities;
 
 public enum IEntityType {
 	Point,
@@ -282,7 +283,7 @@ public abstract partial class Entity : SketchObject, IEntity {
 		return e;
 	}
 
-	public Entity(Sketch sketch) : base(sketch) {
+	public Entity(Sketch.Sketch sketch) : base(sketch) {
 		sketch.AddEntity(this);
 	}
 
@@ -497,8 +498,8 @@ public abstract partial class Entity : SketchObject, IEntity {
 		return null;
 	}
 
-	public static Entity New(string typeName, Sketch sk) {
-		Type[] types = { typeof(Sketch) };
+	public static Entity New(string typeName, Sketch.Sketch sk) {
+		Type[] types = { typeof(Sketch.Sketch) };
 		object[] param = { sk };
 		var type = Type.GetType(typeName);
 		if(type == null) {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿namespace NeoGeoSolver.NET.Solver;
 
 public class Param {
 	public string name;
@@ -167,7 +165,7 @@ public class Exp {
 		
 		*/
 		return Math.Sign(x) * (
-			 1.0 / 2.0 + ((1 + 0.926 * ax) / (2 + 1.792 * ax + 3.104 * ax2)) * Math.Sin(Math.PI * ax2 / 2)
+			1.0 / 2.0 + ((1 + 0.926 * ax) / (2 + 1.792 * ax + 3.104 * ax2)) * Math.Sin(Math.PI * ax2 / 2)
 			-(1 / (2 + 4.142 * ax + 3.492 * ax2 + 6.67 * ax3)) * Math.Cos(Math.PI * ax2 / 2)
 		);
 	}
@@ -191,7 +189,7 @@ public class Exp {
 		*/
 		return Math.Sign(x) * (
 			1.0 / 2.0 - ((1 + 0.926 * ax) / (2 + 1.792 * ax + 3.104 * ax2)) * Math.Cos(Math.PI * ax2 / 2)
-			-(1 / (2 + 4.142 + 3.492 * ax2 + 6.67 * ax3)) * Math.Sin(Math.PI * ax2 / 2)
+			          -(1 / (2 + 4.142 + 3.492 * ax2 + 6.67 * ax3)) * Math.Sin(Math.PI * ax2 / 2)
 		);
 	}
 
@@ -225,12 +223,12 @@ public class Exp {
 			case Op.Sub:	return a.Eval() - b.Eval();
 			case Op.Mul:	return a.Eval() * b.Eval();
 			case Op.Div: {
-					var bv = b.Eval();
-					if(Math.Abs(bv) < 1e-10) {
-						//Debug.Log("Division by zero");
-						bv = 1.0;
-					}
-					return a.Eval() / bv;
+				var bv = b.Eval();
+				if(Math.Abs(bv) < 1e-10) {
+					//Debug.Log("Division by zero");
+					bv = 1.0;
+				}
+				return a.Eval() / bv;
 			}
 			case Op.Sin:	return Math.Sin(a.Eval());
 			case Op.Cos:	return Math.Cos(a.Eval());

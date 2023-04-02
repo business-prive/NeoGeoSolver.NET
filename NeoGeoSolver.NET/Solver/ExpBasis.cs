@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using NeoGeoSolver.NET.Utils;
 
-using System.Linq;
-using System;
+namespace NeoGeoSolver.NET.Solver;
 
 public class ExpBasis {
 	Param px, py, pz;
@@ -210,4 +208,3 @@ public class ExpBasis2d {
 		parameters.ForEach(pp => pp.changed = false);
 	}
 }
-

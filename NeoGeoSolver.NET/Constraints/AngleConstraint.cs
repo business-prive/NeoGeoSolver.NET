@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
-using System.Linq;
-using System.Xml;
+namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
 public class AngleConstraint : ValueConstraint {
@@ -24,22 +26,22 @@ public class AngleConstraint : ValueConstraint {
 		}
 	}
 
-	public AngleConstraint(Sketch sk) : base(sk) { }
+	public AngleConstraint(Sketch.Sketch sk) : base(sk) { }
 
-	public AngleConstraint(Sketch sk, IEntity[] points) : base(sk) {
+	public AngleConstraint(Sketch.Sketch sk, IEntity[] points) : base(sk) {
 		foreach(var p in points) {
 			AddEntity(p);
 		}
 		Satisfy();
 	}
 
-	public AngleConstraint(Sketch sk, IEntity arc) : base(sk) {
+	public AngleConstraint(Sketch.Sketch sk, IEntity arc) : base(sk) {
 		AddEntity(arc);
 		value.value = Math.PI / 4;
 		Satisfy();
 	}
 
-	public AngleConstraint(Sketch sk, IEntity l0, IEntity l1) : base(sk) {
+	public AngleConstraint(Sketch.Sketch sk, IEntity l0, IEntity l1) : base(sk) {
 		AddEntity(l0);
 		AddEntity(l1);
 		Satisfy();

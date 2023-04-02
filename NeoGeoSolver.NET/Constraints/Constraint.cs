@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Xml;
-using System;
+﻿using System.Xml;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Sketch;
+using NeoGeoSolver.NET.Solver;
+using NeoGeoSolver.NET.Utils;
 
-using System.Xml.Serialization;
-using System.Linq;
+namespace NeoGeoSolver.NET.Constraints;
 
 public abstract partial class Entity {
 
@@ -30,7 +31,7 @@ public class Constraint : SketchObject {
 	protected virtual Enum optionInternal { get { return Option.Default; } set { } }
 
 	protected void AddEntity<T>(T e) where T : IEntity {
-		if(e is Entity) (e as Entity).AddConstraint(this);
+		if(e is Entities.Entity) (e as Entities.Entity).AddConstraint(this);
 		ids.Add(e.id);
 	}
 
@@ -44,7 +45,7 @@ public class Constraint : SketchObject {
 		ids.Add(c.id);
 	}
 
-	public Constraint(Sketch sk) : base(sk) {
+	public Constraint(Sketch.Sketch sk) : base(sk) {
 		sk.AddConstraint(this);
 	}
 
@@ -55,7 +56,7 @@ public class Constraint : SketchObject {
 		}
 		base.Destroy();
 		for(int i = 0; i < ids.Count; i++) {
-			var ent = GetEntity(i) as Entity;
+			var ent = GetEntity(i) as Entities.Entity;
 			if(ent != null) {
 				ent.RemoveConstraint(this);
 			} else {
@@ -176,12 +177,12 @@ public class Constraint : SketchObject {
 	}
 
 	protected void SetEntity(int i, IEntity e) {
-		var ent = GetEntity(i) as Entity;
+		var ent = GetEntity(i) as Entities.Entity;
 		if(ent != null) {
 			ent.RemoveConstraint(this);
 		}
 		ids[i] = e.id;
-		ent = GetEntity(i) as Entity;
+		ent = GetEntity(i) as Entities.Entity;
 		if(ent != null) {
 			ent.AddConstraint(this);
 		}
@@ -319,9 +320,9 @@ public class Constraint : SketchObject {
 		}
 	}
 	
-    void drawArcExtend(LineCanvas renderer, Vector3 p0, Vector3 p1,
-                                 Vector3 c, Vector3 to, Vector3 vz,
-                                 bool dash, float step) {
+	void drawArcExtend(LineCanvas renderer, Vector3 p0, Vector3 p1,
+		Vector3 c, Vector3 to, Vector3 vz,
+		bool dash, float step) {
 		float dd0 = Vector3.Dot(Vector3.Cross(p0 - c, p1 - c), vz);
 		bool greater180 = dd0 < 0;
 		Vector3 c0 = Vector3.Cross(to - c, p0 - c);
@@ -512,8 +513,8 @@ public class Constraint : SketchObject {
 		return false;
 	}
 
-	public static Constraint New(string typeName, Sketch sk) {
-		Type[] types = { typeof(Sketch) };
+	public static Constraint New(string typeName, Sketch.Sketch sk) {
+		Type[] types = { typeof(Sketch.Sketch) };
 		object[] param = { sk };
 		var type = Type.GetType(typeName);
 		if(type == null) {
@@ -570,7 +571,7 @@ public class ValueConstraint : Constraint {
 		}
 	}
 
-	public ValueConstraint(Sketch sk) : base(sk) {}
+	public ValueConstraint(Sketch.Sketch sk) : base(sk) {}
 
 	public override IEnumerable<Param> parameters {
 		get {
@@ -947,4 +948,3 @@ public class ValueConstraint : Constraint {
 		}
 	}
 }
-
