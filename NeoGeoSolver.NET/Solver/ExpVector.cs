@@ -1,6 +1,6 @@
 ﻿
 using System;
-using UnityEngine;
+
 
 public class ExpVector {
 	public Exp x;
