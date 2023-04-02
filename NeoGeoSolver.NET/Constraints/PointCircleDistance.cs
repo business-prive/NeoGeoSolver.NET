@@ -5,7 +5,7 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class PointCircleDistance : ValueConstraint {
+public class PointCircleDistance : Value {
 
 	public PointCircleDistance(Sketch.Sketch sk) : base(sk) { }
 
@@ -15,7 +15,7 @@ public class PointCircleDistance : ValueConstraint {
 		Satisfy();
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var point = GetEntity(0);
 			var circle = GetEntity(1);

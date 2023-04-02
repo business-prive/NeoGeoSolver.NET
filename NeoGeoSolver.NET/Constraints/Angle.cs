@@ -8,7 +8,7 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class AngleConstraint : ValueConstraint {
+public class Angle : Value {
 
 	bool supplementary_;
 	public bool supplementary {
@@ -27,34 +27,34 @@ public class AngleConstraint : ValueConstraint {
 		}
 	}
 
-	public AngleConstraint(Sketch.Sketch sk) : base(sk) { }
+	public Angle(Sketch.Sketch sk) : base(sk) { }
 
-	public AngleConstraint(Sketch.Sketch sk, IEntity[] points) : base(sk) {
+	public Angle(Sketch.Sketch sk, IEntity[] points) : base(sk) {
 		foreach(var p in points) {
 			AddEntity(p);
 		}
 		Satisfy();
 	}
 
-	public AngleConstraint(Sketch.Sketch sk, IEntity arc) : base(sk) {
+	public Angle(Sketch.Sketch sk, IEntity arc) : base(sk) {
 		AddEntity(arc);
 		value.value = Math.PI / 4;
 		Satisfy();
 	}
 
-	public AngleConstraint(Sketch.Sketch sk, IEntity l0, IEntity l1) : base(sk) {
+	public Angle(Sketch.Sketch sk, IEntity l0, IEntity l1) : base(sk) {
 		AddEntity(l0);
 		AddEntity(l1);
 		Satisfy();
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var p = GetPointsExp(sketch.plane);
-			ExpVector d0 = p[0] - p[1];
-			ExpVector d1 = p[3] - p[2];
+			ExpressionVector d0 = p[0] - p[1];
+			ExpressionVector d1 = p[3] - p[2];
 			bool angle360 = HasEntitiesOfType(IEntityType.Arc, 1);
-			Exp angle = sketch.is3d ? ConstraintExp.angle3d(d0, d1) : ConstraintExp.angle2d(d0, d1, angle360);
+			Expression angle = sketch.is3d ? ConstraintExp.angle3d(d0, d1) : ConstraintExp.angle2d(d0, d1, angle360);
 			yield return angle - value;
 		}
 	}
@@ -67,8 +67,8 @@ public class AngleConstraint : ValueConstraint {
 		return GetPointsInPlane(sketch.plane);
 	}
 
-	ExpVector[] GetPointsExp(IPlane plane) {
-		var p = new ExpVector[4];
+	ExpressionVector[] GetPointsExp(IPlane plane) {
+		var p = new ExpressionVector[4];
 		if(HasEntitiesOfType(IEntityType.Point, 4)) {
 			for(int i = 0; i < 4; i++) {
 				p[i] = GetEntityOfType(IEntityType.Point, i).GetPointAtInPlane(0, plane);

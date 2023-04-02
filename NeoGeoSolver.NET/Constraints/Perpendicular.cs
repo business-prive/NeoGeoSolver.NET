@@ -1,4 +1,5 @@
-﻿using NeoGeoSolver.NET.Entities;
+﻿using System.Numerics;
+using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
@@ -25,15 +26,15 @@ public class Perpendicular : Constraint {
 		ChooseBestOption();
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var l0 = GetEntityOfType(IEntityType.Line, 0);
 			var l1 = GetEntityOfType(IEntityType.Line, 1);
 
-			ExpVector d0 = l0.GetPointAtInPlane(0, sketch.plane) - l0.GetPointAtInPlane(1, sketch.plane);
-			ExpVector d1 = l1.GetPointAtInPlane(0, sketch.plane) - l1.GetPointAtInPlane(1, sketch.plane);
+			ExpressionVector d0 = l0.GetPointAtInPlane(0, sketch.plane) - l0.GetPointAtInPlane(1, sketch.plane);
+			ExpressionVector d1 = l1.GetPointAtInPlane(0, sketch.plane) - l1.GetPointAtInPlane(1, sketch.plane);
 
-			Exp angle = sketch.is3d ? ConstraintExp.angle3d(d0, d1) : ConstraintExp.angle2d(d0, d1);
+			Expression angle = sketch.is3d ? ConstraintExp.angle3d(d0, d1) : ConstraintExp.angle2d(d0, d1);
 			switch(option) {
 				case Option.LeftHand: yield return angle - Math.PI / 2.0; break;
 				case Option.RightHand: yield return angle + Math.PI / 2.0; break;
@@ -69,9 +70,9 @@ protected override void OnDraw(LineCanvas canvas) {
 		var line0 = GetEntityOfType(IEntityType.Line, 0);
 		var line1 = GetEntityOfType(IEntityType.Line, 1);
 		
-		ExpVector p0 = null;
-		ExpVector p1 = null;
-		ExpVector p2 = null;
+		ExpressionVector p0 = null;
+		ExpressionVector p1 = null;
+		ExpressionVector p2 = null;
 		
 		for(int i = 0; i < 2; i++) {
 			for(int j = 0; j < 2; j++) {

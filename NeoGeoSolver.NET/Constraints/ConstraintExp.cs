@@ -1,28 +1,29 @@
-﻿using NeoGeoSolver.NET.Solver;
+﻿using System.Numerics;
+using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
 public static class ConstraintExp {
 
-	public static ExpVector rotateDir2d(ExpVector rv, Exp angle) {
-		var cos = Exp.Cos(angle);
-		var sin = Exp.Sin(angle);
-		return new ExpVector(
+	public static ExpressionVector rotateDir2d(ExpressionVector rv, Expression angle) {
+		var cos = Expression.Cos(angle);
+		var sin = Expression.Sin(angle);
+		return new ExpressionVector(
 			cos * rv.x - sin * rv.y, 
 			sin * rv.x + cos * rv.y, 
 			rv.z
 		);
 	}
 
-	public static Exp angle2d(ExpVector d0, ExpVector d1, bool angle360 = false) {
-		Exp nu = d1.x * d0.x + d1.y * d0.y;
-		Exp nv = d0.x * d1.y - d0.y * d1.x;
-		if(angle360) return Math.PI - Exp.Atan2(nv, -nu);
-		return Exp.Atan2(nv, nu);
+	public static Expression angle2d(ExpressionVector d0, ExpressionVector d1, bool angle360 = false) {
+		Expression nu = d1.x * d0.x + d1.y * d0.y;
+		Expression nv = d0.x * d1.y - d0.y * d1.x;
+		if(angle360) return Math.PI - Expression.Atan2(nv, -nu);
+		return Expression.Atan2(nv, nu);
 	}
 	
-	public static Exp angle3d(ExpVector d0, ExpVector d1) {
-		return Exp.Atan2(ExpVector.Cross(d0, d1).Magnitude(), ExpVector.Dot(d0, d1));
+	public static Expression angle3d(ExpressionVector d0, ExpressionVector d1) {
+		return Expression.Atan2(ExpressionVector.Cross(d0, d1).Magnitude(), ExpressionVector.Dot(d0, d1));
 	}
 
 	public static double angle2d(Vector3 d0, Vector3 d1, bool angle360 = false) {
@@ -36,12 +37,12 @@ public static class ConstraintExp {
 		return Math.Atan2(Vector3.Cross(d0, d1).magnitude, Vector3.Dot(d0, d1));
 	}
 
-	public static Exp pointLineDistance(ExpVector p, ExpVector p0, ExpVector p1, bool is3d) {
+	public static Expression pointLineDistance(ExpressionVector p, ExpressionVector p0, ExpressionVector p1, bool is3d) {
 		if(is3d) {
 			var d = p0 - p1;
-			return ExpVector.Cross(d, p0 - p).Magnitude() / d.Magnitude();
+			return ExpressionVector.Cross(d, p0 - p).Magnitude() / d.Magnitude();
 		}
-		return ((p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y + p0.x * p1.y - p1.x * p0.y) / Exp.Sqrt(Exp.Sqr(p1.x - p0.x) + Exp.Sqr(p1.y - p0.y));
+		return ((p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y + p0.x * p1.y - p1.x * p0.y) / Expression.Sqrt(Expression.Sqr(p1.x - p0.x) + Expression.Sqr(p1.y - p0.y));
 	}
 
 }

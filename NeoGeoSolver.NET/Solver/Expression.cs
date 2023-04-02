@@ -1,6 +1,6 @@
 namespace NeoGeoSolver.NET.Solver;
 
-public class Exp {
+public class Expression {
 
   public enum Op {
     Undefined,
@@ -31,64 +31,64 @@ public class Exp {
     //Pow,
   }
 
-  public static readonly Exp zero = new Exp(0.0);
-  public static readonly Exp one  = new Exp(1.0);
-  public static readonly Exp mOne = new Exp(-1.0);
-  public static readonly Exp two  = new Exp(2.0);
+  public static readonly Expression zero = new Expression(0.0);
+  public static readonly Expression one  = new Expression(1.0);
+  public static readonly Expression mOne = new Expression(-1.0);
+  public static readonly Expression two  = new Expression(2.0);
 
   public Op op;
 
-  public Exp a;
-  public Exp b;
+  public Expression a;
+  public Expression b;
   public Param param;
   public double value;
 
-  Exp() { }
+  Expression() { }
 
-  public Exp(double value) {
+  public Expression(double value) {
     this.value = value;
     this.op = Op.Const;
   }
 
-  internal Exp(Param p) {
+  internal Expression(Param p) {
     this.param = p;
     this.op = Op.Param;
   }
 
-  public static implicit operator Exp(Param param) {
+  public static implicit operator Expression(Param param) {
     return param.exp;
   }
 
-  public static implicit operator Exp(double value) {
+  public static implicit operator Expression(double value) {
     if(value == 0.0) return zero;
     if(value == 1.0) return one;
-    Exp result = new Exp();
+    Expression result = new Expression();
     result.value = value;
     result.op = Op.Const;
     return result;
   }
 
-  public Exp(Op op, Exp a, Exp b) {
+  public Expression(Op op, Expression a, Expression b) {
     this.a = a;
     this.b = b;
     this.op = op;
   }
 
-  static public Exp operator+(Exp a, Exp b) {
+  static public Expression operator+(Expression a, Expression b) {
     if(a.IsZeroConst()) return b;
     if(b.IsZeroConst()) return a;
     if(b.op == Op.Neg) return a - b.a;
     if(b.op == Op.Pos) return a + b.a;
-    return new Exp(Op.Add, a, b);
+    return new Expression(Op.Add, a, b);
   }
 
-  static public Exp operator-(Exp a, Exp b) {
+  static public Expression operator-(Expression a, Expression b) {
     if(a.IsZeroConst()) return -b;
     if(b.IsZeroConst()) return a;
-    return new Exp(Op.Sub, a, b);
+    return new Expression(Op.Sub, a, b);
   }
 
-  static public Exp operator*(Exp a, Exp b) {
+  static public Expression operator*(Expression a, Expression b) {
     if(a.IsZeroConst()) return zero;
     if(b.IsZeroConst()) return zero;
     if(a.IsOneConst()) return b;
@@ -96,22 +96,22 @@ public class Exp {
     if(a.IsMinusOneConst()) return -b;
     if(b.IsMinusOneConst()) return -a;
     if(a.IsConst() && b.IsConst()) return a.value * b.value;
-    return new Exp(Op.Mul, a, b);
+    return new Expression(Op.Mul, a, b);
   }
 
-  static public Exp operator/(Exp a, Exp b) {
+  static public Expression operator/(Expression a, Expression b) {
     if(b.IsOneConst()) return a;
     if(a.IsZeroConst()) return zero;
     if(b.IsMinusOneConst()) return -a;
-    return new Exp(Op.Div, a, b);
+    return new Expression(Op.Div, a, b);
   }
   //static public Exp operator^(Exp a, Exp b) { return new Exp(Op.Pow, a, b); }
 
-  static public Exp operator-(Exp a) {
+  static public Expression operator-(Expression a) {
     if(a.IsZeroConst()) return a;
     if(a.IsConst()) return -a.value;
     if(a.op == Op.Neg) return a.a;
-    return new Exp(Op.Neg, a, null);
+    return new Expression(Op.Neg, a, null);
   }
 
   // https://www.hindawi.com/journals/mpe/2018/4031793/
@@ -163,24 +163,24 @@ public class Exp {
   }
 
 	
-  static public Exp Sin	(Exp x) { return new Exp(Op.Sin,	x, null); }
-  static public Exp Cos	(Exp x) { return new Exp(Op.Cos,	x, null); }
-  static public Exp ACos	(Exp x) { return new Exp(Op.ACos,	x, null); }
-  static public Exp ASin	(Exp x) { return new Exp(Op.ASin,	x, null); }
-  static public Exp Sqrt	(Exp x) { return new Exp(Op.Sqrt,	x, null); }
-  static public Exp Sqr	(Exp x) { return new Exp(Op.Sqr,	x, null); }
-  static public Exp Abs	(Exp x) { return new Exp(Op.Abs,	x, null); }
-  static public Exp Sign	(Exp x) { return new Exp(Op.Sign,	x, null); }
-  static public Exp Atan2	(Exp x, Exp y) { return new Exp(Op.Atan2, x, y); }
-  static public Exp Expo	(Exp x) { return new Exp(Op.Exp,	x, null); }
-  static public Exp Sinh	(Exp x) { return new Exp(Op.Sinh,	x, null); }
-  static public Exp Cosh	(Exp x) { return new Exp(Op.Cosh,	x, null); }
-  static public Exp SFres	(Exp x) { return new Exp(Op.SFres,	x, null); }
-  static public Exp CFres	(Exp x) { return new Exp(Op.CFres,	x, null); }
+  static public Expression Sin	(Expression x) { return new Expression(Op.Sin,	x, null); }
+  static public Expression Cos	(Expression x) { return new Expression(Op.Cos,	x, null); }
+  static public Expression ACos	(Expression x) { return new Expression(Op.ACos,	x, null); }
+  static public Expression ASin	(Expression x) { return new Expression(Op.ASin,	x, null); }
+  static public Expression Sqrt	(Expression x) { return new Expression(Op.Sqrt,	x, null); }
+  static public Expression Sqr	(Expression x) { return new Expression(Op.Sqr,	x, null); }
+  static public Expression Abs	(Expression x) { return new Expression(Op.Abs,	x, null); }
+  static public Expression Sign	(Expression x) { return new Expression(Op.Sign,	x, null); }
+  static public Expression Atan2	(Expression x, Expression y) { return new Expression(Op.Atan2, x, y); }
+  static public Expression Expo	(Expression x) { return new Expression(Op.Exp,	x, null); }
+  static public Expression Sinh	(Expression x) { return new Expression(Op.Sinh,	x, null); }
+  static public Expression Cosh	(Expression x) { return new Expression(Op.Cosh,	x, null); }
+  static public Expression SFres	(Expression x) { return new Expression(Op.SFres,	x, null); }
+  static public Expression CFres	(Expression x) { return new Expression(Op.CFres,	x, null); }
   //static public Exp Pow  (Exp x, Exp y) { return new Exp(Op.Pow,   x, y); }
 
-  public Exp Drag(Exp to) {
-    return new Exp(Op.Drag, this, to);
+  public Expression Drag(Expression to) {
+    return new Expression(Op.Drag, this, to);
   }
 
   public double Eval() {
@@ -311,11 +311,11 @@ public class Exp {
     return false;
   }
 
-  public Exp Deriv(Param p) {
+  public Expression Deriv(Param p) {
     return d(p);
   }
 
-  Exp d(Param p) {
+  Expression d(Param p) {
     switch(op) {
       case Op.Const:	return zero;
       case Op.Param:	return (param == p) ? one : zero;
@@ -369,7 +369,7 @@ public class Exp {
     }
   }
 
-  public void Substitute(Param p, Exp e) {
+  public void Substitute(Param p, Expression e) {
     if(a != null) {
       a.Substitute(p, e);
       if(b != null) {
@@ -385,7 +385,7 @@ public class Exp {
     }
   }
 
-  public void Walk(Action<Exp> action) {
+  public void Walk(Action<Expression> action) {
     action(this);
     if(a != null) {
       action(a);
@@ -395,8 +395,8 @@ public class Exp {
     }
   }
 
-  public Exp DeepClone() {
-    Exp result = new Exp();
+  public Expression DeepClone() {
+    Expression result = new Expression();
     result.op = op;
     result.param = param;
     result.value = value;

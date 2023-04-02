@@ -2,30 +2,30 @@
 
 namespace NeoGeoSolver.NET.Utils;
 
-public class ExpParser {
+public class ExpressionParser {
     
-	Dictionary <string, Exp.Op> functions = new Dictionary<string, Exp.Op> {
-		{ "sin",	Exp.Op.Sin },
-		{ "cos",	Exp.Op.Cos },
-		{ "atan2",	Exp.Op.Atan2 },
-		{ "sqr",	Exp.Op.Sqr },
-		{ "sqrt",	Exp.Op.Sqrt },
-		{ "abs",	Exp.Op.Abs },
-		{ "sign",	Exp.Op.Sign },
-		{ "acos",	Exp.Op.ACos },
-		{ "asin",	Exp.Op.Cos },
-		{ "exp",	Exp.Op.Exp },
-		{ "sinh",	Exp.Op.Sinh },
-		{ "cosh",	Exp.Op.Cosh },
-		{ "sfres",	Exp.Op.SFres },
-		{ "cfres",	Exp.Op.CFres },
+	Dictionary <string, Expression.Op> functions = new Dictionary<string, Expression.Op> {
+		{ "sin",	Expression.Op.Sin },
+		{ "cos",	Expression.Op.Cos },
+		{ "atan2",	Expression.Op.Atan2 },
+		{ "sqr",	Expression.Op.Sqr },
+		{ "sqrt",	Expression.Op.Sqrt },
+		{ "abs",	Expression.Op.Abs },
+		{ "sign",	Expression.Op.Sign },
+		{ "acos",	Expression.Op.ACos },
+		{ "asin",	Expression.Op.Cos },
+		{ "exp",	Expression.Op.Exp },
+		{ "sinh",	Expression.Op.Sinh },
+		{ "cosh",	Expression.Op.Cosh },
+		{ "sfres",	Expression.Op.SFres },
+		{ "cfres",	Expression.Op.CFres },
 	};
     
-	Dictionary <char, Exp.Op> operators = new Dictionary<char, Exp.Op> {
-		{ '+', Exp.Op.Add },
-		{ '-', Exp.Op.Sub },
-		{ '*', Exp.Op.Mul },
-		{ '/', Exp.Op.Div },
+	Dictionary <char, Expression.Op> operators = new Dictionary<char, Expression.Op> {
+		{ '+', Expression.Op.Add },
+		{ '-', Expression.Op.Sub },
+		{ '*', Expression.Op.Mul },
+		{ '/', Expression.Op.Div },
 	};
 
 	Dictionary <string, double> constants = new Dictionary<string, double> {
@@ -53,7 +53,7 @@ public class ExpParser {
 		};
 
 		foreach(var e in exps) {
-			var parser = new ExpParser(e);
+			var parser = new ExpressionParser(e);
 			var exp = parser.Parse();
 			Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\"");
 		}
@@ -76,7 +76,7 @@ public class ExpParser {
 		};
 
 		foreach(var e in results) {
-			var parser = new ExpParser(e.Key);
+			var parser = new ExpressionParser(e.Key);
 			var exp = parser.Parse();
 			Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\" = " + exp.Eval().ToStr());
 			if(exp.Eval() != e.Value) {
@@ -86,7 +86,7 @@ public class ExpParser {
 
 	}
 
-	public ExpParser(string str) {
+	public ExpressionParser(string str) {
 		toParse = str;
 	}
 
@@ -164,14 +164,14 @@ public class ExpParser {
 		return true;
 	}
     
-	Exp.Op GetFunction(string name) {
+	Expression.Op GetFunction(string name) {
 		if(functions.ContainsKey(name)) {
 			return functions[name];
 		}
-		return Exp.Op.Undefined;
+		return Expression.Op.Undefined;
 	}
 
-	Exp GetConstant(string name) {
+	Expression GetConstant(string name) {
 		if(constants.ContainsKey(name)) {
 			return constants[name];
 		}
@@ -188,29 +188,29 @@ public class ExpParser {
 		throw new System.Exception(msg);
 	}
     
-	Exp ParseValue() {
+	Expression ParseValue() {
         
 		double digits = 0.0;
 		if(ParseDigits(ref digits)) {
-			return new Exp(digits);
+			return new Expression(digits);
 		}
 		bool braced = false;
         
 		string alphas = "";
 		if(ParseAlphas(ref alphas)) {
 			var func = GetFunction(alphas);
-			if(func != Exp.Op.Undefined) {
+			if(func != Expression.Op.Undefined) {
 				if(SkipIf('(')) {
-					Exp a = ParseExp(ref braced);
-					Exp b = null;
+					Expression a = ParseExp(ref braced);
+					Expression b = null;
 					if(SkipIf(',')) {
 						b = ParseExp(ref braced);
 					}
 					Skip(')');
-					if(func == Exp.Op.Atan2 && b == null) {
+					if(func == Expression.Op.Atan2 && b == null) {
 						error("second function argument execpted");
 					}
-					return new Exp(func, a, b);
+					return new Expression(func, a, b);
 				} else error("function arguments execpted");
 			}
 
@@ -222,57 +222,57 @@ public class ExpParser {
 				param = new Param(alphas);
 				parameters.Add(param);
 			}
-			return new Exp(param);
+			return new Expression(param);
 		}
 		error("valid operand excepted");
 		return null;
 	}
     
-	int OrderOf(Exp.Op op) {
+	int OrderOf(Expression.Op op) {
 		switch(op) {
-			case Exp.Op.Add:
-			case Exp.Op.Sub:
+			case Expression.Op.Add:
+			case Expression.Op.Sub:
 				return 1;
-			case Exp.Op.Mul:
-			case Exp.Op.Div:
+			case Expression.Op.Mul:
+			case Expression.Op.Div:
 				return 2;
 			default:
 				return 0;
 		}
 	}
 	
-	Exp.Op ParseOp() {
+	Expression.Op ParseOp() {
 		SkipSpaces();
 		if(operators.ContainsKey(next)) {
 			var result = operators[next];
 			index++;
 			return result;
 		}
-		return Exp.Op.Undefined;
+		return Expression.Op.Undefined;
 	}
 
 	bool HasNext() {
 		return index < toParse.Length;
 	}
 
-	Exp.Op ParseUnary() {
+	Expression.Op ParseUnary() {
 		SkipSpaces();
 		if(next == '+') {
 			index++;
-			return Exp.Op.Pos;
+			return Expression.Op.Pos;
 		}
 		if(next == '-') {
 			index++;
-			return Exp.Op.Neg;
+			return Expression.Op.Neg;
 		}
-		return Exp.Op.Undefined;
+		return Expression.Op.Undefined;
 	}
 	    
-	Exp ParseExp(ref bool braced) {
+	Expression ParseExp(ref bool braced) {
 
 		var uop = ParseUnary();
 				
-		Exp a = null;
+		Expression a = null;
 		bool aBraced = false;
 		if(SkipIf('(')) {
 			bool br = false;
@@ -282,8 +282,8 @@ public class ExpParser {
 		} else {
 			a = ParseValue();
 		}
-		if(uop != Exp.Op.Undefined && uop != Exp.Op.Pos) {
-			a = new Exp(uop, a, null);
+		if(uop != Expression.Op.Undefined && uop != Expression.Op.Pos) {
+			a = new Expression(uop, a, null);
 		}
         
 		SkipSpaces();
@@ -293,19 +293,19 @@ public class ExpParser {
 		}
         
 		var op = ParseOp();
-		if(op == Exp.Op.Undefined) error("operator execpted");
+		if(op == Expression.Op.Undefined) error("operator execpted");
         
 		bool bBraced = false;
 		var b = ParseExp(ref bBraced);
         
 		if(!bBraced && b.HasTwoOperands() && OrderOf(op) > OrderOf(b.op)) {
-			b.a = new Exp(op, a, b.a);
+			b.a = new Expression(op, a, b.a);
 			return b;
 		}
-		return new Exp(op, a, b);
+		return new Expression(op, a, b);
 	}
     
-	public Exp Parse() {
+	public Expression Parse() {
 		try {
 			bool braced = false;
 			return ParseExp(ref braced);

@@ -1,4 +1,5 @@
-﻿using NeoGeoSolver.NET.Entities;
+﻿using System.Numerics;
+using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
@@ -25,18 +26,18 @@ public class Parallel : Constraint {
 		ChooseBestOption();
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var l0 = GetEntityOfType(IEntityType.Line, 0);
 			var l1 = GetEntityOfType(IEntityType.Line, 1);
 
-			ExpVector d0 = l0.GetPointAtInPlane(0, sketch.plane) - l0.GetPointAtInPlane(1, sketch.plane);
-			ExpVector d1 = l1.GetPointAtInPlane(0, sketch.plane) - l1.GetPointAtInPlane(1, sketch.plane);
+			ExpressionVector d0 = l0.GetPointAtInPlane(0, sketch.plane) - l0.GetPointAtInPlane(1, sketch.plane);
+			ExpressionVector d1 = l1.GetPointAtInPlane(0, sketch.plane) - l1.GetPointAtInPlane(1, sketch.plane);
 
-			Exp angle = sketch.is3d ? ConstraintExp.angle3d(d0, d1) : ConstraintExp.angle2d(d0, d1);
+			Expression angle = sketch.is3d ? ConstraintExp.angle3d(d0, d1) : ConstraintExp.angle2d(d0, d1);
 			switch(option) {
 				case Option.Codirected: yield return angle; break;
-				case Option.Antidirected: yield return Exp.Abs(angle) - Math.PI; break;
+				case Option.Antidirected: yield return Expression.Abs(angle) - Math.PI; break;
 			}
 		}
 	}

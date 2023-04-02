@@ -27,7 +27,7 @@ public static class UnityExt {
 
 	public static Quaternion ToQuaternion(this string str) {
 		var values = str.Split(' ');
-		var q = Quaternion.identity;
+		var q = Quaternion.Identity;
 		q.x = values[0].ToFloat();
 		q.y = values[1].ToFloat();
 		q.z = values[2].ToFloat();

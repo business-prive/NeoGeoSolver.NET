@@ -6,7 +6,7 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class CirclesDistance : ValueConstraint {
+public class CirclesDistance : Value {
 
 	public enum Option {
 		Outside,
@@ -29,9 +29,9 @@ public class CirclesDistance : ValueConstraint {
 		Satisfy();
 	}
 
-	PointEntity getCenterPoint(IEntity e) {
-		if(e is CircleEntity) return (e as CircleEntity).center;
-		if(e is ArcEntity) return (e as ArcEntity).center;
+	Point getCenterPoint(IEntity e) {
+		if(e is Circle) return (e as Circle).center;
+		if(e is Arc) return (e as Arc).center;
 		return null;
 	}
 
@@ -41,7 +41,7 @@ public class CirclesDistance : ValueConstraint {
 		return cp0 != null && cp1 != null && cp0.IsCoincidentWith(cp1);
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var c0 = GetEntity(0);
 			var c1 = GetEntity(1);

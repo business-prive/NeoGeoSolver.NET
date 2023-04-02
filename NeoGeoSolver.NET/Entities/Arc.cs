@@ -1,23 +1,24 @@
-﻿using NeoGeoSolver.NET.Constraints;
+﻿using System.Numerics;
+using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class ArcEntity : Entity, ISegmentaryEntity {
+public class Arc : Entity, ISegmentaryEntity {
 
-	public PointEntity p0;
-	public PointEntity p1;
-	public PointEntity c;
+	public Point p0;
+	public Point p1;
+	public Point c;
 
-	public ArcEntity(Sketch.Sketch sk) : base(sk) {
-		p0 = AddChild(new PointEntity(sk));
-		p1 = AddChild(new PointEntity(sk));
-		c = AddChild(new PointEntity(sk));
+	public Arc(Sketch.Sketch sk) : base(sk) {
+		p0 = AddChild(new Point(sk));
+		p1 = AddChild(new Point(sk));
+		c = AddChild(new Point(sk));
 	}
 
 	public override IEntityType type { get { return IEntityType.Arc; } }
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			if(!p0.IsCoincidentWith(p1)) {
 				yield return (p0.exp - c.exp).Magnitude() - (p1.exp - c.exp).Magnitude();
@@ -25,7 +26,7 @@ public class ArcEntity : Entity, ISegmentaryEntity {
 		}
 	}
 
-	public override IEnumerable<PointEntity> points {
+	public override IEnumerable<Point> points {
 		get {
 			yield return p0;
 			yield return p1;
@@ -37,7 +38,7 @@ public class ArcEntity : Entity, ISegmentaryEntity {
 		return p0.IsChanged() || p1.IsChanged() || c.IsChanged();
 	}
 
-	public Exp GetAngleExp() {
+	public Expression GetAngleExp() {
 		if(!p0.IsCoincidentWith(p1)) {
 			var d0 = p0.exp - c.exp;
 			var d1 = p1.exp - c.exp;
@@ -52,9 +53,9 @@ public class ArcEntity : Entity, ISegmentaryEntity {
 		return angle;
 	}
 
-	public PointEntity begin { get { return p0; } }
-	public PointEntity end { get { return p1; } }
-	public PointEntity center { get { return c; } }
+	public Point begin { get { return p0; } }
+	public Point end { get { return p1; } }
+	public Point center { get { return c; } }
 	public IEnumerable<Vector3> segmentPoints {
 		get {
 			float angle = (float)GetAngle() * Mathf.Rad2Deg;
@@ -77,7 +78,7 @@ public class ArcEntity : Entity, ISegmentaryEntity {
 		}
 	}
 
-	public Exp radiusExp {
+	public Expression radiusExp {
 		get {
 			return (p0.exp - c.exp).Magnitude();
 		}
@@ -86,7 +87,7 @@ public class ArcEntity : Entity, ISegmentaryEntity {
 	public override BBox bbox { get { return new BBox(center.pos, (float)radius); } }
 
 	protected override Entity OnSplit(Vector3 position) {
-		var part = new ArcEntity(sketch);
+		var part = new Arc(sketch);
 		part.center.pos = center.pos;
 		part.p1.pos = p1.pos;
 		p1.pos = position;
@@ -119,41 +120,41 @@ protected override double OnSelect(Vector3 mouse, Camera camera, Matrix4x4 tf) {
 }
 */
 
-	public override ExpVector PointOn(Exp t) {
+	public override ExpressionVector PointOn(Expression t) {
 		var angle = GetAngleExp();
-		var cos = Exp.Cos(angle * t);
-		var sin = Exp.Sin(angle * t);
+		var cos = Expression.Cos(angle * t);
+		var sin = Expression.Sin(angle * t);
 		var rv = p0.exp - c.exp;
 
-		return c.exp + new ExpVector(
+		return c.exp + new ExpressionVector(
 			cos * rv.x - sin * rv.y, 
 			sin * rv.x + cos * rv.y, 
 			0.0
 		);
 	}
 
-	public override ExpVector TangentAt(Exp t) {
+	public override ExpressionVector TangentAt(Expression t) {
 		var angle = GetAngleExp();
-		var cos = Exp.Cos(angle * t + Math.PI / 2);
-		var sin = Exp.Sin(angle * t + Math.PI / 2);
+		var cos = Expression.Cos(angle * t + Math.PI / 2);
+		var sin = Expression.Sin(angle * t + Math.PI / 2);
 		var rv = p0.exp - c.exp;
 
-		return new ExpVector(
+		return new ExpressionVector(
 			cos * rv.x - sin * rv.y, 
 			sin * rv.x + cos * rv.y, 
 			0.0
 		);
 	}
 	
-	public override Exp Length() {
+	public override Expression Length() {
 		return GetAngleExp() * Radius();
 	}
 
-	public override Exp Radius() {
+	public override Expression Radius() {
 		return (p0.exp - c.exp).Magnitude();
 	}
 
-	public override ExpVector Center() {
+	public override ExpressionVector Center() {
 		return c.exp;
 	}
 

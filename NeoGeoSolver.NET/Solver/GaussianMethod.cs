@@ -4,8 +4,7 @@ public static class GaussianMethod {
 
 	public const double epsilon = 1e-10;
 	public const double rankEpsilon = 1e-8;
-
-
+	
 	public static string Print<T>(this T[,] A) {
 		string result = "";
 		for(int r = 0; r < A.GetLength(0); r++) {
@@ -24,8 +23,7 @@ public static class GaussianMethod {
 		}
 		return result;
 	}
-
-
+	
 	public static int Rank(double[,] A) {
 		var rows = A.GetLength(0);
 		var cols = A.GetLength(1);

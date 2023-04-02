@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Numerics;
+using System.Xml;
 using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
@@ -7,46 +8,46 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class HVConstraint : Constraint {
+public class HorizontalVertical : Constraint {
 
-	public ExpVector p0exp {
+	public ExpressionVector p0exp {
 		get {
 			return GetPointInPlane(0, sketch.plane);
 		}
 	}
 
-	public ExpVector p1exp {
+	public ExpressionVector p1exp {
 		get {
 			return GetPointInPlane(1, sketch.plane);
 		}
 	}
 
-	ExpVector GetPointInPlane(int index, IPlane plane) {
+	ExpressionVector GetPointInPlane(int index, IPlane plane) {
 		if(HasEntitiesOfType(IEntityType.Point, 2)) {
 			return GetEntityOfType(IEntityType.Point, index).PointExpInPlane(plane);
 		}
 		return GetEntityOfType(IEntityType.Line, 0).GetPointAtInPlane(index, plane);
 	}
 
-	public HVOrientation orientation = HVOrientation.OX;
+	public HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.OX;
 
-	public HVConstraint(Sketch.Sketch sk) : base(sk) { }
+	public HorizontalVertical(Sketch.Sketch sk) : base(sk) { }
 
-	public HVConstraint(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
+	public HorizontalVertical(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
 		AddEntity(p0);
 		AddEntity(p1);
 	}
 
-	public HVConstraint(Sketch.Sketch sk, IEntity line) : base(sk) {
+	public HorizontalVertical(Sketch.Sketch sk, IEntity line) : base(sk) {
 		AddEntity(line);
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			switch(orientation) {
-				case HVOrientation.OX: yield return p0exp.x - p1exp.x; break;
-				case HVOrientation.OY: yield return p0exp.y - p1exp.y; break;
-				case HVOrientation.OZ: yield return p0exp.z - p1exp.z; break;
+				case HorizontalVerticalOrientation.OX: yield return p0exp.x - p1exp.x; break;
+				case HorizontalVerticalOrientation.OY: yield return p0exp.y - p1exp.y; break;
+				case HorizontalVerticalOrientation.OZ: yield return p0exp.z - p1exp.z; break;
 			}
 		}
 	}

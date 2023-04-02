@@ -1,15 +1,16 @@
-﻿using System.Xml;
+﻿using System.Numerics;
+using System.Xml;
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
 [Serializable]
-public class FunctionEntity : Entity, ISegmentaryEntity {
+public class Function : Entity, ISegmentaryEntity {
 
-	public PointEntity p0;
-	public PointEntity p1;
-	public PointEntity c;
+	public Point p0;
+	public Point p1;
+	public Point c;
 
 	string function_x;
 	string function_y;
@@ -23,7 +24,7 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 			sketch.MarkDirtySketch(entities:true);
 		}
 	}
-	ExpBasis2d basis = new ExpBasis2d();
+	ExpressionBasis2d basis = new ExpressionBasis2d();
 
 	bool tBeginFixed_ = false;
 	public bool tBeginFixed {
@@ -99,32 +100,32 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 		}
 	}
 
-	ExpParser parser;
-	ExpVector exp = new ExpVector(0.0, 0.0, 0.0);
+	ExpressionParser parser;
+	ExpressionVector exp = new ExpressionVector(0.0, 0.0, 0.0);
 	Param t = new Param("t");
 	Param t0 = new Param("t0", 0.0);
 	Param t1 = new Param("t1", 1.0);
 
 	void InitParser() {
-		parser = new ExpParser("0");
+		parser = new ExpressionParser("0");
 		parser.parameters.Add(t);
 		x = "t";
 		y = "cos(t * pi)";
 
 	}
 
-	public FunctionEntity(Sketch.Sketch sk) : base(sk) {
-		p0 = AddChild(new PointEntity(sk));
-		p1 = AddChild(new PointEntity(sk));
-		c = AddChild(new PointEntity(sk));
+	public Function(Sketch.Sketch sk) : base(sk) {
+		p0 = AddChild(new Point(sk));
+		p1 = AddChild(new Point(sk));
+		c = AddChild(new Point(sk));
 		InitParser();
 	}
 
 	public override IEntityType type { get { return IEntityType.Function; } }
 
 
-	public ExpVector GetExpClone(Exp t) {
-		var e = new ExpVector(exp.x.DeepClone(), exp.y.DeepClone(), 0.0);
+	public ExpressionVector GetExpClone(Expression t) {
+		var e = new ExpressionVector(exp.x.DeepClone(), exp.y.DeepClone(), 0.0);
 		if(t != null) {
 			e.x.Substitute(this.t, t);
 			e.y.Substitute(this.t, t);
@@ -133,16 +134,16 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 		return e;
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
-			ExpVector e0 = basis.TransformPosition(GetExpClone(t0));
+			ExpressionVector e0 = basis.TransformPosition(GetExpClone(t0));
 
 			var eq0 = e0 - p0.exp;
 			yield return eq0.x;
 			yield return eq0.y;
 
 			//if(!p0.IsCoincidentWith(p1)) {
-			ExpVector e1 = basis.TransformPosition(GetExpClone(t1));
+			ExpressionVector e1 = basis.TransformPosition(GetExpClone(t1));
 
 			var eq1 = e1 - p1.exp;
 			yield return eq1.x;
@@ -158,7 +159,7 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 		}
 	}
 
-	public override IEnumerable<PointEntity> points {
+	public override IEnumerable<Point> points {
 		get {
 			yield return p0;
 			yield return p1;
@@ -178,8 +179,8 @@ public class FunctionEntity : Entity, ISegmentaryEntity {
 		return p0.IsChanged() || p1.IsChanged() || c.IsChanged() || t0.changed || t1.changed;
 	}
 
-	public PointEntity begin { get { return p0; } }
-	public PointEntity end { get { return p1; } }
+	public Point begin { get { return p0; } }
+	public Point end { get { return p1; } }
 	public IEnumerable<Vector3> segmentPoints {
 		get {
 			Param pOn = new Param("pOn");
@@ -205,20 +206,20 @@ protected override Entity OnSplit(Vector3 position) {
 }
 */
 
-	public override ExpVector PointOn(Exp t) {
+	public override ExpressionVector PointOn(Expression t) {
 		var newt = t0.exp + (t1.exp - t0.exp) * t;
 		return basis.TransformPosition(GetExpClone(newt));
 	}
 
-	public override Exp Length() {
+	public override Expression Length() {
 		return null;
 	}
 
-	public override Exp Radius() {
+	public override Expression Radius() {
 		return null;
 	}
 
-	public override ExpVector Center() {
+	public override ExpressionVector Center() {
 		return null;
 	}
 

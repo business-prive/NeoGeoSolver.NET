@@ -1,24 +1,25 @@
-﻿using System.Xml;
+﻿using System.Numerics;
+using System.Xml;
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
 [Serializable]
-public class CircleEntity : Entity, ILoopEntity {
+public class Circle : Entity, ILoopEntity {
 
-	public PointEntity c;
+	public Point c;
 	public Param radius = new Param("r");
 
 	public override IEntityType type { get { return IEntityType.Circle; } }
 
-	public CircleEntity(Sketch.Sketch sk) : base(sk) {
-		c = AddChild(new PointEntity(sk));
+	public Circle(Sketch.Sketch sk) : base(sk) {
+		c = AddChild(new Point(sk));
 	}
 
 	public double rad { get { return radius.value; } set { radius.value = value; } } 
 
-	public override IEnumerable<PointEntity> points {
+	public override IEnumerable<Point> points {
 		get {
 			yield return c;
 		}
@@ -34,7 +35,7 @@ public class CircleEntity : Entity, ILoopEntity {
 		}
 	}
 
-	public PointEntity center { get { return c; } }
+	public Point center { get { return c; } }
 	public IEnumerable<Vector3> loopPoints {
 		get {
 			float angle = 360;
@@ -61,25 +62,25 @@ public class CircleEntity : Entity, ILoopEntity {
 		radius.value = xml.Attributes["r"].Value.ToDouble();
 	}
 
-	public override ExpVector PointOn(Exp t) {
+	public override ExpressionVector PointOn(Expression t) {
 		var angle = t * 2.0 * Math.PI;
-		return c.exp + new ExpVector(Exp.Cos(angle), Exp.Sin(angle), 0.0) * Radius();
+		return c.exp + new ExpressionVector(Expression.Cos(angle), Expression.Sin(angle), 0.0) * Radius();
 	}
 
-	public override ExpVector TangentAt(Exp t) {
+	public override ExpressionVector TangentAt(Expression t) {
 		var angle = t * 2.0 * Math.PI;
-		return new ExpVector(-Exp.Sin(angle), Exp.Cos(angle), 0.0);
+		return new ExpressionVector(-Expression.Sin(angle), Expression.Cos(angle), 0.0);
 	}
 
-	public override Exp Length() {
-		return new Exp(2.0) * Math.PI * Radius();
+	public override Expression Length() {
+		return new Expression(2.0) * Math.PI * Radius();
 	}
 
-	public override Exp Radius() {
-		return Exp.Abs(radius);
+	public override Expression Radius() {
+		return Expression.Abs(radius);
 	}
 
-	public override ExpVector Center() {
+	public override ExpressionVector Center() {
 		return center.exp;
 	}
 

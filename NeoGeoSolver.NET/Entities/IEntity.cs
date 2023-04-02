@@ -1,16 +1,17 @@
 
+using System.Numerics;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
 public interface IEntity : ICADObject {
-  IEnumerable<ExpVector> points { get; }			// enough for dragging
+  IEnumerable<ExpressionVector> points { get; }			// enough for dragging
   IEnumerable<Vector3> segments { get; }			// enough for drawing
-  ExpVector PointOn(Exp t);						// enough for constraining
-  ExpVector TangentAt(Exp t);
-  Exp Length();
-  Exp Radius();
-  ExpVector Center();
+  ExpressionVector PointOn(Expression t);						// enough for constraining
+  ExpressionVector TangentAt(Expression t);
+  Expression Length();
+  Expression Radius();
+  ExpressionVector Center();
   IPlane plane { get; }
   IEntityType type { get; }
 }

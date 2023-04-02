@@ -17,7 +17,7 @@ public class PointsCoincident : Constraint {
 		AddEntity(p1);
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var pe0 = p0.GetPointAtInPlane(0, sketch.plane);
 			var pe1 = p1.GetPointAtInPlane(0, sketch.plane);

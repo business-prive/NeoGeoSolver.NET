@@ -6,14 +6,14 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class LineCircleDistance : ValueConstraint {
+public class LineCircleDistance : Value {
 
 	public IEntity line { get { return GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity circle { get { return GetEntity(1); } set { SetEntity(1, value); } }
 
-	public ExpVector centerExp { get { return circle.Center(); } }
-	public ExpVector lineP0Exp { get { return line.PointsInPlane(sketch.plane).ToArray()[0]; } }
-	public ExpVector lineP1Exp { get { return line.PointsInPlane(sketch.plane).ToArray()[1]; } }
+	public ExpressionVector centerExp { get { return circle.Center(); } }
+	public ExpressionVector lineP0Exp { get { return line.PointsInPlane(sketch.plane).ToArray()[0]; } }
+	public ExpressionVector lineP1Exp { get { return line.PointsInPlane(sketch.plane).ToArray()[1]; } }
 
 	public Vector3 centerPos { get { return circle.CenterInPlane(null).Eval(); } }
 	public Vector3 lineP0Pos { get { return line.PointsInPlane(null).ToArray()[0].Eval(); } }
@@ -38,7 +38,7 @@ public class LineCircleDistance : ValueConstraint {
 		Satisfy();
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			switch(option) {
 				case Option.Positive: yield return ConstraintExp.pointLineDistance(centerExp, lineP0Exp, lineP1Exp, sketch.is3d) - circle.Radius() - value; break;

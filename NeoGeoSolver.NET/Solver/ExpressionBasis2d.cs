@@ -2,16 +2,16 @@ using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Solver;
 
-public class ExpBasis2d {
+public class ExpressionBasis2d {
   Param px, py;
   Param ux, uy;
   Param vx, vy;
 
-  public ExpVector u { get; private set; }
-  public ExpVector v { get; private set; }
-  public ExpVector p { get; private set; }
+  public ExpressionVector u { get; private set; }
+  public ExpressionVector v { get; private set; }
+  public ExpressionVector p { get; private set; }
 
-  public ExpBasis2d() {
+  public ExpressionBasis2d() {
     px = new Param("ux", 0.0);
     py = new Param("uy", 0.0);
 
@@ -21,9 +21,9 @@ public class ExpBasis2d {
     vx = new Param("vx", 0.0);
     vy = new Param("vy", 1.0);
 
-    p = new ExpVector(px, py, 0.0);
-    u = new ExpVector(ux, uy, 0.0);
-    v = new ExpVector(vx, vy, 0.0);
+    p = new ExpressionVector(px, py, 0.0);
+    u = new ExpressionVector(ux, uy, 0.0);
+    v = new ExpressionVector(vx, vy, 0.0);
   }
 
   public void SetPosParams(Param x, Param y) {
@@ -69,11 +69,11 @@ public class ExpBasis2d {
     }
   }
 
-  public ExpVector TransformPosition(ExpVector pos) {
+  public ExpressionVector TransformPosition(ExpressionVector pos) {
     return pos.x * u + pos.y * v + p;
   }
 
-  public ExpVector TransformDirection(ExpVector dir) {
+  public ExpressionVector TransformDirection(ExpressionVector dir) {
     return dir.x * u + dir.y * v;
   }
 
@@ -82,13 +82,13 @@ public class ExpBasis2d {
     sys.AddEquations(equations);
   }
 
-  public IEnumerable<Exp> equations {
+  public IEnumerable<Expression> equations {
     get {
       yield return u.Magnitude() - 1.0;
       yield return v.Magnitude() - 1.0;
-      var cross = ExpVector.Cross(u, v);
-      var dot = ExpVector.Dot(u, v);
-      yield return Exp.Atan2(cross.Magnitude(), dot) - Math.PI / 2;
+      var cross = ExpressionVector.Cross(u, v);
+      var dot = ExpressionVector.Dot(u, v);
+      yield return Expression.Atan2(cross.Magnitude(), dot) - Math.PI / 2;
     }
   }
 

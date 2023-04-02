@@ -16,7 +16,7 @@ public class EquationSystem  {
 	public int dragSteps = 3;
 	public bool revertWhenNotConverged = true;
 
-	Exp[,] J;
+	Expression[,] J;
 	double[,] A;
 	double[,] AAT;
 	double[] B;
@@ -24,32 +24,32 @@ public class EquationSystem  {
 	double[] Z;
 	double[] oldParamValues;
 
-	List<Exp> sourceEquations = new List<Exp>();
+	List<Expression> sourceEquations = new List<Expression>();
 	List<Param> parameters = new List<Param>();
 
-	List<Exp> equations = new List<Exp>();
+	List<Expression> equations = new List<Expression>();
 	List<Param> currentParams = new List<Param>();
 
 	Dictionary<Param, Param> subs;
 
-	public void AddEquation(Exp eq) {
+	public void AddEquation(Expression eq) {
 		sourceEquations.Add(eq);
 		isDirty = true;
 	}
 
-	public void AddEquation(ExpVector v) {
+	public void AddEquation(ExpressionVector v) {
 		sourceEquations.Add(v.x);
 		sourceEquations.Add(v.y);
 		sourceEquations.Add(v.z);
 		isDirty = true;
 	}
 
-	public void AddEquations(IEnumerable<Exp> eq) {
+	public void AddEquations(IEnumerable<Expression> eq) {
 		sourceEquations.AddRange(eq);
 		isDirty = true;
 	}
 
-	public void RemoveEquation(Exp eq) {
+	public void RemoveEquation(Expression eq) {
 		sourceEquations.Remove(eq);
 		isDirty = true;
 	}
@@ -106,8 +106,8 @@ public class EquationSystem  {
 		}
 	}
 
-	static Exp[,] WriteJacobian(List<Exp> equations, List<Param> parameters) {
-		var J = new Exp[equations.Count, parameters.Count];
+	static Expression[,] WriteJacobian(List<Expression> equations, List<Param> parameters) {
+		var J = new Expression[equations.Count, parameters.Count];
 		for(int r = 0; r < equations.Count; r++) {
 			var eq = equations[r];
 			for(int c = 0; c < parameters.Count; c++) {
@@ -127,7 +127,7 @@ public class EquationSystem  {
 		return equations.Any(e => e.IsDrag());
 	}
 
-	public void EvalJacobian(Exp[,] J, ref double[,] A, bool clearDrag) {
+	public void EvalJacobian(Expression[,] J, ref double[,] A, bool clearDrag) {
 		UpdateDirty();
 		UnityEngine.Profiling.Profiler.BeginSample("EvalJacobian");
 		for(int r = 0; r < J.GetLength(0); r++) {

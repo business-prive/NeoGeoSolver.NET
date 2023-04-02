@@ -1,20 +1,21 @@
-﻿using NeoGeoSolver.NET.Solver;
+﻿using System.Numerics;
+using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class SplineEntity : Entity, ISegmentaryEntity {
+public class Spline : Entity, ISegmentaryEntity {
 
-	public PointEntity[] p = new PointEntity[4];
+	public Point[] p = new Point[4];
 
-	public SplineEntity(Sketch.Sketch sk) : base(sk) {
+	public Spline(Sketch.Sketch sk) : base(sk) {
 		for(int i = 0; i < p.Length; i++) {
-			p[i] = AddChild(new PointEntity(sk));
+			p[i] = AddChild(new Point(sk));
 		}
 	}
 
 	public override IEntityType type { get { return IEntityType.Spline; } }
 
-	public override IEnumerable<PointEntity> points {
+	public override IEnumerable<Point> points {
 		get {
 			for(int i = 0; i < p.Length; i++) {
 				yield return p[i];
@@ -26,8 +27,8 @@ public class SplineEntity : Entity, ISegmentaryEntity {
 		return p.Any(po => po.IsChanged());
 	}
 
-	public PointEntity begin { get { return p[0]; } }
-	public PointEntity end { get { return p[3]; } }
+	public Point begin { get { return p[0]; } }
+	public Point end { get { return p[3]; } }
 	public IEnumerable<Vector3> segmentPoints {
 		get {
 			/*var e = PointOn(1.0);
@@ -71,7 +72,7 @@ protected override Entity OnSplit(Vector3 position) {
 	return part;
 }
 */
-	public override ExpVector PointOn(Exp t) {
+	public override ExpressionVector PointOn(Expression t) {
 		var p0 = p[0].exp;
 		var p1 = p[1].exp;
 		var p2 = p[2].exp;
@@ -91,15 +92,15 @@ protected override Entity OnSplit(Vector3 position) {
 		return p1 * (float)(3.0 * t3 - 6.0 * t2 + 3.0 * t) + p3 * (float)t3 + p2 * (float)(3.0 * t2 - 3.0 * t3) - p0 * (float)(t3 - 3.0 * t2 + 3.0 * t - 1.0);
 	}
 
-	public override Exp Length() {
+	public override Expression Length() {
 		return null;
 	}
 
-	public override Exp Radius() {
+	public override Expression Radius() {
 		return null;
 	}
 
-	public override ExpVector Center() {
+	public override ExpressionVector Center() {
 		return null;
 	}
 

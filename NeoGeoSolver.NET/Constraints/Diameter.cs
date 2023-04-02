@@ -7,7 +7,7 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class Diameter : ValueConstraint {
+public class Diameter : Value {
 
 	public Diameter(Sketch.Sketch sk) : base(sk) { }
 
@@ -19,10 +19,10 @@ public class Diameter : ValueConstraint {
 		Satisfy();
 	}
 
-	Exp radius { get { return GetEntity(0).Radius(); } }
-	ExpVector center { get { return GetEntity(0).CenterInPlane(null); } }
+	Expression radius { get { return GetEntity(0).Radius(); } }
+	ExpressionVector center { get { return GetEntity(0).CenterInPlane(null); } }
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			yield return radius * 2.0 - value.exp;
 		}

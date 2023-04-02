@@ -6,10 +6,10 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class Length : ValueConstraint {
+public class Length : Value {
 
-	public ExpVector p0exp { get { return GetPointInPlane(0, sketch.plane); } }
-	public ExpVector p1exp { get { return GetPointInPlane(1, sketch.plane); } }
+	public ExpressionVector p0exp { get { return GetPointInPlane(0, sketch.plane); } }
+	public ExpressionVector p1exp { get { return GetPointInPlane(1, sketch.plane); } }
 
 	public Length(Sketch.Sketch sk) : base(sk) { }
 
@@ -18,13 +18,13 @@ public class Length : ValueConstraint {
 		Satisfy();
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			yield return GetEntity(0).Length() - value;
 		}
 	}
 	
-	ExpVector GetPointInPlane(int i, IPlane plane) {
+	ExpressionVector GetPointInPlane(int i, IPlane plane) {
 		return GetEntity(0).GetPointAtInPlane(i, plane);
 	}
 

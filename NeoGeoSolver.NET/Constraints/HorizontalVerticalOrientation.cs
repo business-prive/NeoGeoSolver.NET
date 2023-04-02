@@ -1,6 +1,6 @@
 namespace NeoGeoSolver.NET.Constraints;
 
-public enum HVOrientation {
+public enum HorizontalVerticalOrientation {
   OX,
   OY,
   OZ

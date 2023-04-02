@@ -15,18 +15,18 @@ public class Param {
 		}
 	}
 
-	public Exp exp { get; private set; }
+	public Expression exp { get; private set; }
 
 	public Param(string name, bool reduceable = true) {
 		this.name = name;
 		this.reduceable = reduceable;
-		exp = new Exp(this);
+		exp = new Expression(this);
 	}
 
 	public Param(string name, double value) {
 		this.name = name;
 		this.value = value;
-		exp = new Exp(this);
+		exp = new Expression(this);
 	}
 
 }

@@ -6,7 +6,7 @@ using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class PointEntity : Entity {
+public class Point : Entity {
 
 	public Param x = new Param("x");
 	public Param y = new Param("y");
@@ -18,7 +18,7 @@ public class PointEntity : Entity {
 		}
 	}
 
-	public PointEntity(Sketch.Sketch sk) : base(sk) {
+	public Point(Sketch.Sketch sk) : base(sk) {
 		
 	}
 
@@ -53,11 +53,11 @@ public class PointEntity : Entity {
 		}
 	}
 
-	ExpVector exp_;
-	public ExpVector exp {
+	ExpressionVector exp_;
+	public ExpressionVector exp {
 		get {
 			if(exp_ == null) {
-				exp_ = new ExpVector(x, y, z);
+				exp_ = new ExpressionVector(x, y, z);
 			}
 			if(transform != null) {
 				return transform(exp_);
@@ -74,7 +74,7 @@ public class PointEntity : Entity {
 		}
 	}
 
-	public override IEnumerable<PointEntity> points {
+	public override IEnumerable<Point> points {
 		get {
 			yield return this;
 		}
@@ -108,7 +108,7 @@ public class PointEntity : Entity {
 			if(c == null) continue;
 			var p = c.GetOtherPoint(this);
 			PointOn pOn1 = null;
-			if(!p.IsSameAs(exclude) && p is PointEntity && (p as PointEntity).IsCoincidentWithCurve(curve, ref pOn1, this)) {
+			if(!p.IsSameAs(exclude) && p is Point && (p as Point).IsCoincidentWithCurve(curve, ref pOn1, this)) {
 				pOn = pOn1;
 				return true;
 			}
@@ -122,7 +122,7 @@ public class PointEntity : Entity {
 			var c = usedInConstraints[i] as PointsCoincident;
 			if(c == null) continue;
 			var p = c.GetOtherPoint(this);
-			if(p.IsSameAs(point) || !p.IsSameAs(exclude) && p is PointEntity && (p as PointEntity).IsCoincidentWith(point, this)) {
+			if(p.IsSameAs(point) || !p.IsSameAs(exclude) && p is Point && (p as Point).IsCoincidentWith(point, this)) {
 				return true;
 			}
 		}
@@ -179,19 +179,19 @@ public class PointEntity : Entity {
 		canvas.DrawPoint(pos);
 	}
 
-	public override ExpVector PointOn(Exp t) {
+	public override ExpressionVector PointOn(Expression t) {
 		return exp;
 	}
 
-	public override ExpVector TangentAt(Exp t) {
+	public override ExpressionVector TangentAt(Expression t) {
 		return null;
 	}
 
-	public override Exp Length() {
+	public override Expression Length() {
 		return null;
 	}
 
-	public override Exp Radius() {
+	public override Expression Radius() {
 		return null;
 	}
 }

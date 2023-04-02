@@ -6,12 +6,12 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class PointOn : ValueConstraint {
+public class PointOn : Value {
 
 	public IEntity point { get { return GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity on { get { return GetEntity(1); } set { SetEntity(1, value); } }
 
-	public ExpVector pointExp { get { return point.PointExpInPlane(sketch.plane); } }
+	public ExpressionVector pointExp { get { return point.PointExpInPlane(sketch.plane); } }
 	public Vector3 pointPos { get { return point.PointExpInPlane(null).Eval(); } }
 	public override bool valueVisible { get { return !reference; } }
 
@@ -48,7 +48,7 @@ public class PointOn : ValueConstraint {
 		return true;
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var p = pointExp;
 			var eq = on.PointOnInPlane(value, sketch.plane) - p;

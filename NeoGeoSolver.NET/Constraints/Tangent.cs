@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Numerics;
+using System.Xml;
 using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
@@ -24,7 +25,7 @@ public class Tangent : Constraint {
 		get {
 			double tv0 = 0.0;
 			double tv1 = 0.0;
-			Exp c = null;
+			Expression c = null;
 			Param p = null;
 			if(!IsCoincident(ref tv0, ref tv1, ref c, ref p)) {
 				yield return t0; 
@@ -72,7 +73,7 @@ public class Tangent : Constraint {
 		return true;
 	}
 
-	bool IsCoincident(ref double tv0, ref double tv1, ref Exp c, ref Param p) {
+	bool IsCoincident(ref double tv0, ref double tv1, ref Expression c, ref Param p) {
 		var l0 = GetEntity(0);
 		var l1 = GetEntity(1);
 		var s0 = l0 as ISegmentaryEntity;
@@ -85,24 +86,24 @@ public class Tangent : Constraint {
 		}
 		if(s0 != null) {
 			PointOn pOn = null;
-			if(s0.begin.IsCoincidentWithCurve(l1, ref pOn)) { tv0 = 0.0; p = t1; c = new Exp(t1) - pOn.GetValueParam(); return true; }
-			if(s0.end.IsCoincidentWithCurve(l1, ref pOn))	{ tv0 = 1.0; p = t1; c = new Exp(t1) - pOn.GetValueParam(); return true; }
+			if(s0.begin.IsCoincidentWithCurve(l1, ref pOn)) { tv0 = 0.0; p = t1; c = new Expression(t1) - pOn.GetValueParam(); return true; }
+			if(s0.end.IsCoincidentWithCurve(l1, ref pOn))	{ tv0 = 1.0; p = t1; c = new Expression(t1) - pOn.GetValueParam(); return true; }
 		}
 		if(s1 != null) {
 			PointOn pOn = null;
-			if(s1.begin.IsCoincidentWithCurve(l0, ref pOn)) { p = t0; c = new Exp(t0) - pOn.GetValueParam(); tv1 = 0.0; return true; }
-			if(s1.end.IsCoincidentWithCurve(l0, ref pOn))   { p = t0; c = new Exp(t0) - pOn.GetValueParam(); tv1 = 1.0; return true; }
+			if(s1.begin.IsCoincidentWithCurve(l0, ref pOn)) { p = t0; c = new Expression(t0) - pOn.GetValueParam(); tv1 = 0.0; return true; }
+			if(s1.end.IsCoincidentWithCurve(l0, ref pOn))   { p = t0; c = new Expression(t0) - pOn.GetValueParam(); tv1 = 1.0; return true; }
 		}
 		return false;
 	}
 	bool addAngle = true;
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			var l0 = GetEntity(0);
 			var l1 = GetEntity(1);
 
-			ExpVector dir0 = l0.TangentAt(t0);
-			ExpVector dir1 = l1.TangentAt(t1);
+			ExpressionVector dir0 = l0.TangentAt(t0);
+			ExpressionVector dir1 = l1.TangentAt(t1);
 
 			dir0 = l0.plane.DirFromPlane(dir0);
 			dir0 = sketch.plane.DirToPlane(dir0);
@@ -111,15 +112,15 @@ public class Tangent : Constraint {
 			dir1 = sketch.plane.DirToPlane(dir1);
 
 			if(addAngle) {
-				Exp angle = sketch.is3d ? ConstraintExp.angle3d(dir0, dir1) : ConstraintExp.angle2d(dir0, dir1);
+				Expression angle = sketch.is3d ? ConstraintExp.angle3d(dir0, dir1) : ConstraintExp.angle2d(dir0, dir1);
 				switch(option) {
 					case Option.Codirected: yield return angle; break;
-					case Option.Antidirected: yield return Exp.Abs(angle) - Math.PI; break;
+					case Option.Antidirected: yield return Expression.Abs(angle) - Math.PI; break;
 				}
 			}
 			double tv0 = t0.value;
 			double tv1 = t1.value;
-			Exp c = null;
+			Expression c = null;
 			Param p = null;
 			if(IsCoincident(ref tv0, ref tv1, ref c, ref p)) {
 				t0.value = tv0;

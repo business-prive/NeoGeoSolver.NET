@@ -8,7 +8,7 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class Equal : ValueConstraint {
+public class Equal : Value {
 
 	public Equal(Sketch.Sketch sk) : base(sk) { selectByRefPoints = true; }
 
@@ -56,9 +56,9 @@ public class Equal : ValueConstraint {
 		selectByRefPoints = true;
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
-			Exp[] len = new Exp[2];
+			Expression[] len = new Expression[2];
 
 			for(int i = 0; i < 2; i++) {
 				var e = GetEntity(i);

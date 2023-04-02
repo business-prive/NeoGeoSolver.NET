@@ -7,7 +7,7 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Constraints;
 
 [Serializable]
-public class ValueConstraint : Constraint {
+public class Value : Constraint {
 
   protected Param value = new Param("value");
   bool reference_;
@@ -52,7 +52,7 @@ public class ValueConstraint : Constraint {
     }
   }
 
-  public ValueConstraint(Sketch.Sketch sk) : base(sk) {}
+  public Value(Sketch.Sketch sk) : base(sk) {}
 
   public override IEnumerable<Param> parameters {
     get {

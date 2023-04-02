@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace NeoGeoSolver.NET.Utils;
 
 public class MeshCheck {

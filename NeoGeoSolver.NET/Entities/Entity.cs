@@ -11,9 +11,9 @@ public abstract partial class Entity : SketchObject, IEntity {
 	protected List<Constraint> usedInConstraints = new List<Constraint>();
 	List<Entity> children = new List<Entity>();
 	public Entity parent { get; private set; }
-	public Func<ExpVector, ExpVector> transform = null;
+	public Func<ExpressionVector, ExpressionVector> transform = null;
 	public IEnumerable<Constraint> constraints { get { return usedInConstraints.AsEnumerable(); } }
-	public virtual IEnumerable<PointEntity> points { get { yield break; } }
+	public virtual IEnumerable<Point> points { get { yield break; } }
 	public virtual BBox bbox { get { return new BBox(Vector3.zero, Vector3.zero); } }
 	public abstract IEntityType type { get; }
 
@@ -27,7 +27,7 @@ public abstract partial class Entity : SketchObject, IEntity {
 		return children.Count;
 	}
 
-	IEnumerable<ExpVector> IEntity.points {
+	IEnumerable<ExpressionVector> IEntity.points {
 		get {
 			for(var it = points.GetEnumerator(); it.MoveNext(); ) {
 				yield return it.Current.exp;
@@ -58,7 +58,7 @@ public abstract partial class Entity : SketchObject, IEntity {
 		}
 	}
 
-	public abstract ExpVector PointOn(Exp t);
+	public abstract ExpressionVector PointOn(Expression t);
 
 	public T AddChild<T>(T e) where T : Entity {
 		children.Add(e);
@@ -165,7 +165,7 @@ public abstract partial class Entity : SketchObject, IEntity {
 		}
 	}
 
-	public bool IsEnding(PointEntity p) {
+	public bool IsEnding(Point p) {
 		if(!(this is ISegmentaryEntity)) return false;
 		var se = this as ISegmentaryEntity;
 		return se.begin == p || se.end == p;
@@ -264,20 +264,20 @@ public abstract partial class Entity : SketchObject, IEntity {
 		});
 	}
 
-	public virtual ExpVector TangentAt(Exp t) {
+	public virtual ExpressionVector TangentAt(Expression t) {
 		Param p = new Param("pOn");
 		var pt = PointOn(p);
-		var result = new ExpVector(pt.x.Deriv(p), pt.y.Deriv(p), pt.z.Deriv(p));
+		var result = new ExpressionVector(pt.x.Deriv(p), pt.y.Deriv(p), pt.z.Deriv(p));
 		result.x.Substitute(p, t);
 		result.y.Substitute(p, t);
 		result.z.Substitute(p, t);
 		return result;
 	}
 
-	public abstract Exp Length();
-	public abstract Exp Radius();
+	public abstract Expression Length();
+	public abstract Expression Radius();
 
-	public virtual ExpVector Center() {
+	public virtual ExpressionVector Center() {
 		return null;
 	}
 

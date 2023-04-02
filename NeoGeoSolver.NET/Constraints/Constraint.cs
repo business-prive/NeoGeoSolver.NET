@@ -76,7 +76,7 @@ public class Constraint : SketchObject {
 		
 		for(int i = 0; i < names.Length; i++) {
 			optionInternal = (Enum)Enum.Parse(type, names[i]);
-			List<Exp> exprs = equations.ToList();
+			List<Expression> exprs = equations.ToList();
 			
 			double cur_value = exprs.Sum(e => Math.Abs(e.Eval()));
 			Debug.Log(String.Format("check option {0} (min: {1}, cur: {2})\n", optionInternal, min_value, cur_value));

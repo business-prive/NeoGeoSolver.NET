@@ -1,7 +1,9 @@
+using System.Numerics;
+
 namespace NeoGeoSolver.NET.Entities;
 
 public interface ISegmentaryEntity {
-  PointEntity begin { get; }
-  PointEntity end { get; }
+  Point begin { get; }
+  Point end { get; }
   IEnumerable<Vector3> segmentPoints { get; }
 }

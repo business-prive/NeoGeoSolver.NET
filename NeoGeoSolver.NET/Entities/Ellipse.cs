@@ -1,28 +1,29 @@
-﻿using System.Xml;
+﻿using System.Numerics;
+using System.Xml;
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
 [Serializable]
-public class EllipseEntity : Entity, ILoopEntity {
+public class Ellipse : Entity, ILoopEntity {
 
-	public PointEntity c;
+	public Point c;
 	public Param r0 = new Param("r0");
 	public Param r1 = new Param("r1");
-	ExpBasis2d basis = new ExpBasis2d();
+	ExpressionBasis2d basis = new ExpressionBasis2d();
 
 	public override IEntityType type { get { return IEntityType.Ellipse; } }
 
-	public EllipseEntity(Sketch.Sketch sk) : base(sk) {
-		c = AddChild(new PointEntity(sk));
+	public Ellipse(Sketch.Sketch sk) : base(sk) {
+		c = AddChild(new Point(sk));
 		basis.SetPosParams(c.x, c.y);
 	}
 
 	public double radius0 { get { return r0.value; } set { r0.value = value; } } 
 	public double radius1 { get { return r1.value; } set { r1.value = value; } } 
 
-	public override IEnumerable<PointEntity> points {
+	public override IEnumerable<Point> points {
 		get {
 			yield return c;
 		}
@@ -40,13 +41,13 @@ public class EllipseEntity : Entity, ILoopEntity {
 		}
 	}
 
-	public override IEnumerable<Exp> equations {
+	public override IEnumerable<Expression> equations {
 		get {
 			foreach(var e in basis.equations) yield return e;
 		}
 	}
 
-	public PointEntity center { get { return c; } }
+	public Point center { get { return c; } }
 	public IEnumerable<Vector3> loopPoints {
 		get {
 			return getSegmentsUsingPointOn(36);
@@ -69,20 +70,20 @@ public class EllipseEntity : Entity, ILoopEntity {
 		basis.FromString(xml.Attributes["basis"].Value);
 	}
 
-	public override ExpVector PointOn(Exp t) {
+	public override ExpressionVector PointOn(Expression t) {
 		var angle = t * 2.0 * Math.PI;
-		return basis.TransformPosition(new ExpVector(Exp.Cos(angle) * Exp.Abs(r0), Exp.Sin(angle) * Exp.Abs(r1), 0.0));
+		return basis.TransformPosition(new ExpressionVector(Expression.Cos(angle) * Expression.Abs(r0), Expression.Sin(angle) * Expression.Abs(r1), 0.0));
 	}
 
-	public override Exp Length() {
+	public override Expression Length() {
 		return null;
 	}
 
-	public override Exp Radius() {
+	public override Expression Radius() {
 		return null;
 	}
 
-	public override ExpVector Center() {
+	public override ExpressionVector Center() {
 		return null;
 	}
 
