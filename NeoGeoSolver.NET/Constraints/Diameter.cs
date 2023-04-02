@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Xml;
 using NeoGeoSolver.NET.Entities;
-using NeoGeoSolver.NET.Sketch;
+
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
