@@ -23,11 +23,11 @@ public class EquationSystem  {
 	private double[] Z;
 	private double[] oldParamValues;
 
-	private List<Expression> sourceEquations = new List<Expression>();
-	private List<Param> parameters = new List<Param>();
+	private List<Expression> sourceEquations = new();
+	private List<Param> parameters = new();
 
-	private List<Expression> equations = new List<Expression>();
-	private List<Param> currentParams = new List<Param>();
+	private List<Expression> equations = new();
+	private List<Param> currentParams = new();
 
 	private Dictionary<Param, Param> subs;
 

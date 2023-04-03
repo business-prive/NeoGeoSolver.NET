@@ -4,16 +4,17 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class Arc : Entity, ISegmentaryEntity {
+public class Arc : Entity {
 
 	public Point p0;
 	public Point p1;
 	public Point c;
 
-	public Arc(Sketch.Sketch sk) : base(sk) {
-		p0 = AddChild(new Point(sk));
-		p1 = AddChild(new Point(sk));
-		c = AddChild(new Point(sk));
+	public Arc()
+	{
+		p0 = AddChild(new Point());
+		p1 = AddChild(new Point());
+		c = AddChild(new  Point());
 	}
 
 	public override IEntityType type { get { return IEntityType.Arc; } }
@@ -42,31 +43,6 @@ public class Arc : Entity, ISegmentaryEntity {
 		}
 		return Math.PI * 2.0;
 	}
-
-	public double GetAngle() {
-		var angle = GeomUtils.GetAngle(p0.pos - c.pos, p1.pos - c.pos);
-		if(angle <= 0f) angle += 2f * Mathf.PI;
-		return angle;
-	}
-
-	public Point begin { get { return p0; } }
-	public Point end { get { return p1; } }
-	public Point center { get { return c; } }
-	public IEnumerable<Vector3> segmentPoints {
-		get {
-			float angle = (float)GetAngle() * Mathf.Rad2Deg;
-			var cp = c.pos;
-			var rv = p0.pos - cp;
-			int subdiv = Math.Max(Math.Abs((int)Mathf.Ceil(angle / 10f)), 1);
-			if(subdiv == 0) yield break;
-			var vz = Vector3.forward;
-			var rot = Quaternion.AngleAxis(angle / subdiv, vz);
-			for(int i = 0; i <= subdiv; i++) {
-				yield return rv + cp;
-				rv = rot * rv;
-			}
-		}
-	}	
 
 	public override ExpressionVector PointOn(Expression t) {
 		var angle = GetAngleExp();

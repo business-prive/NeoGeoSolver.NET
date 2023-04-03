@@ -30,10 +30,10 @@ public class Expression {
     //Pow,
   }
 
-  public static readonly Expression zero = new Expression(0.0);
-  public static readonly Expression one  = new Expression(1.0);
-  public static readonly Expression mOne = new Expression(-1.0);
-  public static readonly Expression two  = new Expression(2.0);
+  public static readonly Expression zero = new(0.0);
+  public static readonly Expression one  = new(1.0);
+  public static readonly Expression mOne = new(-1.0);
+  public static readonly Expression two  = new(2.0);
 
   public Op op;
 

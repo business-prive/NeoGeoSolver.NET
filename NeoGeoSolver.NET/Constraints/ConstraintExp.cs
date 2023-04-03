@@ -14,11 +14,7 @@ public static class ConstraintExp {
 		return Expression.Atan2(ExpressionVector.Cross(d0, d1).Magnitude(), ExpressionVector.Dot(d0, d1));
 	}
 
-	public static Expression pointLineDistance(ExpressionVector p, ExpressionVector p0, ExpressionVector p1, bool is3d) {
-		if(is3d) {
-			var d = p0 - p1;
-			return ExpressionVector.Cross(d, p0 - p).Magnitude() / d.Magnitude();
-		}
+	public static Expression pointLineDistance(ExpressionVector p, ExpressionVector p0, ExpressionVector p1) {
 		return ((p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y + p0.x * p1.y - p1.x * p0.y) / Expression.Sqrt(Expression.Sqr(p1.x - p0.x) + Expression.Sqr(p1.y - p0.y));
 	}
 }

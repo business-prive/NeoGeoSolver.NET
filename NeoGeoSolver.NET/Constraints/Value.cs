@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Numerics;
 using NeoGeoSolver.NET.Solver;
 
@@ -6,7 +5,7 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class Value : Constraint {
 
-  protected Param value = new Param("value");
+  protected Param value = new("value");
   private bool reference_;
   public bool reference {
     get {
@@ -14,13 +13,10 @@ public class Value : Constraint {
     }
     set {
       reference_ = value;
-      sketch.MarkDirtySketch(constraints:true);
     }
   }
 
   private Vector3 position_;
-	
-  public Value(Sketch.Sketch sk) : base(sk) {}
 
   public override IEnumerable<Param> parameters {
     get {
@@ -60,7 +56,7 @@ public class Value : Constraint {
   public bool Satisfy() {
     var result = OnSatisfy();
     if(!result) {
-      Debug.LogWarning(GetType() + " satisfy failed!");
+      // TODO   Debug.LogWarning(GetType() + " satisfy failed!");
     }
     return result;
   }

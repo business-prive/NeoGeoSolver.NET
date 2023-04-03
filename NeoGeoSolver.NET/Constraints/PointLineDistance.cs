@@ -53,11 +53,7 @@ public class PointLineDistance : Value
 		}
 	}
 
-	public PointLineDistance(Sketch.Sketch sk) : base(sk)
-	{
-	}
-
-	public PointLineDistance(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk)
+	public PointLineDistance(IEntity p0, IEntity p1)
 	{
 		AddEntity(p0);
 		AddEntity(p1);

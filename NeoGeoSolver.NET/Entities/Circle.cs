@@ -3,15 +3,16 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class Circle : Entity, ILoopEntity {
+public class Circle : Entity {
 
 	public Point c;
-	public Param radius = new Param("r");
+	public Param radius = new("r");
 
 	public override IEntityType type { get { return IEntityType.Circle; } }
 
-	public Circle(Sketch.Sketch sk) : base(sk) {
-		c = AddChild(new Point(sk));
+	public Circle()
+	{
+		c = AddChild(new Point());
 	}
 
 	public override IEnumerable<Point> points {
@@ -27,19 +28,6 @@ public class Circle : Entity, ILoopEntity {
 	}
 
 	public Point center { get { return c; } }
-	public IEnumerable<Vector3> loopPoints {
-		get {
-			float angle = 360;
-			var cp = center.pos;
-			var rv = Vector3.left * Mathf.Abs((float)radius.value);
-			int subdiv = 36;
-			var vz = Vector3.forward;
-			for(int i = 0; i < subdiv; i++) {
-				var nrv = Quaternion.AngleAxis(angle / (subdiv - 1) * i, vz) * rv;
-				yield return nrv + cp;
-			}
-		}
-	}
 
 	public override ExpressionVector PointOn(Expression t) {
 		var angle = t * 2.0 * Math.PI;

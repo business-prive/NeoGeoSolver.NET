@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using System.Numerics;
+﻿using System.Numerics;
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class Function : Entity, ISegmentaryEntity {
+public class Function : Entity {
 	public Point p0;
 	public Point p1;
 	public Point c;
@@ -22,7 +21,7 @@ public class Function : Entity, ISegmentaryEntity {
 		}
 	}
 
-	private ExpressionBasis2d basis = new ExpressionBasis2d();
+	private ExpressionBasis2d basis = new();
 
 	private bool tBeginFixed_ = false;
 	public bool tBeginFixed {
@@ -56,8 +55,8 @@ public class Function : Entity, ISegmentaryEntity {
 			var e = parser.Parse();
 			if(e != null) {
 				exp.x = e;
-				Debug.Log("x = " + e.ToString());
-				sketch.MarkDirtySketch(entities:true, topo:true);
+				// TODO		Debug.Log("x = " + e.ToString());
+				
 			}
 		}
 	}
@@ -79,10 +78,10 @@ public class Function : Entity, ISegmentaryEntity {
 	}
 
 	private ExpressionParser parser;
-	private ExpressionVector exp = new ExpressionVector(0.0, 0.0, 0.0);
-	private Param t = new Param("t");
-	private Param t0 = new Param("t0", 0.0);
-	private Param t1 = new Param("t1", 1.0);
+	private ExpressionVector exp = new(0.0, 0.0, 0.0);
+	private Param t = new("t");
+	private Param t0 = new("t0", 0.0);
+	private Param t1 = new("t1", 1.0);
 
 	private void InitParser() {
 		parser = new ExpressionParser("0");
@@ -92,10 +91,11 @@ public class Function : Entity, ISegmentaryEntity {
 
 	}
 
-	public Function(Sketch.Sketch sk) : base(sk) {
-		p0 = AddChild(new Point(sk));
-		p1 = AddChild(new Point(sk));
-		c = AddChild(new Point(sk));
+	public Function()
+	{
+		p0 = AddChild(new Point());
+		p1 = AddChild(new Point());
+		c = AddChild(new  Point());
 		InitParser();
 	}
 
@@ -150,20 +150,6 @@ public class Function : Entity, ISegmentaryEntity {
 			foreach(var p in basis.parameters) yield return p;
 		}
 	}
-
-	public Point begin { get { return p0; } }
-	public Point end { get { return p1; } }
-	public IEnumerable<Vector3> segmentPoints {
-		get {
-			Param pOn = new Param("pOn");
-			var on = PointOn(pOn);
-			var subdiv = (int)Math.Ceiling(subdivision * Math.Abs(t1.value - t0.value));
-			for(int i = 0; i <= subdiv; i++) {
-				pOn.value = (double)i / subdiv;
-				yield return on.Eval();
-			}
-		}
-	}	
 
 	public override ExpressionVector PointOn(Expression t) {
 		var newt = t0.exp + (t1.exp - t0.exp) * t;

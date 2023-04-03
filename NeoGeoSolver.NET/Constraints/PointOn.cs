@@ -37,7 +37,6 @@ public class PointOn : Value {
 
 			yield return eq.x;
 			yield return eq.y;
-			if(sketch.is3d) yield return eq.z;
 		}
 	}
 

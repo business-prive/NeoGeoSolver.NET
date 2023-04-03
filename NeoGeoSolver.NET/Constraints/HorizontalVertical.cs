@@ -5,14 +5,13 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class HorizontalVertical : Constraint {
-
-	public ExpressionVector p0exp {
+	private ExpressionVector p0exp {
 		get {
 			return GetPointInPlane(0, sketch.plane);
 		}
 	}
 
-	public ExpressionVector p1exp {
+	private ExpressionVector p1exp {
 		get {
 			return GetPointInPlane(1, sketch.plane);
 		}
@@ -27,14 +26,14 @@ public class HorizontalVertical : Constraint {
 
 	public HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.OX;
 
-	public HorizontalVertical(Sketch.Sketch sk) : base(sk) { }
-
-	public HorizontalVertical(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
+	public HorizontalVertical(IEntity p0, IEntity p1)
+	{
 		AddEntity(p0);
 		AddEntity(p1);
 	}
 
-	public HorizontalVertical(Sketch.Sketch sk, IEntity line) : base(sk) {
+	public HorizontalVertical(IEntity line)
+	{
 		AddEntity(line);
 	}
 

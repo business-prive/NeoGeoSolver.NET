@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Numerics;
 using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
@@ -7,9 +6,7 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public abstract class Constraint {
-	public bool changed;
-	protected Vector3[] ref_points = new Vector3[2];
-	private List<Constraint> usedInConstraints = new List<Constraint>();
+	private List<Constraint> usedInConstraints = new();
 	public virtual IEnumerable<Param> parameters { get { yield break; } }
 	public virtual IEnumerable<Expression> equations { get { yield break; } }
 
@@ -21,16 +18,10 @@ public abstract class Constraint {
 
 	protected void AddEntity<T>(T e) where T : IEntity {
 		if(e is Entities.Entity) (e as Entities.Entity).AddConstraint(this);
-		ids.Add(e.id);
 	}
 
 	protected void AddConstraint(Constraint c) {
 		c.usedInConstraints.Add(this);
-		ids.Add(c.id);
-	}
-
-	public Constraint(Sketch.Sketch sk) : base(sk) {
-		sk.AddConstraint(this);
 	}
 
 	public virtual void ChooseBestOption() {
@@ -50,14 +41,14 @@ public abstract class Constraint {
 			List<Expression> exprs = equations.ToList();
 			
 			double cur_value = exprs.Sum(e => Math.Abs(e.Eval()));
-			Debug.Log(String.Format("check option {0} (min: {1}, cur: {2})\n", optionInternal, min_value, cur_value));
+			// TODO		Debug.Log(String.Format("check option {0} (min: {1}, cur: {2})\n", optionInternal, min_value, cur_value));
 			if(min_value < 0.0 || cur_value < min_value) {
 				min_value = cur_value;
 				best_option = i;
 			}
 		}
 		optionInternal = (Enum)Enum.Parse(type, names[best_option]);
-		Debug.Log("best option = " + optionInternal.ToString());
+		// TODO		Debug.Log("best option = " + optionInternal.ToString());
 	}
 
 	public IEntity GetEntity(int i) {

@@ -3,17 +3,18 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class Ellipse : Entity, ILoopEntity {
+public class Ellipse : Entity {
 
 	public Point c;
-	public Param r0 = new Param("r0");
-	public Param r1 = new Param("r1");
-	private ExpressionBasis2d basis = new ExpressionBasis2d();
+	public Param r0 = new("r0");
+	public Param r1 = new("r1");
+	private ExpressionBasis2d basis = new();
 
 	public override IEntityType type { get { return IEntityType.Ellipse; } }
 
-	public Ellipse(Sketch.Sketch sk) : base(sk) {
-		c = AddChild(new Point(sk));
+	public Ellipse()
+	{
+		c = AddChild(new Point());
 		basis.SetPosParams(c.x, c.y);
 	}
 

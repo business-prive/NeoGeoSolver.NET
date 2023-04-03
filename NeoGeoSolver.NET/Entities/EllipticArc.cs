@@ -4,16 +4,17 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class EllipticArc : Entity, ISegmentaryEntity {
+public class EllipticArc : Entity {
 
 	public Point p0;
 	public Point p1;
 	public Point c;
 
-	public EllipticArc(Sketch.Sketch sk) : base(sk) {
-		p0 = AddChild(new Point(sk));
-		p1 = AddChild(new Point(sk));
-		c = AddChild(new Point(sk));
+	public EllipticArc()
+	{
+		p0 = AddChild(new Point());
+		p1 = AddChild(new Point());
+		c = AddChild(new  Point());
 	}
 
 	public override IEntityType type { get { return IEntityType.Arc; } }
@@ -43,14 +44,6 @@ public class EllipticArc : Entity, ISegmentaryEntity {
 		return Math.PI * 2.0;
 	}
 
-	public Point begin { get { return p0; } }
-	public Point end { get { return p1; } }
-	public Point center { get { return c; } }
-	public IEnumerable<Vector3> segmentPoints {
-		get {
-			return getSegmentsUsingPointOn(36);
-		}
-	}	
 
 	public override ExpressionVector PointOn(Expression t) {
 		var angle = GetAngleExp();

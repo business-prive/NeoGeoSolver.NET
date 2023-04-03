@@ -5,9 +5,8 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class Length : Value {
-	public Length(Sketch.Sketch sk) : base(sk) { }
-
-	public Length(Sketch.Sketch sk, IEntity e) : base(sk) {
+	public Length(IEntity e)
+	{
 		AddEntity(e);
 		Satisfy();
 	}

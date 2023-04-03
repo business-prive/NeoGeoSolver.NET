@@ -3,10 +3,6 @@
 namespace NeoGeoSolver.NET.Constraints;
 
 public class EqualValue : Value {
-
-	public EqualValue(Sketch.Sketch sk) : base(sk) {
-	}
-
 	protected override bool OnSatisfy() {
 		var c0 = GetConstraint(0) as Value;
 		var c1 = GetConstraint(1) as Value;
@@ -16,7 +12,8 @@ public class EqualValue : Value {
 		return true;
 	}
 
-	public EqualValue(Sketch.Sketch sk, Value c0, Value c1) : base(sk) {
+	public EqualValue(Value c0, Value c1)
+	{
 		AddConstraint(c0);
 		AddConstraint(c1);
 		value.value = 1.0;

@@ -5,10 +5,9 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Entities;
 
 public class Point : Entity {
-
-	public Param x = new Param("x");
-	public Param y = new Param("y");
-	public Param z = new Param("z");
+	public Param x = new("x");
+	public Param y = new("y");
+	public Param z = new("z");
 
 	public override IEntityType type { get { return IEntityType.Point; } }
 
@@ -23,12 +22,6 @@ public class Point : Entity {
 		if(transform != null) return;
 		x.value = pos.X;
 		y.value = pos.Y;
-	}
-
-	public override IEnumerable<Vector3> segments {
-		get {
-			yield return pos;
-		}
 	}
 
 	public Vector3 pos {
@@ -64,32 +57,6 @@ public class Point : Entity {
 		get {
 			yield return this;
 		}
-	}
-
-	public bool IsCoincidentWithCurve(IEntity curve, ref PointOn pOn) {
-		return IsCoincidentWithCurve(curve, ref pOn, null);
-	}
-	
-	private bool IsCoincidentWithCurve(IEntity curve, ref PointOn pOn, IEntity exclude) {
-		for(int i = 0; i < usedInConstraints.Count; i++) {
-			var c = usedInConstraints[i] as PointOn;
-			if(c == null) continue;
-			if(c.on.IsSameAs(curve)) {
-				pOn = c;
-				return true;
-			}
-		}
-		for(int i = 0; i < usedInConstraints.Count; i++) {
-			var c = usedInConstraints[i] as PointsCoincident;
-			if(c == null) continue;
-			var p = c.GetOtherPoint(this);
-			PointOn pOn1 = null;
-			if(!p.IsSameAs(exclude) && p is Point && (p as Point).IsCoincidentWithCurve(curve, ref pOn1, this)) {
-				pOn = pOn1;
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private bool IsCoincidentWith(IEntity point, IEntity exclude) {

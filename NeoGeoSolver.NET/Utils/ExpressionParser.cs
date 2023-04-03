@@ -3,7 +3,8 @@
 namespace NeoGeoSolver.NET.Utils;
 
 public class ExpressionParser {
-	private Dictionary <string, Expression.Op> functions = new Dictionary<string, Expression.Op> {
+	private Dictionary <string, Expression.Op> functions = new()
+	{
 		{ "sin",	Expression.Op.Sin },
 		{ "cos",	Expression.Op.Cos },
 		{ "atan2",	Expression.Op.Atan2 },
@@ -20,14 +21,16 @@ public class ExpressionParser {
 		{ "cfres",	Expression.Op.CFres },
 	};
 
-	private Dictionary <char, Expression.Op> operators = new Dictionary<char, Expression.Op> {
+	private Dictionary <char, Expression.Op> operators = new()
+	{
 		{ '+', Expression.Op.Add },
 		{ '-', Expression.Op.Sub },
 		{ '*', Expression.Op.Mul },
 		{ '/', Expression.Op.Div },
 	};
 
-	private Dictionary <string, double> constants = new Dictionary<string, double> {
+	private Dictionary <string, double> constants = new()
+	{
 		{ "pi", Math.PI },
 		{ "e", Math.E },
 	};
@@ -35,11 +38,12 @@ public class ExpressionParser {
 	private string toParse;
 	private int index = 0;
     
-	public List<Param> parameters = new List<Param>();
+	public List<Param> parameters = new();
     
     
 	public static void Test() {
-		List<string> exps = new List<string> {
+		List<string> exps = new()
+		{
 			"a + b",
 			"  a  - -b",
 			"43 + d * c",
@@ -57,7 +61,8 @@ public class ExpressionParser {
 			// TODO		Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\"");
 		}
 
-		Dictionary<string, double> results = new Dictionary<string, double> {
+		Dictionary<string, double> results = new()
+		{
 			{ "2 * 3", 6.0 },
 			{ "2 + 1", 3.0 },
 			{ "-2 + 2", 0.0 },

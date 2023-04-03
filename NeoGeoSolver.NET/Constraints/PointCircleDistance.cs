@@ -4,10 +4,8 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class PointCircleDistance : Value {
-
-	public PointCircleDistance(Sketch.Sketch sk) : base(sk) { }
-
-	public PointCircleDistance(Sketch.Sketch sk, IEntity pt, IEntity c) : base(sk) {
+	public PointCircleDistance(IEntity pt, IEntity c)
+	{
 		AddEntity(pt);
 		AddEntity(c);
 		Satisfy();

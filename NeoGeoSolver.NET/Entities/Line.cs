@@ -3,33 +3,17 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public class Line : Entity, ISegmentaryEntity {
-
+public class Line : Entity {
 	public Point p0;
 	public Point p1;
 
-	public Line(Sketch.Sketch sk) : base(sk) {
-		p0 = AddChild(new Point(sk));
-		p1 = AddChild(new Point(sk));
+	public Line()
+	{
+		p0 = AddChild(new Point());
+		p1 = AddChild(new Point());
 	}
 
 	public override IEntityType type { get { return IEntityType.Line; } }
-
-	public override IEnumerable<Point> points {
-		get {
-			yield return p0;
-			yield return p1;
-		}
-	}
-
-	public Point begin { get { return p0; } }
-	public Point end { get { return p1; } }
-	public IEnumerable<Vector3> segmentPoints {
-		get {
-			yield return p0.GetPosition();
-			yield return p1.GetPosition();
-		}
-	}
 
 	public override ExpressionVector PointOn(Expression t) {
 		var pt0 = p0.exp;

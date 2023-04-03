@@ -6,11 +6,10 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class Diameter : Value {
 
-	public Diameter(Sketch.Sketch sk) : base(sk) { }
-
 	public bool showAsRadius = false;
 
-	public Diameter(Sketch.Sketch sk, IEntity c) : base(sk) {
+	public Diameter(IEntity c)
+	{
 		showAsRadius = (c.type == IEntityType.Arc);
 		AddEntity(c);
 		Satisfy();

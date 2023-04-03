@@ -6,14 +6,13 @@ public static class IEntityUtils {
   public static bool IsSameAs(this IEntity e0, IEntity e1) {
     if(e0 == null) return e1 == null;
     if(e1 == null) return e0 == null;
-    return e0 == e1 || e0.type == e1.type && e0.id == e1.id;
+    return e0 == e1 || e0.type == e1.type;
   }
 
   public static ExpressionVector PointExpInPlane(this IEntity entity, IPlane plane) {
     var it = entity.PointsInPlane(plane).GetEnumerator();
     it.MoveNext();
     return it.Current;
-    //return entity.PointsInPlane(plane).Single();
   }
 
   public static ExpressionVector CenterInPlane(this IEntity entity, IPlane plane) {

@@ -9,15 +9,15 @@ public class PointsDistance : Value {
 	public ExpressionVector p0exp { get { return GetPointInPlane(0, sketch.plane); } }
 	public ExpressionVector p1exp { get { return GetPointInPlane(1, sketch.plane); } }
 
-	public PointsDistance(Sketch.Sketch sk) : base(sk) { }
-
-	public PointsDistance(Sketch.Sketch sk, IEntity p0, IEntity p1) : base(sk) {
+	public PointsDistance(IEntity p0, IEntity p1)
+	{
 		AddEntity(p0);
 		AddEntity(p1);
 		Satisfy();
 	}
 
-	public PointsDistance(Sketch.Sketch sk, IEntity line) : base(sk) {
+	public PointsDistance(IEntity line)
+	{
 		AddEntity(line);
 		Satisfy();
 	}

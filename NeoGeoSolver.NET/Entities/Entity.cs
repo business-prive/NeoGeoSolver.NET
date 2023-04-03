@@ -6,8 +6,8 @@ namespace NeoGeoSolver.NET.Entities;
 
 public abstract partial class Entity : IEntity
 {
-  protected List<Constraint> usedInConstraints = new List<Constraint>();
-  private List<Entity> children = new List<Entity>();
+  protected List<Constraint> usedInConstraints = new();
+  private List<Entity> children = new();
   public Entity parent { get; private set; }
   public Func<ExpressionVector, ExpressionVector> transform = null;
 	public IEnumerable<Constraint> constraints { get { return usedInConstraints.AsEnumerable(); } }
@@ -16,27 +16,6 @@ public abstract partial class Entity : IEntity
   public virtual IEnumerable<Expression> equations { get { yield break; } }
 
   public abstract IEntityType type { get; }
-
-  IEnumerable<ExpressionVector> IEntity.points
-  {
-    get
-    {
-      for (var it = points.GetEnumerator(); it.MoveNext();)
-      {
-        yield return it.Current.exp;
-      }
-    }
-  }
-
-  public virtual IEnumerable<Vector3> segments
-  {
-    get
-    {
-      if (this is ISegmentaryEntity) return (this as ISegmentaryEntity).segmentPoints;
-      if (this is ILoopEntity) return (this as ILoopEntity).loopPoints;
-      return Enumerable.Empty<Vector3>();
-    }
-  }
 
   protected IEnumerable<Vector3> getSegmentsUsingPointOn(int subdiv)
   {

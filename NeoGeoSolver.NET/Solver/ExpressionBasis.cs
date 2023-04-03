@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Utils;
+﻿using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Solver;
 
@@ -37,12 +36,6 @@ public class ExpressionBasis {
 		n = new ExpressionVector(nx, ny, nz);
 	}
 
-	public Matrix4x4 matrix {
-		get {
-			return UnityExt.Basis(u.Eval(), v.Eval(), n.Eval(), p.Eval());
-		}
-	}
-
 	public IEnumerable<Param> parameters {
 		get {
 			yield return ux;
@@ -66,45 +59,5 @@ public class ExpressionBasis {
 			result += p.value.ToStr() + " ";
 		}
 		return result;
-	}
-
-	public void FromString(string str) {
-		char[] sep = { ' ' };
-		var values = str.Split(sep, StringSplitOptions.RemoveEmptyEntries);
-		int i = 0;
-		foreach(var p in parameters) {
-			p.value = values[i].ToDouble();
-			i++;
-		}
-	}
-
-	public ExpressionVector TransformPosition(ExpressionVector pos) {
-		return pos.x * u + pos.y * v + pos.z * n + p;
-	}
-
-	public ExpressionVector TransformDirection(ExpressionVector dir) {
-		return dir.x * u + dir.y * v + dir.z * n;
-	}
-
-	public void GenerateEquations(EquationSystem sys) {
-		sys.AddParameters(parameters);
-
-		sys.AddEquation(u.Magnitude() - 1.0);
-		sys.AddEquation(v.Magnitude() - 1.0);
-
-		var cross = ExpressionVector.Cross(u, v);
-		var dot = ExpressionVector.Dot(u, v);
-		sys.AddEquation(Expression.Atan2(cross.Magnitude(), dot) - Math.PI / 2);
-		sys.AddEquation(n - ExpressionVector.Cross(u, v));
-	}
-
-	public bool changed {
-		get {
-			return parameters.Any(p => p.changed);
-		}
-	}
-
-	public void markUnchanged() {
-		parameters.ForEach(pp => pp.changed = false);
 	}
 }
