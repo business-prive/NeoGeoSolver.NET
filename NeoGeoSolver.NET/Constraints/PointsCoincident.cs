@@ -9,8 +9,8 @@ public class PointsCoincident : Constraint {
 
 	public override IEnumerable<Expression> equations {
 		get {
-			var pe0 = p0.GetPointAtInPlane(0, sketch.plane);
-			var pe1 = p1.GetPointAtInPlane(0, sketch.plane);
+			var pe0 = p0.GetPointAtInPlane(0);
+			var pe1 = p1.GetPointAtInPlane(0);
 			yield return pe0.x - pe1.x;
 			yield return pe0.y - pe1.y;
 		}

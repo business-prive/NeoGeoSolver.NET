@@ -227,7 +227,7 @@ public class Tangent : Constraint
       }
       else
       {
-        var eq = l1.PointOnInPlane(t1, sketch.plane) - l0.PointOnInPlane(t0, sketch.plane);
+        var eq = l1.PointOnInPlane(t1) - l0.PointOnInPlane(t0);
 
         yield return eq.x;
         yield return eq.y;

@@ -17,7 +17,7 @@ public abstract class Constraint {
 	protected virtual Enum optionInternal { get { return Option.Default; } set { } }
 
 	protected void AddEntity<T>(T e) where T : IEntity {
-		if(e is Entities.Entity) (e as Entities.Entity).AddConstraint(this);
+		if(e is Entity) (e as Entity).AddConstraint(this);
 	}
 
 	protected void AddConstraint(Constraint c) {
@@ -55,11 +55,11 @@ public abstract class Constraint {
 		return sketch.feature.detail.GetObjectById(ids[i]) as IEntity;
 	}
 
-	public Constraint GetConstraint(int i) {
+	protected Constraint GetConstraint(int i) {
 		return sketch.feature.detail.GetObjectById(ids[i]) as Constraint;
 	}
 
-	public int GetEntitiesCount() {
+	private int GetEntitiesCount() {
 		return ids.Count;
 	}
 
@@ -72,7 +72,7 @@ public abstract class Constraint {
 		return count == required;
 	}
 
-	public IEntity GetEntityOfType(IEntityType type, int index) {
+	protected IEntity GetEntityOfType(IEntityType type, int index) {
 		int curIndex = 0;
 		for(int i = 0; i < GetEntitiesCount(); i++) {
 			var e = GetEntity(i);
@@ -84,15 +84,14 @@ public abstract class Constraint {
 	}
 
 	protected void SetEntity(int i, IEntity e) {
-		var ent = GetEntity(i) as Entities.Entity;
+		var ent = GetEntity(i) as Entity;
 		if(ent != null) {
 			ent.RemoveConstraint(this);
 		}
 		ids[i] = e.id;
-		ent = GetEntity(i) as Entities.Entity;
+		ent = GetEntity(i) as Entity;
 		if(ent != null) {
 			ent.AddConstraint(this);
 		}
-		changed = true;
 	}
 }

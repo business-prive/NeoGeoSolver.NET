@@ -33,7 +33,7 @@ public class PointLineDistance : Value
 	{
 		get
 		{
-			return point.PointExpInPlane(sketch.plane);
+			return point.PointExpInPlane();
 		}
 	}
 
@@ -41,7 +41,7 @@ public class PointLineDistance : Value
 	{
 		get
 		{
-			return line.PointsInPlane(sketch.plane).ToArray()[0];
+			return line.PointsInPlane().ToArray()[0];
 		}
 	}
 
@@ -49,7 +49,7 @@ public class PointLineDistance : Value
 	{
 		get
 		{
-			return line.PointsInPlane(sketch.plane).ToArray()[1];
+			return line.PointsInPlane().ToArray()[1];
 		}
 	}
 
@@ -65,7 +65,7 @@ public class PointLineDistance : Value
 	{
 		get
 		{
-			yield return ConstraintExp.pointLineDistance(pointExp, lineP0Exp, lineP1Exp, sketch.is3d) - value;
+			yield return ConstraintExp.pointLineDistance(pointExp, lineP0Exp, lineP1Exp) - value;
 		}
 	}
 }

@@ -8,7 +8,7 @@ public class PointOn : Value {
 	public IEntity point { get { return GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity on { get { return GetEntity(1); } set { SetEntity(1, value); } }
 
-	public ExpressionVector pointExp { get { return point.PointExpInPlane(sketch.plane); } }
+	public ExpressionVector pointExp { get { return point.PointExpInPlane(); } }
 
 	protected override bool OnSatisfy() {
 		EquationSystem sys = new EquationSystem();
@@ -33,7 +33,7 @@ public class PointOn : Value {
 	public override IEnumerable<Expression> equations {
 		get {
 			var p = pointExp;
-			var eq = on.PointOnInPlane(value, sketch.plane) - p;
+			var eq = on.PointOnInPlane(value) - p;
 
 			yield return eq.x;
 			yield return eq.y;

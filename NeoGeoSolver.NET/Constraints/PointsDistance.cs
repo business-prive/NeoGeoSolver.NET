@@ -6,8 +6,8 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class PointsDistance : Value {
 
-	public ExpressionVector p0exp { get { return GetPointInPlane(0, sketch.plane); } }
-	public ExpressionVector p1exp { get { return GetPointInPlane(1, sketch.plane); } }
+	public ExpressionVector p0exp { get { return GetPointInPlane(0); } }
+	public ExpressionVector p1exp { get { return GetPointInPlane(1); } }
 
 	public PointsDistance(IEntity p0, IEntity p1)
 	{
@@ -28,12 +28,12 @@ public class PointsDistance : Value {
 		}
 	}
 
-	private ExpressionVector GetPointInPlane(int i, IPlane plane) {
+	private ExpressionVector GetPointInPlane(int i) {
 		if(HasEntitiesOfType(IEntityType.Line, 1)) {
-			return GetEntityOfType(IEntityType.Line, 0).GetPointAtInPlane(i, plane);
+			return GetEntityOfType(IEntityType.Line, 0).GetPointAtInPlane(i);
 		} else 
 		if(HasEntitiesOfType(IEntityType.Point, 2)) {
-			return GetEntityOfType(IEntityType.Point, i).GetPointAtInPlane(0, plane);
+			return GetEntityOfType(IEntityType.Point, i).GetPointAtInPlane(0);
 		}
 		return null;
 	}

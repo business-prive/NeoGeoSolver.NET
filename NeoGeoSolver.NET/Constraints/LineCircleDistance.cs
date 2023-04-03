@@ -41,7 +41,7 @@ public class LineCircleDistance : Value
   {
     get
     {
-      return line.PointsInPlane(sketch.plane).ToArray()[0];
+      return line.PointsInPlane().ToArray()[0];
     }
   }
 
@@ -49,7 +49,7 @@ public class LineCircleDistance : Value
   {
     get
     {
-      return line.PointsInPlane(sketch.plane).ToArray()[1];
+      return line.PointsInPlane().ToArray()[1];
     }
   }
 

@@ -51,8 +51,8 @@ public class Perpendicular : Constraint
       var l0 = GetEntityOfType(IEntityType.Line, 0);
       var l1 = GetEntityOfType(IEntityType.Line, 1);
 
-      ExpressionVector d0 = l0.GetPointAtInPlane(0, sketch.plane) - l0.GetPointAtInPlane(1, sketch.plane);
-      ExpressionVector d1 = l1.GetPointAtInPlane(0, sketch.plane) - l1.GetPointAtInPlane(1, sketch.plane);
+      ExpressionVector d0 = l0.GetPointAtInPlane(0) - l0.GetPointAtInPlane(1);
+      ExpressionVector d1 = l1.GetPointAtInPlane(0) - l1.GetPointAtInPlane(1);
 
       Expression angle = ConstraintExp.angle2d(d0, d1);
       switch (option)

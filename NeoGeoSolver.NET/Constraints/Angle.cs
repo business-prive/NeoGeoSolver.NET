@@ -46,7 +46,7 @@ public class Angle : Value {
 
 	public override IEnumerable<Expression> equations {
 		get {
-			var p = GetPointsExp(sketch.plane);
+			var p = GetPointsExp();
 			ExpressionVector d0 = p[0] - p[1];
 			ExpressionVector d1 = p[3] - p[2];
 			bool angle360 = HasEntitiesOfType(IEntityType.Arc, 1);
@@ -55,11 +55,11 @@ public class Angle : Value {
 		}
 	}
 
-	private ExpressionVector[] GetPointsExp(IPlane plane) {
+	private ExpressionVector[] GetPointsExp() {
 		var p = new ExpressionVector[4];
 		if(HasEntitiesOfType(IEntityType.Point, 4)) {
 			for(int i = 0; i < 4; i++) {
-				p[i] = GetEntityOfType(IEntityType.Point, i).GetPointAtInPlane(0, plane);
+				p[i] = GetEntityOfType(IEntityType.Point, i).GetPointAtInPlane(0);
 			}
 			if(supplementary) {
 				SystemExt.Swap(ref p[2], ref p[3]);
@@ -67,21 +67,21 @@ public class Angle : Value {
 		} else 
 		if(HasEntitiesOfType(IEntityType.Line, 2)) {
 			var l0 = GetEntityOfType(IEntityType.Line, 0);
-			p[0] = l0.GetPointAtInPlane(0, plane);
-			p[1] = l0.GetPointAtInPlane(1, plane);
+			p[0] = l0.GetPointAtInPlane(0);
+			p[1] = l0.GetPointAtInPlane(1);
 			var l1 = GetEntityOfType(IEntityType.Line, 1);
-			p[2] = l1.GetPointAtInPlane(0, plane);
-			p[3] = l1.GetPointAtInPlane(1, plane);
+			p[2] = l1.GetPointAtInPlane(0);
+			p[3] = l1.GetPointAtInPlane(1);
 			if(supplementary) {
 				SystemExt.Swap(ref p[2], ref p[3]);
 			}
 		} else 
 		if(HasEntitiesOfType(IEntityType.Arc, 1)) {
 			var arc = GetEntityOfType(IEntityType.Arc, 0);
-			p[0] = arc.GetPointAtInPlane(0, plane);
-			p[1] = arc.GetPointAtInPlane(2, plane);
-			p[2] = arc.GetPointAtInPlane(2, plane);
-			p[3] = arc.GetPointAtInPlane(1, plane);
+			p[0] = arc.GetPointAtInPlane(0);
+			p[1] = arc.GetPointAtInPlane(2);
+			p[2] = arc.GetPointAtInPlane(2);
+			p[3] = arc.GetPointAtInPlane(1);
 			if(supplementary) {
 				SystemExt.Swap(ref p[0], ref p[3]);
 				SystemExt.Swap(ref p[1], ref p[2]);

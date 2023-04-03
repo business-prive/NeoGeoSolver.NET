@@ -46,12 +46,12 @@ public class Expression {
 
   public Expression(double value) {
     this.value = value;
-    this.op = Op.Const;
+    op = Op.Const;
   }
 
   internal Expression(Param p) {
-    this.param = p;
-    this.op = Op.Param;
+    param = p;
+    op = Op.Param;
   }
 
   public static implicit operator Expression(Param param) {

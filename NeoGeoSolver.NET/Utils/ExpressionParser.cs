@@ -191,7 +191,7 @@ public class ExpressionParser {
 		}
 		var msg = error + " (error in \"" + str + "\")";
 		// TODO		Debug.Log(msg);
-		throw new System.Exception(msg);
+		throw new Exception(msg);
 	}
 
 	private Expression ParseValue() {
@@ -315,7 +315,7 @@ public class ExpressionParser {
 		try {
 			bool braced = false;
 			return ParseExp(ref braced);
-		} catch (System.Exception) {
+		} catch (Exception) {
 			return null;
 		}
 	}

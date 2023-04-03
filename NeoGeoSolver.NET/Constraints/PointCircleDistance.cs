@@ -15,7 +15,7 @@ public class PointCircleDistance : Value {
 		get {
 			var point = GetEntity(0);
 			var circle = GetEntity(1);
-			var pPos = point.GetPointAtInPlane(0, getPlane());
+			var pPos = point.GetPointAtInPlane(0);
 			var cCen = circle.Center();
 			var cRad = circle.Radius();
 
