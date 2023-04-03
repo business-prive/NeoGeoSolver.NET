@@ -6,17 +6,9 @@ namespace NeoGeoSolver.NET.Constraints;
 public class Value : Constraint {
 
   protected Param value = new("value");
-  private bool reference_;
-  public bool reference {
-    get {
-      return reference_;
-    }
-    set {
-      reference_ = value;
-    }
-  }
+  public bool reference { get; set; }
 
-  private Vector3 position_;
+  private Vector3 _position;
 
   public override IEnumerable<Param> parameters {
     get {
@@ -26,31 +18,23 @@ public class Value : Constraint {
   }
 
   public double GetValue() {
-    return ValueToLabel(value.value);
+    return value.value;
   }
 
   public void SetValue(double v) {
-    value.value = LabelToValue(v);
+    value.value = v;
   }
 
   public Param GetValueParam() {
     return value;
   }
 
-  public virtual double ValueToLabel(double value) {
-    return value;
-  }
-
-  public virtual double LabelToValue(double label) {
-    return label;
-  }
-
   protected virtual bool OnSatisfy() {
-    EquationSystem sys = new EquationSystem();
+    var sys = new EquationSystem();
     sys.revertWhenNotConverged = false;
     sys.AddParameter(value);
     sys.AddEquations(equations);
-    return sys.Solve() == EquationSystem.SolveResult.OKAY;
+    return sys.Solve() == EquationSystem.SolveResult.Okay;
   }
 
   public bool Satisfy() {

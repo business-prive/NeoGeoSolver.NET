@@ -12,19 +12,7 @@ public class CirclesDistance : Value
     SecondInside,
   }
 
-  private Option option_;
-
-  public Option option
-  {
-    get
-    {
-      return option_;
-    }
-    set
-    {
-      option_ = value;
-    }
-  }
+  public Option option { get; set; }
 
   protected override Enum optionInternal
   {
@@ -38,10 +26,6 @@ public class CirclesDistance : Value
     }
   }
 
-  public CirclesDistance()
-  {
-  }
-
   public CirclesDistance(IEntity c0, IEntity c1)
   {
     AddEntity(c0);
@@ -51,17 +35,17 @@ public class CirclesDistance : Value
     Satisfy();
   }
 
-  private Point getCenterPoint(IEntity e)
+  private Point GetCenterPoint(IEntity e)
   {
     if (e is Circle) return (e as Circle).center;
-    if (e is Arc) return (e as Arc).Center;
+    if (e is Arc) return (e as Arc).center;
     return null;
   }
 
-  private bool isCentersCoincident(IEntity c0, IEntity c1)
+  private bool IsCentersCoincident(IEntity c0, IEntity c1)
   {
-    var cp0 = getCenterPoint(c0);
-    var cp1 = getCenterPoint(c1);
+    var cp0 = GetCenterPoint(c0);
+    var cp1 = GetCenterPoint(c1);
     return cp0 != null && cp1 != null && cp0.IsCoincidentWith(cp1);
   }
 
@@ -73,7 +57,7 @@ public class CirclesDistance : Value
       var c1 = GetEntity(1);
       var r0 = c0.Radius();
       var r1 = c1.Radius();
-      if (isCentersCoincident(c0, c1))
+      if (IsCentersCoincident(c0, c1))
       {
         if (option == Option.FirstInside)
         {

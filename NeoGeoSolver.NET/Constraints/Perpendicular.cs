@@ -11,19 +11,7 @@ public class Perpendicular : Constraint
     RightHand
   }
 
-  private Option option_;
-
-  public Option option
-  {
-    get
-    {
-      return option_;
-    }
-    set
-    {
-      option_ = value;
-    }
-  }
+  public Option option { get; set; }
 
   protected override Enum optionInternal
   {
@@ -48,13 +36,13 @@ public class Perpendicular : Constraint
   {
     get
     {
-      var l0 = GetEntityOfType(IEntityType.Line, 0);
-      var l1 = GetEntityOfType(IEntityType.Line, 1);
+      var l0 = GetEntityOfType(EntityType.Line, 0);
+      var l1 = GetEntityOfType(EntityType.Line, 1);
 
-      ExpressionVector d0 = l0.GetPointAtInPlane(0) - l0.GetPointAtInPlane(1);
-      ExpressionVector d1 = l1.GetPointAtInPlane(0) - l1.GetPointAtInPlane(1);
+      var d0 = l0.GetPointAtInPlane(0) - l0.GetPointAtInPlane(1);
+      var d1 = l1.GetPointAtInPlane(0) - l1.GetPointAtInPlane(1);
 
-      Expression angle = ConstraintExp.angle2d(d0, d1);
+      var angle = ConstraintExp.Angle2d(d0, d1);
       switch (option)
       {
         case Option.LeftHand:

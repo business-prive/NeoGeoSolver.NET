@@ -9,16 +9,16 @@ public class Spline : Entity {
 
 	public Spline()
 	{
-		for(int i = 0; i < p.Length; i++) {
+		for(var i = 0; i < p.Length; i++) {
 			p[i] = AddChild(new Point());
 		}
 	}
 
-	public override IEntityType type { get { return IEntityType.Spline; } }
+	public override EntityType type { get { return EntityType.Spline; } }
 
 	public override IEnumerable<Point> points {
 		get {
-			for(int i = 0; i < p.Length; i++) {
+			for(var i = 0; i < p.Length; i++) {
 				yield return p[i];
 			}
 		}

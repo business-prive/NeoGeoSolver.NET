@@ -3,49 +3,49 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Solver;
 
 public class ExpressionBasis2d {
-  private Param px, py;
-  private Param ux, uy;
-  private Param vx, vy;
+  private Param _px, _py;
+  private Param _ux, _uy;
+  private Param _vx, _vy;
 
   public ExpressionVector u { get; private set; }
   public ExpressionVector v { get; private set; }
   public ExpressionVector p { get; private set; }
 
   public ExpressionBasis2d() {
-    px = new Param("ux", 0.0);
-    py = new Param("uy", 0.0);
+    _px = new Param("ux", 0.0);
+    _py = new Param("uy", 0.0);
 
-    ux = new Param("ux", 1.0);
-    uy = new Param("uy", 0.0);
+    _ux = new Param("ux", 1.0);
+    _uy = new Param("uy", 0.0);
 
-    vx = new Param("vx", 0.0);
-    vy = new Param("vy", 1.0);
+    _vx = new Param("vx", 0.0);
+    _vy = new Param("vy", 1.0);
 
-    p = new ExpressionVector(px, py, 0.0);
-    u = new ExpressionVector(ux, uy, 0.0);
-    v = new ExpressionVector(vx, vy, 0.0);
+    p = new ExpressionVector(_px, _py, 0.0);
+    u = new ExpressionVector(_ux, _uy, 0.0);
+    v = new ExpressionVector(_vx, _vy, 0.0);
   }
 
   public void SetPosParams(Param x, Param y) {
-    px = x;
-    py = y;
-    p.x = px;
-    p.y = py;
+    _px = x;
+    _py = y;
+    p.x = _px;
+    p.y = _py;
   }
 
   public IEnumerable<Param> parameters {
     get {
-      yield return ux;
-      yield return uy;
-      yield return vx;
-      yield return vy;
-      yield return px;
-      yield return py;
+      yield return _ux;
+      yield return _uy;
+      yield return _vx;
+      yield return _vy;
+      yield return _px;
+      yield return _py;
     }
   }
 
   public override string ToString() {
-    string result = "";
+    var result = "";
     foreach(var p in parameters) {
       result += p.value.ToStr() + " ";
     }
@@ -55,7 +55,7 @@ public class ExpressionBasis2d {
   public void FromString(string str) {
     char[] sep = { ' ' };
     var values = str.Split(sep, StringSplitOptions.RemoveEmptyEntries);
-    int i = 0;
+    var i = 0;
     foreach(var p in parameters) {
       p.value = values[i].ToDouble();
       i++;
@@ -91,7 +91,7 @@ public class ExpressionBasis2d {
     }
   }
 
-  public void markUnchanged() {
+  public void MarkUnchanged() {
     parameters.ForEach(pp => pp.changed = false);
   }
 }

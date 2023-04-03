@@ -1,6 +1,6 @@
 namespace NeoGeoSolver.NET.Entities;
 
-public enum IEntityType {
+public enum EntityType {
   Point,
   Line,
   Arc,

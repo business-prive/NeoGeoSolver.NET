@@ -3,26 +3,26 @@
 namespace NeoGeoSolver.NET.Utils;
 
 public static class SystemExt {
-	private static NumberFormatInfo nfi = new();
+	private static NumberFormatInfo _nfi = new();
 
 	static SystemExt() {
-		nfi.NumberDecimalSeparator = ".";
+		_nfi.NumberDecimalSeparator = ".";
 	}
 
 	public static double ToDouble(this string str) {
-		return double.Parse(str, nfi);
+		return double.Parse(str, _nfi);
 	}
 
 	public static float ToFloat(this string str) {
-		return float.Parse(str, nfi);
+		return float.Parse(str, _nfi);
 	}
 
 	public static string ToStr(this double value) {
-		return value.ToString(nfi);
+		return value.ToString(_nfi);
 	}
 
 	public static string ToStr(this float value) {
-		return value.ToString(nfi);
+		return value.ToString(_nfi);
 	}
 
 	public static void ToEnum<T>(this string str, ref T e) {

@@ -3,7 +3,7 @@
 namespace NeoGeoSolver.NET.Utils;
 
 public class ExpressionParser {
-	private Dictionary <string, Expression.Op> functions = new()
+	private Dictionary <string, Expression.Op> _functions = new()
 	{
 		{ "sin",	Expression.Op.Sin },
 		{ "cos",	Expression.Op.Cos },
@@ -21,7 +21,7 @@ public class ExpressionParser {
 		{ "cfres",	Expression.Op.CFres },
 	};
 
-	private Dictionary <char, Expression.Op> operators = new()
+	private Dictionary <char, Expression.Op> _operators = new()
 	{
 		{ '+', Expression.Op.Add },
 		{ '-', Expression.Op.Sub },
@@ -29,14 +29,14 @@ public class ExpressionParser {
 		{ '/', Expression.Op.Div },
 	};
 
-	private Dictionary <string, double> constants = new()
+	private Dictionary <string, double> _constants = new()
 	{
 		{ "pi", Math.PI },
 		{ "e", Math.E },
 	};
 
-	private string toParse;
-	private int index = 0;
+	private string _toParse;
+	private int _index = 0;
     
 	public List<Param> parameters = new();
     
@@ -93,17 +93,17 @@ public class ExpressionParser {
 	}
 
 	public ExpressionParser(string str) {
-		toParse = str;
+		_toParse = str;
 	}
 
 	public void SetString(string str) {
-		toParse = str;
-		index = 0;
+		_toParse = str;
+		_index = 0;
 	}
 
 	private char next {
 		get {
-			return toParse[index];
+			return _toParse[_index];
 		}
 	}
 
@@ -125,7 +125,7 @@ public class ExpressionParser {
 
 	private void SkipSpaces() {
 		if(!HasNext()) return;
-		while(HasNext() && IsSpace(next)) index++;
+		while(HasNext() && IsSpace(next)) _index++;
 	}
 
 	private Param GetParam(string name) {
@@ -135,9 +135,9 @@ public class ExpressionParser {
 	private void Skip(char c) {
 		SkipSpaces();
 		if(!HasNext() || next != c) {
-			error("\"" + c + "\" excepted!");
+			Error("\"" + c + "\" excepted!");
 		}
-		index++;
+		_index++;
 	}
 
 	private bool SkipIf(char c) {
@@ -145,49 +145,49 @@ public class ExpressionParser {
 		if(!HasNext() || next != c) {
 			return false;
 		}
-		index++;
+		_index++;
 		return true;
 	}
 
 	private bool ParseDigits(ref double digits) {
 		SkipSpaces();
-		if(!HasNext()) error("operand exepted");
+		if(!HasNext()) Error("operand exepted");
 		if(!IsDigit(next)) return false;
-		var start = index;
-		while(HasNext() && (IsDigit(next) || IsDelimiter(next))) index++;
-		var str = toParse.Substring(start, index - start);
+		var start = _index;
+		while(HasNext() && (IsDigit(next) || IsDelimiter(next))) _index++;
+		var str = _toParse.Substring(start, _index - start);
 		digits = str.ToDouble();
 		return true;
 	}
 
 	private bool ParseAlphas(ref string alphas) {
 		SkipSpaces();
-		if(!HasNext()) error("operand exepted");
+		if(!HasNext()) Error("operand exepted");
 		if(!IsAlpha(next)) return false;
-		var start = index;
-		while(HasNext() && (IsAlpha(next) || IsDigit(next))) index++;
-		alphas = toParse.Substring(start, index - start);
+		var start = _index;
+		while(HasNext() && (IsAlpha(next) || IsDigit(next))) _index++;
+		alphas = _toParse.Substring(start, _index - start);
 		return true;
 	}
 
 	private Expression.Op GetFunction(string name) {
-		if(functions.ContainsKey(name)) {
-			return functions[name];
+		if(_functions.ContainsKey(name)) {
+			return _functions[name];
 		}
 		return Expression.Op.Undefined;
 	}
 
 	private Expression GetConstant(string name) {
-		if(constants.ContainsKey(name)) {
-			return constants[name];
+		if(_constants.ContainsKey(name)) {
+			return _constants[name];
 		}
 		return null;
 	}
 
-	private void error(string error = "") {
-		var str = toParse;
-		if(index < str.Length) {
-			str.Insert(index, "?");
+	private void Error(string error = "") {
+		var str = _toParse;
+		if(_index < str.Length) {
+			str.Insert(_index, "?");
 		}
 		var msg = error + " (error in \"" + str + "\")";
 		// TODO		Debug.Log(msg);
@@ -196,28 +196,28 @@ public class ExpressionParser {
 
 	private Expression ParseValue() {
         
-		double digits = 0.0;
+		var digits = 0.0;
 		if(ParseDigits(ref digits)) {
 			return new Expression(digits);
 		}
-		bool braced = false;
+		var braced = false;
         
-		string alphas = "";
+		var alphas = "";
 		if(ParseAlphas(ref alphas)) {
 			var func = GetFunction(alphas);
 			if(func != Expression.Op.Undefined) {
 				if(SkipIf('(')) {
-					Expression a = ParseExp(ref braced);
+					var a = ParseExp(ref braced);
 					Expression b = null;
 					if(SkipIf(',')) {
 						b = ParseExp(ref braced);
 					}
 					Skip(')');
 					if(func == Expression.Op.Atan2 && b == null) {
-						error("second function argument execpted");
+						Error("second function argument execpted");
 					}
 					return new Expression(func, a, b);
-				} else error("function arguments execpted");
+				} else Error("function arguments execpted");
 			}
 
 			var constant = GetConstant(alphas);
@@ -230,7 +230,7 @@ public class ExpressionParser {
 			}
 			return new Expression(param);
 		}
-		error("valid operand excepted");
+		Error("valid operand excepted");
 		return null;
 	}
 
@@ -249,26 +249,26 @@ public class ExpressionParser {
 
 	private Expression.Op ParseOp() {
 		SkipSpaces();
-		if(operators.ContainsKey(next)) {
-			var result = operators[next];
-			index++;
+		if(_operators.ContainsKey(next)) {
+			var result = _operators[next];
+			_index++;
 			return result;
 		}
 		return Expression.Op.Undefined;
 	}
 
 	private bool HasNext() {
-		return index < toParse.Length;
+		return _index < _toParse.Length;
 	}
 
 	private Expression.Op ParseUnary() {
 		SkipSpaces();
 		if(next == '+') {
-			index++;
+			_index++;
 			return Expression.Op.Pos;
 		}
 		if(next == '-') {
-			index++;
+			_index++;
 			return Expression.Op.Neg;
 		}
 		return Expression.Op.Undefined;
@@ -279,9 +279,9 @@ public class ExpressionParser {
 		var uop = ParseUnary();
 				
 		Expression a = null;
-		bool aBraced = false;
+		var aBraced = false;
 		if(SkipIf('(')) {
-			bool br = false;
+			var br = false;
 			a = ParseExp(ref br);
 			Skip(')');
 			aBraced = true;
@@ -299,9 +299,9 @@ public class ExpressionParser {
 		}
         
 		var op = ParseOp();
-		if(op == Expression.Op.Undefined) error("operator execpted");
+		if(op == Expression.Op.Undefined) Error("operator execpted");
         
-		bool bBraced = false;
+		var bBraced = false;
 		var b = ParseExp(ref bBraced);
         
 		if(!bBraced && b.HasTwoOperands() && OrderOf(op) > OrderOf(b.op)) {
@@ -313,7 +313,7 @@ public class ExpressionParser {
     
 	public Expression Parse() {
 		try {
-			bool braced = false;
+			var braced = false;
 			return ParseExp(ref braced);
 		} catch (Exception) {
 			return null;

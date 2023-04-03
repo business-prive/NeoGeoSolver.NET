@@ -8,5 +8,5 @@ public interface IEntity {
   Expression Length();
   Expression Radius();
   ExpressionVector Center();
-  IEntityType type { get; }
+  EntityType type { get; }
 }

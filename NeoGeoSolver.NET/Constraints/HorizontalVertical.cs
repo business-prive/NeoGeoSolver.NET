@@ -5,26 +5,26 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class HorizontalVertical : Constraint {
-	private ExpressionVector p0exp {
+	private ExpressionVector p0Exp {
 		get {
 			return GetPointInPlane(0);
 		}
 	}
 
-	private ExpressionVector p1exp {
+	private ExpressionVector p1Exp {
 		get {
 			return GetPointInPlane(1);
 		}
 	}
 
 	private ExpressionVector GetPointInPlane(int index) {
-		if(HasEntitiesOfType(IEntityType.Point, 2)) {
-			return GetEntityOfType(IEntityType.Point, index).PointExpInPlane();
+		if(HasEntitiesOfType(EntityType.Point, 2)) {
+			return GetEntityOfType(EntityType.Point, index).PointExpInPlane();
 		}
-		return GetEntityOfType(IEntityType.Line, 0).GetPointAtInPlane(index);
+		return GetEntityOfType(EntityType.Line, 0).GetPointAtInPlane(index);
 	}
 
-	public HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.OX;
+	public HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.Ox;
 
 	public HorizontalVertical(IEntity p0, IEntity p1)
 	{
@@ -40,9 +40,9 @@ public class HorizontalVertical : Constraint {
 	public override IEnumerable<Expression> equations {
 		get {
 			switch(orientation) {
-				case HorizontalVerticalOrientation.OX: yield return p0exp.x - p1exp.x; break;
-				case HorizontalVerticalOrientation.OY: yield return p0exp.y - p1exp.y; break;
-				case HorizontalVerticalOrientation.OZ: yield return p0exp.z - p1exp.z; break;
+				case HorizontalVerticalOrientation.Ox: yield return p0Exp.x - p1Exp.x; break;
+				case HorizontalVerticalOrientation.Oy: yield return p0Exp.y - p1Exp.y; break;
+				case HorizontalVerticalOrientation.Oz: yield return p0Exp.z - p1Exp.z; break;
 			}
 		}
 	}

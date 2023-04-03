@@ -10,7 +10,7 @@ public class Diameter : Value {
 
 	public Diameter(IEntity c)
 	{
-		showAsRadius = (c.type == IEntityType.Arc);
+		showAsRadius = (c.type == EntityType.Arc);
 		AddEntity(c);
 		Satisfy();
 	}
@@ -21,13 +21,5 @@ public class Diameter : Value {
 		get {
 			yield return radius * 2.0 - value.exp;
 		}
-	}
-
-	public override double LabelToValue(double label) {
-		return showAsRadius ? label / 2.0 : label;
-	}
-
-	public override double ValueToLabel(double value) {
-		return showAsRadius ? value * 2.0 : value;
 	}
 }

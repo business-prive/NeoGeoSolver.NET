@@ -11,20 +11,20 @@ public class PointOn : Value {
 	public ExpressionVector pointExp { get { return point.PointExpInPlane(); } }
 
 	protected override bool OnSatisfy() {
-		EquationSystem sys = new EquationSystem();
+		var sys = new EquationSystem();
 		sys.AddParameters(parameters);
 		var exprs = equations.ToList();
 		sys.AddEquations(equations);
 
-		double bestI = 0.0;
-		double min = -1.0;
-		for(double i = 0.0; i < 1.0; i += 0.25 / 2.0) {
+		var bestI = 0.0;
+		var min = -1.0;
+		for(var i = 0.0; i < 1.0; i += 0.25 / 2.0) {
 			value.value = i;
 			sys.Solve();
-			double cur_value = exprs.Sum(e => Math.Abs(e.Eval()));
-			if(min >= 0.0 && min < cur_value) continue;
+			var curValue = exprs.Sum(e => Math.Abs(e.Eval()));
+			if(min >= 0.0 && min < curValue) continue;
 			bestI = value.value;
-			min = cur_value;
+			min = curValue;
 		}
 		value.value = bestI;
 		return true;
@@ -38,25 +38,5 @@ public class PointOn : Value {
 			yield return eq.x;
 			yield return eq.y;
 		}
-	}
-
-	public override double LabelToValue(double label) {
-		switch(on.type) {
-			//case IEntityType.Arc:
-			//case IEntityType.Circle:
-			case IEntityType.Helix:
-				return label / 180.0 * Math.PI;
-		}
-		return base.LabelToValue(label);
-	}
-
-	public override double ValueToLabel(double value) {
-		switch(on.type) {
-			//case IEntityType.Arc:
-			//case IEntityType.Circle:
-			case IEntityType.Helix:
-				return value * 180.0 / Math.PI;
-		}
-		return base.ValueToLabel(value);
 	}
 }

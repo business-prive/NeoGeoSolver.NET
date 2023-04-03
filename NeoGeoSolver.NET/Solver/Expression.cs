@@ -30,10 +30,10 @@ public class Expression {
     //Pow,
   }
 
-  public static readonly Expression zero = new(0.0);
-  public static readonly Expression one  = new(1.0);
-  public static readonly Expression mOne = new(-1.0);
-  public static readonly Expression two  = new(2.0);
+  public static readonly Expression Zero = new(0.0);
+  public static readonly Expression One  = new(1.0);
+  public static readonly Expression MOne = new(-1.0);
+  public static readonly Expression Two  = new(2.0);
 
   public Op op;
 
@@ -59,9 +59,9 @@ public class Expression {
   }
 
   public static implicit operator Expression(double value) {
-    if(value == 0.0) return zero;
-    if(value == 1.0) return one;
-    Expression result = new Expression();
+    if(value == 0.0) return Zero;
+    if(value == 1.0) return One;
+    var result = new Expression();
     result.value = value;
     result.op = Op.Const;
     return result;
@@ -88,8 +88,8 @@ public class Expression {
   }
 
   static public Expression operator*(Expression a, Expression b) {
-    if(a.IsZeroConst()) return zero;
-    if(b.IsZeroConst()) return zero;
+    if(a.IsZeroConst()) return Zero;
+    if(b.IsZeroConst()) return Zero;
     if(a.IsOneConst()) return b;
     if(b.IsOneConst()) return a;
     if(a.IsMinusOneConst()) return -b;
@@ -100,7 +100,7 @@ public class Expression {
 
   static public Expression operator/(Expression a, Expression b) {
     if(b.IsOneConst()) return a;
-    if(a.IsZeroConst()) return zero;
+    if(a.IsZeroConst()) return Zero;
     if(b.IsMinusOneConst()) return -a;
     return new Expression(Op.Div, a, b);
   }
@@ -116,7 +116,7 @@ public class Expression {
   // https://www.hindawi.com/journals/mpe/2018/4031793/
   public static double CFres(double x) {
 		
-    var PI = Math.PI;
+    var pi = Math.PI;
     var ax = Math.Abs(x);
     var ax2 = ax * ax;
     var ax3 = ax2 * ax;
@@ -140,7 +140,7 @@ public class Expression {
 
   public static double SFres(double x) {
 		
-    var PI = Math.PI;
+    var pi = Math.PI;
     var ax = Math.Abs(x);
     var ax2 = ax * ax;
     var ax3 = ax2 * ax;
@@ -192,7 +192,7 @@ public class Expression {
       case Op.ACos:	return Math.Acos(a.Eval());
       case Op.ASin:	return Math.Asin(a.Eval());
       case Op.Sqrt:	return Math.Sqrt(a.Eval());
-      case Op.Sqr:	{  double av = a.Eval(); return av * av; }
+      case Op.Sqr:	{  var av = a.Eval(); return av * av; }
       case Op.Atan2:	return Math.Atan2(a.Eval(), b.Eval());
       case Op.Abs:	return Math.Abs(a.Eval());
       case Op.Sign:	return Math.Sign(a.Eval());
@@ -300,35 +300,35 @@ public class Expression {
   }
 
   public Expression Deriv(Param p) {
-    return d(p);
+    return D(p);
   }
 
-  private Expression d(Param p) {
+  private Expression D(Param p) {
     switch(op) {
-      case Op.Const:	return zero;
-      case Op.Param:	return (param == p) ? one : zero;
-      case Op.Add:	return a.d(p) + b.d(p);
+      case Op.Const:	return Zero;
+      case Op.Param:	return (param == p) ? One : Zero;
+      case Op.Add:	return a.D(p) + b.D(p);
       case Op.Drag:
-      case Op.Sub:	return a.d(p) - b.d(p);
-      case Op.Mul:	return a.d(p) * b + a * b.d(p);
-      case Op.Div:	return (a.d(p) * b - a * b.d(p)) / Sqr(b);
-      case Op.Sin:	return a.d(p) * Cos(a);
-      case Op.Cos:	return a.d(p) * -Sin(a);
-      case Op.ASin:	return a.d(p) / Sqrt(one - Sqr(a));
-      case Op.ACos:	return a.d(p) * mOne / Sqrt(one - Sqr(a));
-      case Op.Sqrt:	return a.d(p) / (two * Sqrt(a));
-      case Op.Sqr:	return a.d(p) * two * a;
-      case Op.Abs:	return a.d(p) * Sign(a);
-      case Op.Sign:	return zero;
-      case Op.Neg:    return -a.d(p);
-      case Op.Atan2:	return (b * a.d(p) - a * b.d(p)) / (Sqr(a) + Sqr(b));
-      case Op.Exp:	return a.d(p) * Expo(a);
-      case Op.Sinh:	return a.d(p) * Cosh(a);
-      case Op.Cosh:	return a.d(p) * Sinh(a);
-      case Op.SFres:	return a.d(p) * Sin(Math.PI * Sqr(a) / 2.0);
-      case Op.CFres:	return a.d(p) * Cos(Math.PI * Sqr(a) / 2.0);
+      case Op.Sub:	return a.D(p) - b.D(p);
+      case Op.Mul:	return a.D(p) * b + a * b.D(p);
+      case Op.Div:	return (a.D(p) * b - a * b.D(p)) / Sqr(b);
+      case Op.Sin:	return a.D(p) * Cos(a);
+      case Op.Cos:	return a.D(p) * -Sin(a);
+      case Op.ASin:	return a.D(p) / Sqrt(One - Sqr(a));
+      case Op.ACos:	return a.D(p) * MOne / Sqrt(One - Sqr(a));
+      case Op.Sqrt:	return a.D(p) / (Two * Sqrt(a));
+      case Op.Sqr:	return a.D(p) * Two * a;
+      case Op.Abs:	return a.D(p) * Sign(a);
+      case Op.Sign:	return Zero;
+      case Op.Neg:    return -a.D(p);
+      case Op.Atan2:	return (b * a.D(p) - a * b.D(p)) / (Sqr(a) + Sqr(b));
+      case Op.Exp:	return a.D(p) * Expo(a);
+      case Op.Sinh:	return a.D(p) * Cosh(a);
+      case Op.Cosh:	return a.D(p) * Sinh(a);
+      case Op.SFres:	return a.D(p) * Sin(Math.PI * Sqr(a) / 2.0);
+      case Op.CFres:	return a.D(p) * Cos(Math.PI * Sqr(a) / 2.0);
     }
-    return zero;
+    return Zero;
   }
 
   public bool IsSubstitionForm() {
@@ -384,7 +384,7 @@ public class Expression {
   }
 
   public Expression DeepClone() {
-    Expression result = new Expression();
+    var result = new Expression();
     result.op = op;
     result.param = param;
     result.value = value;

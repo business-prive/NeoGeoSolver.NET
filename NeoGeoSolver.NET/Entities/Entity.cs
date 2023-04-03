@@ -7,7 +7,7 @@ namespace NeoGeoSolver.NET.Entities;
 public abstract partial class Entity : IEntity
 {
   protected List<Constraint> usedInConstraints = new();
-  private List<Entity> children = new();
+  private List<Entity> _children = new();
   public Entity parent { get; private set; }
   public Func<ExpressionVector, ExpressionVector> transform = null;
 	public IEnumerable<Constraint> constraints { get { return usedInConstraints.AsEnumerable(); } }
@@ -15,22 +15,22 @@ public abstract partial class Entity : IEntity
 	public virtual IEnumerable<Point> points { get { yield break; } }
   public virtual IEnumerable<Expression> equations { get { yield break; } }
 
-  public abstract IEntityType type { get; }
+  public abstract EntityType type { get; }
 
   protected IEnumerable<Vector3> getSegmentsUsingPointOn(int subdiv)
   {
-    Param pOn = new Param("pOn");
+    var pOn = new Param("pOn");
     var on = PointOn(pOn);
-    for (int i = 0; i <= subdiv; i++)
+    for (var i = 0; i <= subdiv; i++)
     {
       pOn.value = (double) i / subdiv;
       yield return on.Eval();
     }
   }
 
-  protected IEnumerable<Vector3> getSegments(int subdiv, Func<double, Vector3> pointOn)
+  protected IEnumerable<Vector3> GetSegments(int subdiv, Func<double, Vector3> pointOn)
   {
-    for (int i = 0; i <= subdiv; i++)
+    for (var i = 0; i <= subdiv; i++)
     {
       yield return pointOn((double) i / subdiv);
     }
@@ -40,14 +40,14 @@ public abstract partial class Entity : IEntity
 
   public T AddChild<T>(T e) where T : Entity
   {
-    children.Add(e);
+    _children.Add(e);
     e.parent = this;
     return e;
   }
 
   public virtual ExpressionVector TangentAt(Expression t)
   {
-    Param p = new Param("pOn");
+    var p = new Param("pOn");
     var pt = PointOn(p);
     var result = new ExpressionVector(pt.x.Deriv(p), pt.y.Deriv(p), pt.z.Deriv(p));
     result.x.Substitute(p, t);

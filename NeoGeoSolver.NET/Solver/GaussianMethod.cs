@@ -2,53 +2,53 @@
 
 public static class GaussianMethod {
 
-	public const double epsilon = 1e-10;
-	public const double rankEpsilon = 1e-8;
+	public const double Epsilon = 1e-10;
+	public const double RankEpsilon = 1e-8;
 	
-	public static string Print<T>(this T[,] A) {
-		string result = "";
-		for(int r = 0; r < A.GetLength(0); r++) {
-			for(int c = 0; c < A.GetLength(1); c++) {
-				result += A[r, c].ToString() + " ";
+	public static string Print<T>(this T[,] a) {
+		var result = "";
+		for(var r = 0; r < a.GetLength(0); r++) {
+			for(var c = 0; c < a.GetLength(1); c++) {
+				result += a[r, c].ToString() + " ";
 			}
 			result += "\n";
 		}
 		return result;
 	}
 
-	public static string Print<T>(this T[] A) {
-		string result = "";
-		for(int r = 0; r < A.GetLength(0); r++) {
-			result += A[r].ToString() + "\n";
+	public static string Print<T>(this T[] a) {
+		var result = "";
+		for(var r = 0; r < a.GetLength(0); r++) {
+			result += a[r].ToString() + "\n";
 		}
 		return result;
 	}
 	
-	public static int Rank(double[,] A) {
-		var rows = A.GetLength(0);
-		var cols = A.GetLength(1);
+	public static int Rank(double[,] a) {
+		var rows = a.GetLength(0);
+		var cols = a.GetLength(1);
 
-		int rank = 0;
-		double[] rowsLength = new double[rows];
+		var rank = 0;
+		var rowsLength = new double[rows];
 
-		for(int i = 0; i < rows; i++) {
-			for(int ii = 0; ii < i; ii++) {
-				if(rowsLength[ii] <= rankEpsilon) continue;
+		for(var i = 0; i < rows; i++) {
+			for(var ii = 0; ii < i; ii++) {
+				if(rowsLength[ii] <= RankEpsilon) continue;
 
 				double sum = 0;
-				for(int j = 0; j < cols; j++) {
-					sum += A[ii, j] * A[i, j];
+				for(var j = 0; j < cols; j++) {
+					sum += a[ii, j] * a[i, j];
 				}
-				for(int j = 0; j < cols; j++) {
-					A[i, j] -= A[ii, j] * sum / rowsLength[ii];
+				for(var j = 0; j < cols; j++) {
+					a[i, j] -= a[ii, j] * sum / rowsLength[ii];
 				}
 			}
 
 			double len = 0;
-			for(int j = 0; j < cols; j++) {
-				len += A[i, j] * A[i, j];
+			for(var j = 0; j < cols; j++) {
+				len += a[i, j] * a[i, j];
 			}
-			if(len > rankEpsilon) {
+			if(len > RankEpsilon) {
 				rank++;
 			}
 			rowsLength[i] = len;
@@ -57,33 +57,33 @@ public static class GaussianMethod {
 		return rank;
 	}
 
-	public static void Solve(double[,] A, double[] B, ref double[] X) {
+	public static void Solve(double[,] a, double[] b, ref double[] x) {
 
-		var rows = A.GetLength(0);
-		var cols = A.GetLength(1);
-		double t = 0.0;
+		var rows = a.GetLength(0);
+		var cols = a.GetLength(1);
+		var t = 0.0;
 
-		for(int r = 0; r < rows; r++) {
+		for(var r = 0; r < rows; r++) {
 
 			var mr = r;
-			double max = 0.0;
-			for(int rr = r; rr < rows; rr++) {
-				if(Math.Abs(A[rr, r]) <= max) continue;
-				max = Math.Abs(A[rr, r]);
+			var max = 0.0;
+			for(var rr = r; rr < rows; rr++) {
+				if(Math.Abs(a[rr, r]) <= max) continue;
+				max = Math.Abs(a[rr, r]);
 				mr = rr;
 			}
 
-			if(max < epsilon) continue;
+			if(max < Epsilon) continue;
 
-			for(int c = 0; c < cols; c++) {
-				t = A[r, c];
-				A[r, c] = A[mr, c];
-				A[mr, c] = t;
+			for(var c = 0; c < cols; c++) {
+				t = a[r, c];
+				a[r, c] = a[mr, c];
+				a[mr, c] = t;
 			}
 
-			t = B[r];
-			B[r] = B[mr];
-			B[mr] = t;
+			t = b[r];
+			b[r] = b[mr];
+			b[mr] = t;
 
 			// normalize
 			/*
@@ -95,22 +95,22 @@ public static class GaussianMethod {
 		*/
 
 			// 
-			for(int rr = r + 1; rr < rows; rr++) {
-				double coef = A[rr, r] / A[r, r];
-				for(int c = 0; c < cols; c++) {
-					A[rr, c] -= A[r, c] * coef;
+			for(var rr = r + 1; rr < rows; rr++) {
+				var coef = a[rr, r] / a[r, r];
+				for(var c = 0; c < cols; c++) {
+					a[rr, c] -= a[r, c] * coef;
 				}
-				B[rr] -= B[r] * coef;
+				b[rr] -= b[r] * coef;
 			}
 		}
 
-		for(int r = rows - 1; r >= 0; r--) {
-			if(Math.Abs(A[r, r]) < epsilon) continue;
-			double xx = B[r] / A[r, r];
-			for(int rr = rows - 1; rr > r; rr--) {
-				xx -= X[rr] * A[r, rr] / A[r, r];
+		for(var r = rows - 1; r >= 0; r--) {
+			if(Math.Abs(a[r, r]) < Epsilon) continue;
+			var xx = b[r] / a[r, r];
+			for(var rr = rows - 1; rr > r; rr--) {
+				xx -= x[rr] * a[r, rr] / a[r, r];
 			}
-			X[r] = xx;
+			x[r] = xx;
 		}
 	}
 }

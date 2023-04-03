@@ -9,52 +9,27 @@ public class Function : Entity {
 	public Point p1;
 	public Point c;
 
-	private string function_x;
-	private string function_y;
-	private int subdivision_ = 16;
-	public int subdivision {
-		get {
-			return subdivision_;
-		}
-		set {
-			subdivision_ = value;
-		}
-	}
+	private string _functionX;
+	private string _functionY;
+	public int subdivision { get; set; } = 16;
 
-	private ExpressionBasis2d basis = new();
+	private ExpressionBasis2d _basis = new();
 
-	private bool tBeginFixed_ = false;
-	public bool tBeginFixed {
-		get {
-			return tBeginFixed_;
-		}
-		set {
-			tBeginFixed_ = value;
-		}
-	}
+	public bool tBeginFixed { get; set; } = false;
 
-	private bool tEndFixed_ = false;
-	public bool tEndFixed {
-		get {
-			return tEndFixed_;
-		}
-		set {
-			tEndFixed_ = value;
-			//sketch.(entities:true, topo:true);
-		}
-	}
+	public bool tEndFixed { get; set; } = false;
 
 	public string x {
 		get {
-			return function_x;
+			return _functionX;
 		}
 		set {
-			if(function_x == value) return;
-			function_x = value;
-			parser.SetString(function_x);
-			var e = parser.Parse();
+			if(_functionX == value) return;
+			_functionX = value;
+			_parser.SetString(_functionX);
+			var e = _parser.Parse();
 			if(e != null) {
-				exp.x = e;
+				_exp.x = e;
 				// TODO		Debug.Log("x = " + e.ToString());
 				
 			}
@@ -63,29 +38,29 @@ public class Function : Entity {
 
 	public string y {
 		get {
-			return function_y;
+			return _functionY;
 		}
 		set {
-			if(function_y == value) return;
-			function_y = value;
-			parser.SetString(function_y);
-			var e = parser.Parse();
+			if(_functionY == value) return;
+			_functionY = value;
+			_parser.SetString(_functionY);
+			var e = _parser.Parse();
 			if(e != null) {
-				exp.y = e;
+				_exp.y = e;
 				// TODO		Debug.Log("y = " + e.ToString());
 			}
 		}
 	}
 
-	private ExpressionParser parser;
-	private ExpressionVector exp = new(0.0, 0.0, 0.0);
-	private Param t = new("t");
-	private Param t0 = new("t0", 0.0);
-	private Param t1 = new("t1", 1.0);
+	private ExpressionParser _parser;
+	private ExpressionVector _exp = new(0.0, 0.0, 0.0);
+	private Param _t = new("t");
+	private Param _t0 = new("t0", 0.0);
+	private Param _t1 = new("t1", 1.0);
 
 	private void InitParser() {
-		parser = new ExpressionParser("0");
-		parser.parameters.Add(t);
+		_parser = new ExpressionParser("0");
+		_parser.parameters.Add(_t);
 		x = "t";
 		y = "cos(t * pi)";
 
@@ -99,39 +74,39 @@ public class Function : Entity {
 		InitParser();
 	}
 
-	public override IEntityType type { get { return IEntityType.Function; } }
+	public override EntityType type { get { return EntityType.Function; } }
 	
 	public ExpressionVector GetExpClone(Expression t) {
-		var e = new ExpressionVector(exp.x.DeepClone(), exp.y.DeepClone(), 0.0);
+		var e = new ExpressionVector(_exp.x.DeepClone(), _exp.y.DeepClone(), 0.0);
 		if(t != null) {
-			e.x.Substitute(this.t, t);
-			e.y.Substitute(this.t, t);
-			e.z.Substitute(this.t, t);
+			e.x.Substitute(this._t, t);
+			e.y.Substitute(this._t, t);
+			e.z.Substitute(this._t, t);
 		}
 		return e;
 	}
 
 	public override IEnumerable<Expression> equations {
 		get {
-			ExpressionVector e0 = basis.TransformPosition(GetExpClone(t0));
+			var e0 = _basis.TransformPosition(GetExpClone(_t0));
 
 			var eq0 = e0 - p0.exp;
 			yield return eq0.x;
 			yield return eq0.y;
 
 			//if(!p0.IsCoincidentWith(p1)) {
-			ExpressionVector e1 = basis.TransformPosition(GetExpClone(t1));
+			var e1 = _basis.TransformPosition(GetExpClone(_t1));
 
 			var eq1 = e1 - p1.exp;
 			yield return eq1.x;
 			yield return eq1.y;
 			//}
 
-			var eqc = basis.p - c.exp;
+			var eqc = _basis.p - c.exp;
 			yield return eqc.x;
 			yield return eqc.y;
 
-			foreach(var e in basis.equations) yield return e;
+			foreach(var e in _basis.equations) yield return e;
 		}
 	}
 
@@ -145,15 +120,15 @@ public class Function : Entity {
 
 	public override IEnumerable<Param> parameters {
 		get {
-			if(!tBeginFixed) yield return t0;
-			if(!tEndFixed) yield return t1;
-			foreach(var p in basis.parameters) yield return p;
+			if(!tBeginFixed) yield return _t0;
+			if(!tEndFixed) yield return _t1;
+			foreach(var p in _basis.parameters) yield return p;
 		}
 	}
 
 	public override ExpressionVector PointOn(Expression t) {
-		var newt = t0.exp + (t1.exp - t0.exp) * t;
-		return basis.TransformPosition(GetExpClone(newt));
+		var newt = _t0.exp + (_t1.exp - _t0.exp) * t;
+		return _basis.TransformPosition(GetExpClone(newt));
 	}
 
 	public override Expression Length() {

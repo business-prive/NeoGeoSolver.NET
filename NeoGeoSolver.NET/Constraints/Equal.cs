@@ -12,7 +12,7 @@ public class Equal : Value
     Diameter
   }
 
-  private LengthType[] lengthType = new LengthType[2];
+  private LengthType[] _lengthType = new LengthType[2];
 
   public Equal(IEntity l0, IEntity l1)
   {
@@ -25,12 +25,12 @@ public class Equal : Value
   {
     get
     {
-      Expression[] len = new Expression[2];
+      var len = new Expression[2];
 
-      for (int i = 0; i < 2; i++)
+      for (var i = 0; i < 2; i++)
       {
         var e = GetEntity(i);
-        switch (lengthType[i])
+        switch (_lengthType[i])
         {
           case LengthType.Length:
             len[i] = e.Length();

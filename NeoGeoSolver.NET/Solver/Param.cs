@@ -3,15 +3,15 @@
 public class Param {
 	public string name;
 	public bool reduceable = true;
-	private double v;
+	private double _v;
 	public bool changed;
 
 	public double value {
-		get { return v; }
+		get { return _v; }
 		set {
-			if(v == value) return;
+			if(_v == value) return;
 			changed = true;
-			v = value;
+			_v = value;
 		}
 	}
 

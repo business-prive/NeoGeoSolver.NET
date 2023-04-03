@@ -9,7 +9,7 @@ public class Point : Entity {
 	public Param y = new("y");
 	public Param z = new("z");
 
-	public override IEntityType type { get { return IEntityType.Point; } }
+	public override EntityType type { get { return EntityType.Point; } }
 
 	public Vector3 GetPosition() {
 		if(transform != null) {
@@ -33,16 +33,16 @@ public class Point : Entity {
 		}
 	}
 
-	private ExpressionVector exp_;
+	private ExpressionVector _exp;
 	public ExpressionVector exp {
 		get {
-			if(exp_ == null) {
-				exp_ = new ExpressionVector(x, y, z);
+			if(_exp == null) {
+				_exp = new ExpressionVector(x, y, z);
 			}
 			if(transform != null) {
-				return transform(exp_);
+				return transform(_exp);
 			}
-			return exp_;
+			return _exp;
 		}
 	}
 
@@ -61,7 +61,7 @@ public class Point : Entity {
 
 	private bool IsCoincidentWith(IEntity point, IEntity exclude) {
 		if(point.IsSameAs(this)) return true;
-		for(int i = 0; i < usedInConstraints.Count; i++) {
+		for(var i = 0; i < usedInConstraints.Count; i++) {
 			var c = usedInConstraints[i] as PointsCoincident;
 			if(c == null) continue;
 			var p = c.GetOtherPoint(this);

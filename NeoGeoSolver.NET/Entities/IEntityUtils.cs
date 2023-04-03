@@ -2,7 +2,7 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public static class IEntityUtils {
+public static class EntityUtils {
   public static bool IsSameAs(this IEntity e0, IEntity e1) {
     if(e0 == null) return e1 == null;
     if(e1 == null) return e0 == null;
@@ -41,7 +41,7 @@ public static class IEntityUtils {
 
   public static ExpressionVector GetPointAtInPlane(this IEntity entity, int index) {
     var points = entity.points.GetEnumerator();
-    int curIndex = -1;
+    var curIndex = -1;
     while(curIndex++ < index && points.MoveNext());
     return plane.ToFrom(points.Current, entity.plane);
   }

@@ -17,7 +17,7 @@ public class EllipticArc : Entity {
 		c = AddChild(new  Point());
 	}
 
-	public override IEntityType type { get { return IEntityType.Arc; } }
+	public override EntityType type { get { return EntityType.Arc; } }
 
 	public override IEnumerable<Expression> equations {
 		get {
@@ -39,7 +39,7 @@ public class EllipticArc : Entity {
 		if(!p0.IsCoincidentWith(p1)) {
 			var d0 = p0.exp - c.exp;
 			var d1 = p1.exp - c.exp;
-			return ConstraintExp.angle2d(d0, d1, angle360: true);
+			return ConstraintExp.Angle2d(d0, d1, angle360: true);
 		}
 		return Math.PI * 2.0;
 	}

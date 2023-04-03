@@ -6,15 +6,15 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class Angle : Value {
-	private bool supplementary_;
+	private bool _supplementary;
 	public bool supplementary {
 		get {
-			return supplementary_;
+			return _supplementary;
 		}
 		set {
-			if(value == supplementary_) return;
-			supplementary_ = value;
-			if(HasEntitiesOfType(IEntityType.Arc, 1)) {
+			if(value == _supplementary) return;
+			_supplementary = value;
+			if(HasEntitiesOfType(EntityType.Arc, 1)) {
 				this.value.value = 2.0 * Math.PI - this.value.value;
 			} else {
 				this.value.value = -(Math.Sign(this.value.value) * Math.PI - this.value.value);
@@ -47,37 +47,37 @@ public class Angle : Value {
 	public override IEnumerable<Expression> equations {
 		get {
 			var p = GetPointsExp();
-			ExpressionVector d0 = p[0] - p[1];
-			ExpressionVector d1 = p[3] - p[2];
-			bool angle360 = HasEntitiesOfType(IEntityType.Arc, 1);
-			Expression angle = ConstraintExp.angle2d(d0, d1, angle360);
+			var d0 = p[0] - p[1];
+			var d1 = p[3] - p[2];
+			var angle360 = HasEntitiesOfType(EntityType.Arc, 1);
+			var angle = ConstraintExp.Angle2d(d0, d1, angle360);
 			yield return angle - value;
 		}
 	}
 
 	private ExpressionVector[] GetPointsExp() {
 		var p = new ExpressionVector[4];
-		if(HasEntitiesOfType(IEntityType.Point, 4)) {
-			for(int i = 0; i < 4; i++) {
-				p[i] = GetEntityOfType(IEntityType.Point, i).GetPointAtInPlane(0);
+		if(HasEntitiesOfType(EntityType.Point, 4)) {
+			for(var i = 0; i < 4; i++) {
+				p[i] = GetEntityOfType(EntityType.Point, i).GetPointAtInPlane(0);
 			}
 			if(supplementary) {
 				SystemExt.Swap(ref p[2], ref p[3]);
 			}
 		} else 
-		if(HasEntitiesOfType(IEntityType.Line, 2)) {
-			var l0 = GetEntityOfType(IEntityType.Line, 0);
+		if(HasEntitiesOfType(EntityType.Line, 2)) {
+			var l0 = GetEntityOfType(EntityType.Line, 0);
 			p[0] = l0.GetPointAtInPlane(0);
 			p[1] = l0.GetPointAtInPlane(1);
-			var l1 = GetEntityOfType(IEntityType.Line, 1);
+			var l1 = GetEntityOfType(EntityType.Line, 1);
 			p[2] = l1.GetPointAtInPlane(0);
 			p[3] = l1.GetPointAtInPlane(1);
 			if(supplementary) {
 				SystemExt.Swap(ref p[2], ref p[3]);
 			}
 		} else 
-		if(HasEntitiesOfType(IEntityType.Arc, 1)) {
-			var arc = GetEntityOfType(IEntityType.Arc, 0);
+		if(HasEntitiesOfType(EntityType.Arc, 1)) {
+			var arc = GetEntityOfType(EntityType.Arc, 0);
 			p[0] = arc.GetPointAtInPlane(0);
 			p[1] = arc.GetPointAtInPlane(2);
 			p[2] = arc.GetPointAtInPlane(2);
@@ -88,13 +88,5 @@ public class Angle : Value {
 			}
 		}
 		return p;
-	}
-
-	public override double LabelToValue(double label) {
-		return label * Math.PI / 180.0;
-	}
-
-	public override double ValueToLabel(double value) {
-		return value / Math.PI * 180.0;
 	}
 }

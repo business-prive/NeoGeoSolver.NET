@@ -13,7 +13,7 @@ public class Line : Entity {
 		p1 = AddChild(new Point());
 	}
 
-	public override IEntityType type { get { return IEntityType.Line; } }
+	public override EntityType type { get { return EntityType.Line; } }
 
 	public override ExpressionVector PointOn(Expression t) {
 		var pt0 = p0.exp;

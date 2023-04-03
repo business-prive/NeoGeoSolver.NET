@@ -2,88 +2,85 @@
 
 public class EquationSystem  {
 	public enum SolveResult {
-		OKAY,
-		DIDNT_CONVEGE,
-		REDUNDANT,
-		POSTPONE
+		Okay,
+		DidntConvege,
+		Redundant,
+		Postpone
 	}
-
-	private bool isDirty = true;
-
-	public bool IsDirty { get { return isDirty; } }
+	public bool isDirty { get; private set; }
 	public int maxSteps = 20;
 	public int dragSteps = 3;
 	public bool revertWhenNotConverged = true;
 
-	private Expression[,] J;
-	private double[,] A;
-	private double[,] AAT;
-	private double[] B;
-	private double[] X;
-	private double[] Z;
-	private double[] oldParamValues;
+	private Expression[,] _j;
+	private double[,] _a;
+	private double[,] _aat;
+	private double[] _b;
+	private double[] _x;
+	private double[] _z;
+	private double[] _oldParamValues;
 
-	private List<Expression> sourceEquations = new();
-	private List<Param> parameters = new();
+	private List<Expression> _sourceEquations = new();
+	private List<Param> _parameters = new();
 
-	private List<Expression> equations = new();
-	private List<Param> currentParams = new();
+	private List<Expression> _equations = new();
+	private List<Param> _currentParams = new();
 
-	private Dictionary<Param, Param> subs;
+	private Dictionary<Param, Param> _subs;
 
 	public void AddEquation(Expression eq) {
-		sourceEquations.Add(eq);
+		_sourceEquations.Add(eq);
 		isDirty = true;
 	}
 
 	public void AddEquation(ExpressionVector v) {
-		sourceEquations.Add(v.x);
-		sourceEquations.Add(v.y);
-		sourceEquations.Add(v.z);
+		_sourceEquations.Add(v.x);
+		_sourceEquations.Add(v.y);
+		_sourceEquations.Add(v.z);
 		isDirty = true;
 	}
 
 	public void AddEquations(IEnumerable<Expression> eq) {
-		sourceEquations.AddRange(eq);
+		_sourceEquations.AddRange(eq);
 		isDirty = true;
 	}
 
 	public void RemoveEquation(Expression eq) {
-		sourceEquations.Remove(eq);
+		_sourceEquations.Remove(eq);
 		isDirty = true;
 	}
 
 	public void AddParameter(Param p) {
-		parameters.Add(p);
+		_parameters.Add(p);
 		isDirty = true;
 	}
 
 	public void AddParameters(IEnumerable<Param> p) {
-		parameters.AddRange(p);
+		_parameters.AddRange(p);
 		isDirty = true;
 	}
 
 	public void RemoveParameter(Param p) {
-		parameters.Remove(p);
+		_parameters.Remove(p);
 		isDirty = true;
 	}
 
-	public void Eval(ref double[] B, bool clearDrag) {
-		for(int i = 0; i < equations.Count; i++) {
-			if(clearDrag && equations[i].IsDrag()) {
-				B[i] = 0.0;
+	public void Eval(ref double[] b, bool clearDrag) {
+		for(var i = 0; i < _equations.Count; i++) {
+			if(clearDrag && _equations[i].IsDrag()) {
+				b[i] = 0.0;
 				continue;
 			}
-			B[i] = equations[i].Eval();
+			b[i] = _equations[i].Eval();
 		}
 	}
 
 	public bool IsConverged(bool checkDrag, bool printNonConverged = false) {
-		for(int i = 0; i < equations.Count; i++) {
-			if(!checkDrag && equations[i].IsDrag()) {
+		for(var i = 0; i < _equations.Count; i++) {
+			if(!checkDrag && _equations[i].IsDrag()) {
 				continue;
 			}
-			if(Math.Abs(B[i]) < GaussianMethod.epsilon) continue;
+			if(Math.Abs(_b[i]) < GaussianMethod.Epsilon) continue;
 			if(printNonConverged) {
 				//Debug.Log("Not converged: " + equations[i].ToString());
 				continue;
@@ -94,24 +91,24 @@ public class EquationSystem  {
 	}
 
 	private void StoreParams() {
-		for(int i = 0; i < parameters.Count; i++) {
-			oldParamValues[i] = parameters[i].value;
+		for(var i = 0; i < _parameters.Count; i++) {
+			_oldParamValues[i] = _parameters[i].value;
 		}
 	}
 
 	private void RevertParams() {
-		for(int i = 0; i < parameters.Count; i++) {
-			parameters[i].value = oldParamValues[i];
+		for(var i = 0; i < _parameters.Count; i++) {
+			_parameters[i].value = _oldParamValues[i];
 		}
 	}
 
 	private static Expression[,] WriteJacobian(List<Expression> equations, List<Param> parameters) {
-		var J = new Expression[equations.Count, parameters.Count];
-		for(int r = 0; r < equations.Count; r++) {
+		var j = new Expression[equations.Count, parameters.Count];
+		for(var r = 0; r < equations.Count; r++) {
 			var eq = equations[r];
-			for(int c = 0; c < parameters.Count; c++) {
+			for(var c = 0; c < parameters.Count; c++) {
 				var u = parameters[c];
-				J[r, c] = eq.Deriv(u);
+				j[r, c] = eq.Deriv(u);
 				/*
 			if(!J[r, c].IsZeroConst()) {
 				Debug.Log(J[r, c].ToString() + "\n");
@@ -119,91 +116,91 @@ public class EquationSystem  {
 			*/
 			}
 		}
-		return J;
+		return j;
 	}
 
 	public bool HasDragged() {
-		return equations.Any(e => e.IsDrag());
+		return _equations.Any(e => e.IsDrag());
 	}
 
-	public void EvalJacobian(Expression[,] J, ref double[,] A, bool clearDrag) {
+	public void EvalJacobian(Expression[,] j, ref double[,] a, bool clearDrag) {
 		UpdateDirty();
-		for(int r = 0; r < J.GetLength(0); r++) {
-			if(clearDrag && equations[r].IsDrag()) {
-				for(int c = 0; c < J.GetLength(1); c++) {
-					A[r, c] = 0.0;
+		for(var r = 0; r < j.GetLength(0); r++) {
+			if(clearDrag && _equations[r].IsDrag()) {
+				for(var c = 0; c < j.GetLength(1); c++) {
+					a[r, c] = 0.0;
 				}
 				continue;
 			}
-			for(int c = 0; c < J.GetLength(1); c++) {
-				A[r, c] = J[r, c].Eval();
+			for(var c = 0; c < j.GetLength(1); c++) {
+				a[r, c] = j[r, c].Eval();
 			}
 		}
 	}
 
-	public void SolveLeastSquares(double[,] A, double[] B, ref double[] X) {
+	public void SolveLeastSquares(double[,] a, double[] b, ref double[] x) {
 
 		// A^T * A * X = A^T * B
-		var rows = A.GetLength(0);
-		var cols = A.GetLength(1);
+		var rows = a.GetLength(0);
+		var cols = a.GetLength(1);
 
-		for(int r = 0; r < rows; r++) {
-			for(int c = 0; c < rows; c++) {
-				double sum = 0.0;
-				for(int i = 0; i < cols; i++) {
-					if(A[c, i] == 0 || A[r, i] == 0) continue;
-					sum += A[r, i] * A[c, i];
+		for(var r = 0; r < rows; r++) {
+			for(var c = 0; c < rows; c++) {
+				var sum = 0.0;
+				for(var i = 0; i < cols; i++) {
+					if(a[c, i] == 0 || a[r, i] == 0) continue;
+					sum += a[r, i] * a[c, i];
 				}
-				AAT[r, c] = sum;
+				_aat[r, c] = sum;
 			}
 		}
 
-		GaussianMethod.Solve(AAT, B, ref Z);
+		GaussianMethod.Solve(_aat, b, ref _z);
 
-		for(int c = 0; c < cols; c++) {
-			double sum = 0.0;
-			for(int r = 0; r < rows; r++) {
-				sum += Z[r] * A[r, c];
+		for(var c = 0; c < cols; c++) {
+			var sum = 0.0;
+			for(var r = 0; r < rows; r++) {
+				sum += _z[r] * a[r, c];
 			}
-			X[c] = sum;
+			x[c] = sum;
 		}
 
 	}
 
 	public void Clear() {
-		parameters.Clear();
-		currentParams.Clear();
-		equations.Clear();
-		sourceEquations.Clear();
+		_parameters.Clear();
+		_currentParams.Clear();
+		_equations.Clear();
+		_sourceEquations.Clear();
 		isDirty = true;
 		UpdateDirty();
 	}
 
 	public bool TestRank(out int dof) {
-		EvalJacobian(J, ref A, clearDrag:false);
-		int rank = GaussianMethod.Rank(A);
-		dof = A.GetLength(1) - rank;
-		return rank == A.GetLength(0);
+		EvalJacobian(_j, ref _a, clearDrag:false);
+		var rank = GaussianMethod.Rank(_a);
+		dof = _a.GetLength(1) - rank;
+		return rank == _a.GetLength(0);
 	}
 
 	private void UpdateDirty() {
 		if(isDirty) {
-			equations = sourceEquations.Select(e => e.DeepClone()).ToList();
-			currentParams = parameters.ToList();
+			_equations = _sourceEquations.Select(e => e.DeepClone()).ToList();
+			_currentParams = _parameters.ToList();
 			/*
 		foreach(var e in equations) {
 			e.ReduceParams(currentParams);
 		}*/
 			//currentParams = parameters.Where(p => equations.Any(e => e.IsDependOn(p))).ToList();
-			subs = SolveBySubstitution();
+			_subs = SolveBySubstitution();
 
-			J = WriteJacobian(equations, currentParams);
-			A = new double[J.GetLength(0), J.GetLength(1)];
-			B = new double[equations.Count];
-			X = new double[currentParams.Count];
-			Z = new double[A.GetLength(0)];
-			AAT = new double[A.GetLength(0), A.GetLength(0)];
-			oldParamValues = new double[parameters.Count];
+			_j = WriteJacobian(_equations, _currentParams);
+			_a = new double[_j.GetLength(0), _j.GetLength(1)];
+			_b = new double[_equations.Count];
+			_x = new double[_currentParams.Count];
+			_z = new double[_a.GetLength(0)];
+			_aat = new double[_a.GetLength(0), _a.GetLength(0)];
+			_oldParamValues = new double[_parameters.Count];
 			isDirty = false;
 			dofChanged = true;
 		}
@@ -211,8 +208,8 @@ public class EquationSystem  {
 
 	private void BackSubstitution(Dictionary<Param, Param> subs) {
 		if(subs == null) return;
-		for(int i = 0; i < parameters.Count; i++) {
-			var p = parameters[i];
+		for(var i = 0; i < _parameters.Count; i++) {
+			var p = _parameters[i];
 			if(!subs.ContainsKey(p)) continue;
 			p.value = subs[p].value;
 		}
@@ -221,13 +218,13 @@ public class EquationSystem  {
 	private Dictionary<Param, Param> SolveBySubstitution() {
 		var subs = new Dictionary<Param, Param>();
 
-		for(int i = 0; i < equations.Count; i++) {
-			var eq = equations[i];
+		for(var i = 0; i < _equations.Count; i++) {
+			var eq = _equations[i];
 			if(!eq.IsSubstitionForm()) continue;
 			var a = eq.GetSubstitutionParamA();
 			var b = eq.GetSubstitutionParamB();
-			if(Math.Abs(a.value - b.value) > GaussianMethod.epsilon) continue;
-			if(!currentParams.Contains(b)) {
+			if(Math.Abs(a.value - b.value) > GaussianMethod.Epsilon) continue;
+			if(!_currentParams.Contains(b)) {
 				var t = a;
 				a = b;
 				b = t;
@@ -243,11 +240,11 @@ public class EquationSystem  {
 				}
 			}
 			subs[b] = a;
-			equations.RemoveAt(i--);
-			currentParams.Remove(b);
+			_equations.RemoveAt(i--);
+			_currentParams.Remove(b);
 
-			for(int j = 0; j < equations.Count; j++) {
-				equations[j].Substitute(b, a);
+			for(var j = 0; j < _equations.Count; j++) {
+				_equations[j].Substitute(b, a);
 			}
 		}
 		return subs;
@@ -260,10 +257,10 @@ public class EquationSystem  {
 		dofChanged = false;
 		UpdateDirty();
 		StoreParams();
-		int steps = 0;
+		var steps = 0;
 		do {
-			bool isDragStep = steps <= dragSteps;
-			Eval(ref B, clearDrag: !isDragStep);
+			var isDragStep = steps <= dragSteps;
+			Eval(ref _b, clearDrag: !isDragStep);
 			/*
 		if(steps > 0) {
 			BackSubstitution(subs);
@@ -275,14 +272,14 @@ public class EquationSystem  {
 					dofChanged = true;
 					// TODO		Debug.Log(String.Format("solved {0} equations with {1} unknowns in {2} steps", equations.Count, currentParams.Count, steps));
 				}
-				stats = String.Format("eqs:{0}\nunkn: {1}", equations.Count, currentParams.Count);
-				BackSubstitution(subs);
-				return SolveResult.OKAY;
+				stats = String.Format("eqs:{0}\nunkn: {1}", _equations.Count, _currentParams.Count);
+				BackSubstitution(_subs);
+				return SolveResult.Okay;
 			}
-			EvalJacobian(J, ref A, clearDrag: !isDragStep);
-			SolveLeastSquares(A, B, ref X);
-			for(int i = 0; i < currentParams.Count; i++) {
-				currentParams[i].value -= X[i];
+			EvalJacobian(_j, ref _a, clearDrag: !isDragStep);
+			SolveLeastSquares(_a, _b, ref _x);
+			for(var i = 0; i < _currentParams.Count; i++) {
+				_currentParams[i].value -= _x[i];
 			}
 		} while(steps++ <= maxSteps);
 		IsConverged(checkDrag: false, printNonConverged: true);
@@ -290,6 +287,6 @@ public class EquationSystem  {
 			RevertParams();
 			dofChanged = false;
 		}
-		return SolveResult.DIDNT_CONVEGE;
+		return SolveResult.DidntConvege;
 	}
 }

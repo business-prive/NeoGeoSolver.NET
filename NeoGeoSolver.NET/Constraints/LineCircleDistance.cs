@@ -59,19 +59,7 @@ public class LineCircleDistance : Value
     Negative
   }
 
-  private Option option_;
-
-  public Option option
-  {
-    get
-    {
-      return option_;
-    }
-    set
-    {
-      option_ = value;
-    }
-  }
+  public Option option { get; set; }
 
   protected override Enum optionInternal
   {
@@ -101,10 +89,10 @@ public class LineCircleDistance : Value
       switch (option)
       {
         case Option.Positive:
-          yield return ConstraintExp.pointLineDistance(centerExp, lineP0Exp, lineP1Exp) - circle.Radius() - value;
+          yield return ConstraintExp.PointLineDistance(centerExp, lineP0Exp, lineP1Exp) - circle.Radius() - value;
           break;
         case Option.Negative:
-          yield return ConstraintExp.pointLineDistance(centerExp, lineP0Exp, lineP1Exp) + circle.Radius() + value;
+          yield return ConstraintExp.PointLineDistance(centerExp, lineP0Exp, lineP1Exp) + circle.Radius() + value;
           break;
       }
     }

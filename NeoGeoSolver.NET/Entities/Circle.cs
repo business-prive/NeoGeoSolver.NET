@@ -8,7 +8,7 @@ public class Circle : Entity {
 	public Point c;
 	public Param radius = new("r");
 
-	public override IEntityType type { get { return IEntityType.Circle; } }
+	public override EntityType type { get { return EntityType.Circle; } }
 
 	public Circle()
 	{

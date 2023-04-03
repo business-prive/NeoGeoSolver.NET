@@ -6,7 +6,7 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public abstract class Constraint {
-	private List<Constraint> usedInConstraints = new();
+	private List<Constraint> _usedInConstraints = new();
 	public virtual IEnumerable<Param> parameters { get { yield break; } }
 	public virtual IEnumerable<Expression> equations { get { yield break; } }
 
@@ -21,7 +21,7 @@ public abstract class Constraint {
 	}
 
 	protected void AddConstraint(Constraint c) {
-		c.usedInConstraints.Add(this);
+		c._usedInConstraints.Add(this);
 	}
 
 	public virtual void ChooseBestOption() {
@@ -33,21 +33,21 @@ public abstract class Constraint {
 		var names = Enum.GetNames(type);
 		if(names.Length < 2) return;
 		
-		double min_value = -1.0;
-		int best_option = 0;
+		var minValue = -1.0;
+		var bestOption = 0;
 		
-		for(int i = 0; i < names.Length; i++) {
+		for(var i = 0; i < names.Length; i++) {
 			optionInternal = (Enum)Enum.Parse(type, names[i]);
 			List<Expression> exprs = equations.ToList();
 			
-			double cur_value = exprs.Sum(e => Math.Abs(e.Eval()));
+			var curValue = exprs.Sum(e => Math.Abs(e.Eval()));
 			// TODO		Debug.Log(String.Format("check option {0} (min: {1}, cur: {2})\n", optionInternal, min_value, cur_value));
-			if(min_value < 0.0 || cur_value < min_value) {
-				min_value = cur_value;
-				best_option = i;
+			if(minValue < 0.0 || curValue < minValue) {
+				minValue = curValue;
+				bestOption = i;
 			}
 		}
-		optionInternal = (Enum)Enum.Parse(type, names[best_option]);
+		optionInternal = (Enum)Enum.Parse(type, names[bestOption]);
 		// TODO		Debug.Log("best option = " + optionInternal.ToString());
 	}
 
@@ -63,18 +63,18 @@ public abstract class Constraint {
 		return ids.Count;
 	}
 
-	public bool HasEntitiesOfType(IEntityType type, int required) {
-		int count = 0;
-		for(int i = 0; i < GetEntitiesCount(); i++) {
+	public bool HasEntitiesOfType(EntityType type, int required) {
+		var count = 0;
+		for(var i = 0; i < GetEntitiesCount(); i++) {
 			var e = GetEntity(i);
 			if(e.type == type) count++;
 		}
 		return count == required;
 	}
 
-	protected IEntity GetEntityOfType(IEntityType type, int index) {
-		int curIndex = 0;
-		for(int i = 0; i < GetEntitiesCount(); i++) {
+	protected IEntity GetEntityOfType(EntityType type, int index) {
+		var curIndex = 0;
+		for(var i = 0; i < GetEntitiesCount(); i++) {
 			var e = GetEntity(i);
 			if(e.type != type) continue;
 			if(curIndex == index) return e;
@@ -88,7 +88,6 @@ public abstract class Constraint {
 		if(ent != null) {
 			ent.RemoveConstraint(this);
 		}
-		ids[i] = e.id;
 		ent = GetEntity(i) as Entity;
 		if(ent != null) {
 			ent.AddConstraint(this);

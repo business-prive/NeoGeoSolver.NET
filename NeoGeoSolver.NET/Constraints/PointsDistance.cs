@@ -6,8 +6,8 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class PointsDistance : Value {
 
-	public ExpressionVector p0exp { get { return GetPointInPlane(0); } }
-	public ExpressionVector p1exp { get { return GetPointInPlane(1); } }
+	public ExpressionVector p0Exp { get { return GetPointInPlane(0); } }
+	public ExpressionVector p1Exp { get { return GetPointInPlane(1); } }
 
 	public PointsDistance(IEntity p0, IEntity p1)
 	{
@@ -24,16 +24,16 @@ public class PointsDistance : Value {
 
 	public override IEnumerable<Expression> equations {
 		get {
-			yield return (p1exp - p0exp).Magnitude() - value.exp;
+			yield return (p1Exp - p0Exp).Magnitude() - value.exp;
 		}
 	}
 
 	private ExpressionVector GetPointInPlane(int i) {
-		if(HasEntitiesOfType(IEntityType.Line, 1)) {
-			return GetEntityOfType(IEntityType.Line, 0).GetPointAtInPlane(i);
+		if(HasEntitiesOfType(EntityType.Line, 1)) {
+			return GetEntityOfType(EntityType.Line, 0).GetPointAtInPlane(i);
 		} else 
-		if(HasEntitiesOfType(IEntityType.Point, 2)) {
-			return GetEntityOfType(IEntityType.Point, i).GetPointAtInPlane(0);
+		if(HasEntitiesOfType(EntityType.Point, 2)) {
+			return GetEntityOfType(EntityType.Point, i).GetPointAtInPlane(0);
 		}
 		return null;
 	}
