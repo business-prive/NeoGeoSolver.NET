@@ -43,27 +43,8 @@ public class ExpressionBasis2d {
     return result;
   }
 
-  public void FromString(string str) {
-    char[] sep = { ' ' };
-    var values = str.Split(sep, StringSplitOptions.RemoveEmptyEntries);
-    var i = 0;
-    foreach(var p in parameters) {
-      p.value = values[i].ToDouble();
-      i++;
-    }
-  }
-
   public ExpressionVector TransformPosition(ExpressionVector pos) {
     return pos.x * u + pos.y * v + p;
-  }
-
-  public ExpressionVector TransformDirection(ExpressionVector dir) {
-    return dir.x * u + dir.y * v;
-  }
-
-  public void GenerateEquations(EquationSystem sys) {
-    sys.AddParameters(parameters);
-    sys.AddEquations(equations);
   }
 
   public IEnumerable<Expression> equations {
