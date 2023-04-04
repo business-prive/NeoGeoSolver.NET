@@ -56,14 +56,6 @@ public class Point : Entity {
 
 	private bool IsCoincidentWith(IEntity point, IEntity exclude) {
 		if(point.IsSameAs(this)) return true;
-		for(var i = 0; i < usedInConstraints.Count; i++) {
-			var c = usedInConstraints[i] as PointsCoincident;
-			if(c == null) continue;
-			var p = c.GetOtherPoint(this);
-			if(p.IsSameAs(point) || !p.IsSameAs(exclude) && p is Point && (p as Point).IsCoincidentWith(point, this)) {
-				return true;
-			}
-		}
 		return false;
 	}
 

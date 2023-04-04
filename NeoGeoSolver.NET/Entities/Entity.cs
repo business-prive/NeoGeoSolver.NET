@@ -6,9 +6,7 @@ namespace NeoGeoSolver.NET.Entities;
 
 public abstract class Entity : IEntity
 {
-  protected List<Constraint> usedInConstraints = new();
   public Func<ExpressionVector, ExpressionVector> transform = null;
-	public IEnumerable<Constraint> constraints { get { return usedInConstraints.AsEnumerable(); } }
   public virtual IEnumerable<Param> parameters { get { yield break; } }
   public abstract IEnumerable<Expression> equations { get; }
 
