@@ -27,17 +27,11 @@ public class Point : Entity
 
 	public Vector3 GetPosition()
 	{
-		if (transform != null)
-		{
-			return exp.Eval();
-		}
-
 		return new Vector3((float) x.value, (float) y.value, (float) z.value);
 	}
 
 	public void SetPosition(Vector3 pos)
 	{
-		if (transform != null) return;
 		x.value = pos.X;
 		y.value = pos.Y;
 	}
@@ -63,11 +57,6 @@ public class Point : Entity
 			if (_exp == null)
 			{
 				_exp = new ExpressionVector(x, y, z);
-			}
-
-			if (transform != null)
-			{
-				return transform(_exp);
 			}
 
 			return _exp;

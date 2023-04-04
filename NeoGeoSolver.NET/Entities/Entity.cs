@@ -4,7 +4,6 @@ namespace NeoGeoSolver.NET.Entities;
 
 public abstract class Entity : IEntity
 {
-  public Func<ExpressionVector, ExpressionVector> transform = null;
   public virtual IEnumerable<Param> parameters { get { yield break; } }
   public abstract IEnumerable<Expression> equations { get; }
 
