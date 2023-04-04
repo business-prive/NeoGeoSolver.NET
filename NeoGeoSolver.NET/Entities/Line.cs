@@ -29,8 +29,4 @@ public class Line : Entity {
 	public override Expression Length() {
 		return (p1.exp - p0.exp).Magnitude();
 	}
-
-	public override Expression Radius() {
-		return null;
-	}
 }

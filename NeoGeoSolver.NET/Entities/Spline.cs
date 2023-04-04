@@ -26,16 +26,4 @@ public class Spline : Entity {
 		var t3 = t2 * t;
 		return p1 * (3.0 * t3 - 6.0 * t2 + 3.0 * t) + p3 * t3 + p2 * (3.0 * t2 - 3.0 * t3) - p0 * (t3 - 3.0 * t2 + 3.0 * t - 1.0);
 	}
-
-	public override Expression Length() {
-		return null;
-	}
-
-	public override Expression Radius() {
-		return null;
-	}
-
-	public override ExpressionVector Center() {
-		return null;
-	}
 }

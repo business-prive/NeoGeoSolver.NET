@@ -43,16 +43,4 @@ public class Ellipse : Entity {
 		var angle = t * 2.0 * Math.PI;
 		return _basis.TransformPosition(new ExpressionVector(Expression.Cos(angle) * Expression.Abs(r0), Expression.Sin(angle) * Expression.Abs(r1), 0.0));
 	}
-
-	public override Expression Length() {
-		return null;
-	}
-
-	public override Expression Radius() {
-		return null;
-	}
-
-	public override ExpressionVector Center() {
-		return null;
-	}
 }

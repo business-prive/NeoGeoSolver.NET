@@ -122,16 +122,4 @@ public class Function : Entity {
 		var newt = _t0.exp + (_t1.exp - _t0.exp) * t;
 		return _basis.TransformPosition(GetExpClone(newt));
 	}
-
-	public override Expression Length() {
-		return null;
-	}
-
-	public override Expression Radius() {
-		return null;
-	}
-
-	public override ExpressionVector Center() {
-		return null;
-	}
 }

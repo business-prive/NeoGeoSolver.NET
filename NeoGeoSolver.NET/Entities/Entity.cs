@@ -44,11 +44,7 @@ public abstract class Entity : IEntity
     return result;
   }
 
-  public abstract Expression Length();
-  public abstract Expression Radius();
-
-  public virtual ExpressionVector Center()
-  {
-    return null;
-  }
+  public virtual Expression Length() => null;
+  public virtual Expression Radius() => null;
+  public virtual ExpressionVector Center() => null;
 }
