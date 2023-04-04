@@ -3,7 +3,7 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public class Value : Constraint {
+public abstract class Value : Constraint {
 
   protected Param value = new("value");
   public bool reference { get; set; }
