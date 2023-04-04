@@ -9,7 +9,7 @@ public static class EntityUtils {
     return it.Current;
   }
 
-  public static IEnumerable<ExpressionVector> PointsInPlane(this IEntity entity) {
+  private static IEnumerable<ExpressionVector> PointsInPlane(this IEntity entity) {
     if(plane == entity.plane) {
       for(var it = entity.points.GetEnumerator(); it.MoveNext();) {
         yield return it.Current;
