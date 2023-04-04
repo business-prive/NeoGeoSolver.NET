@@ -20,11 +20,7 @@ public abstract class Constraint {
 		_entities.Add(entity);
 	}
 
-	public virtual void ChooseBestOption() {
-		OnChooseBestOption();
-	}
-
-	protected virtual void OnChooseBestOption() {
+	public void ChooseBestOption() {
 		var type = optionInternal.GetType();
 		var names = Enum.GetNames(type);
 		if(names.Length < 2) return;
@@ -51,13 +47,9 @@ public abstract class Constraint {
 		return _entities[i];
 	}
 
-	private int GetEntitiesCount() {
-		return _entities.Count;
-	}
-
 	public bool HasEntitiesOfType(EntityType type, int required) {
 		var count = 0;
-		for(var i = 0; i < GetEntitiesCount(); i++) {
+		for(var i = 0; i < _entities.Count; i++) {
 			var e = GetEntity(i);
 			if(e.type == type) count++;
 		}
@@ -66,7 +58,7 @@ public abstract class Constraint {
 
 	protected IEntity GetEntityOfType(EntityType type, int index) {
 		var curIndex = 0;
-		for(var i = 0; i < GetEntitiesCount(); i++) {
+		for(var i = 0; i < _entities.Count; i++) {
 			var e = GetEntity(i);
 			if(e.type != type) continue;
 			if(curIndex == index) return e;
