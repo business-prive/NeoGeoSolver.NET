@@ -25,9 +25,7 @@ public class Expression {
     Sinh,
     Cosh,
     SFres,
-    CFres,
-
-    //Pow,
+    CFres
   }
 
   public static readonly Expression Zero = new(0.0);
@@ -104,7 +102,6 @@ public class Expression {
     if(b.IsMinusOneConst()) return -a;
     return new Expression(Op.Div, a, b);
   }
-  //static public Exp operator^(Exp a, Exp b) { return new Exp(Op.Pow, a, b); }
 
   public static Expression operator-(Expression a) {
     if(a.IsZeroConst()) return a;
@@ -288,17 +285,6 @@ public class Expression {
     return "";
   }
 
-  public bool IsDependOn(Param p) {
-    if(op == Op.Param) return param == p;
-    if(a != null) {
-      if(b != null) {
-        return a.IsDependOn(p) || b.IsDependOn(p);
-      }
-      return a.IsDependOn(p);
-    }
-    return false;
-  }
-
   public Expression Deriv(Param p) {
     return D(p);
   }
@@ -373,16 +359,6 @@ public class Expression {
     }
   }
 
-  public void Walk(Action<Expression> action) {
-    action(this);
-    if(a != null) {
-      action(a);
-      if(b != null) {
-        action(b);
-      }
-    }
-  }
-
   public Expression DeepClone() {
     var result = new Expression();
     result.op = op;
@@ -395,29 +371,6 @@ public class Expression {
       }
     }
     return result;
-  }
-	
-  public void ReduceParams(List<Param> pars) {
-    if(op == Op.Param) {
-      if(param.reduceable && !pars.Contains(param)) {
-        value = Eval();
-        op = Op.Const;
-        param = null;
-      }
-      return;
-    }
-
-    if(a != null) {
-      a.ReduceParams(pars);
-      if(b != null) b.ReduceParams(pars);
-      if(a.IsConst() && (b == null || b.IsConst())) {
-        value = Eval();
-        op = Op.Const;
-        a = null;
-        b = null;
-        param = null;
-      }
-    }
   }
 
   public bool HasTwoOperands() {
