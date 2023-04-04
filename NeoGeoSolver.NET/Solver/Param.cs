@@ -3,17 +3,7 @@
 public class Param {
 	public string name;
 	public bool reduceable = true;
-	private double _v;
-	public bool changed;
-
-	public double value {
-		get { return _v; }
-		set {
-			if(_v == value) return;
-			changed = true;
-			_v = value;
-		}
-	}
+	public double value;
 
 	public Expression exp { get; private set; }
 

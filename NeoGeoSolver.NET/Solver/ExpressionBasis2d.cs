@@ -75,14 +75,4 @@ public class ExpressionBasis2d {
       yield return Expression.Atan2(cross.Magnitude(), dot) - Math.PI / 2;
     }
   }
-
-  public bool changed {
-    get {
-      return parameters.Any(p => p.changed);
-    }
-  }
-
-  public void MarkUnchanged() {
-    parameters.ForEach(pp => pp.changed = false);
-  }
 }
