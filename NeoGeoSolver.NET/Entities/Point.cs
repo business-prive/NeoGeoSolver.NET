@@ -10,6 +10,7 @@ public class Point : Entity {
 	public Param z = new("z");
 
 	public override EntityType type { get { return EntityType.Point; } }
+	public override IEnumerable<Expression> equations { get { yield break; } }
 
 	public Vector3 GetPosition() {
 		if(transform != null) {

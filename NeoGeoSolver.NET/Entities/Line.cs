@@ -14,6 +14,7 @@ public class Line : Entity {
 	}
 
 	public override EntityType type { get { return EntityType.Line; } }
+	public override IEnumerable<Expression> equations { get { yield break; } }
 
 	public override ExpressionVector PointOn(Expression t) {
 		var pt0 = p0.exp;

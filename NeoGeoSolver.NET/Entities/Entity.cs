@@ -10,7 +10,7 @@ public abstract class Entity : IEntity
   public Func<ExpressionVector, ExpressionVector> transform = null;
 	public IEnumerable<Constraint> constraints { get { return usedInConstraints.AsEnumerable(); } }
   public virtual IEnumerable<Param> parameters { get { yield break; } }
-  public virtual IEnumerable<Expression> equations { get { yield break; } }
+  public abstract IEnumerable<Expression> equations { get; }
 
   public abstract EntityType type { get; }
 

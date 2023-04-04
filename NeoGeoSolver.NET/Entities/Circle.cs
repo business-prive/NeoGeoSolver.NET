@@ -9,6 +9,7 @@ public class Circle : Entity {
 	public Param radius = new("r");
 
 	public override EntityType type { get { return EntityType.Circle; } }
+	public override IEnumerable<Expression> equations { get { yield break; } }
 
 	public Circle()
 	{

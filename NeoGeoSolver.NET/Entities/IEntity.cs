@@ -9,4 +9,6 @@ public interface IEntity {
   Expression Radius();
   ExpressionVector Center();
   EntityType type { get; }
+  IEnumerable<Expression> equations { get; }
+  IEnumerable<Param> parameters { get; }
 }
