@@ -20,7 +20,6 @@ public class Expression {
     Sign,
     Neg,
     Pos,
-    Drag,
     Exp,
     Sinh,
     Cosh,
@@ -162,16 +161,11 @@ public class Expression {
   public static Expression SFres	(Expression x) { return new Expression(Op.SFres,	x, null); }
   public static Expression CFres	(Expression x) { return new Expression(Op.CFres,	x, null); }
 
-  public Expression Drag(Expression to) {
-    return new Expression(Op.Drag, this, to);
-  }
-
   public double Eval() {
     switch(op) {
       case Op.Const:	return value;
       case Op.Param:	return param.value;
       case Op.Add:	return a.Eval() + b.Eval();
-      case Op.Drag:
       case Op.Sub:	return a.Eval() - b.Eval();
       case Op.Mul:	return a.Eval() * b.Eval();
       case Op.Div: {
@@ -210,7 +204,6 @@ public class Expression {
   public bool IsOneConst()		{ return op == Op.Const && value ==  1.0; }
   public bool IsMinusOneConst()	{ return op == Op.Const && value == -1.0; }
   public bool IsConst()			{ return op == Op.Const; }
-  public bool IsDrag()			{ return op == Op.Drag; }
 
   public bool IsUnary() {
     switch(op) {
@@ -238,7 +231,6 @@ public class Expression {
 
   public bool IsAdditive() {
     switch(op) {
-      case Op.Drag:
       case Op.Sub:
       case Op.Add:
         return true;
@@ -275,7 +267,6 @@ public class Expression {
       case Op.Atan2:	return "atan2(" + a + ", " + b + ")";
       case Op.Neg:	return "-" + a.Quoted();
       case Op.Pos:	return "+" + a.Quoted();
-      case Op.Drag:   return a + " ≈ " + b.QuotedAdd();
       case Op.Exp:	return "exp(" + a + ")";
       case Op.Sinh:	return "sinh(" + a + ")";
       case Op.Cosh:	return "cosh(" + a + ")";
@@ -294,7 +285,6 @@ public class Expression {
       case Op.Const:	return Zero;
       case Op.Param:	return (param == p) ? One : Zero;
       case Op.Add:	return a.D(p) + b.D(p);
-      case Op.Drag:
       case Op.Sub:	return a.D(p) - b.D(p);
       case Op.Mul:	return a.D(p) * b + a * b.D(p);
       case Op.Div:	return (a.D(p) * b - a * b.D(p)) / Sqr(b);

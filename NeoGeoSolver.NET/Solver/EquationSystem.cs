@@ -9,7 +9,6 @@ public class EquationSystem  {
 	}
 	public bool isDirty { get; private set; }
 	public int maxSteps = 20;
-	public int dragSteps = 3;
 	public bool revertWhenNotConverged = true;
 
 	private Expression[,] _j;
@@ -65,21 +64,14 @@ public class EquationSystem  {
 		isDirty = true;
 	}
 
-	public void Eval(ref double[] b, bool clearDrag) {
+	public void Eval(ref double[] b) {
 		for(var i = 0; i < _equations.Count; i++) {
-			if(clearDrag && _equations[i].IsDrag()) {
-				b[i] = 0.0;
-				continue;
-			}
 			b[i] = _equations[i].Eval();
 		}
 	}
 
-	public bool IsConverged(bool checkDrag, bool printNonConverged = false) {
+	public bool IsConverged(bool printNonConverged = false) {
 		for(var i = 0; i < _equations.Count; i++) {
-			if(!checkDrag && _equations[i].IsDrag()) {
-				continue;
-			}
 			if(Math.Abs(_b[i]) < GaussianMethod.Epsilon) continue;
 			if(printNonConverged) {
 				//Debug.Log("Not converged: " + equations[i].ToString());
@@ -109,29 +101,14 @@ public class EquationSystem  {
 			for(var c = 0; c < parameters.Count; c++) {
 				var u = parameters[c];
 				j[r, c] = eq.Deriv(u);
-				/*
-			if(!J[r, c].IsZeroConst()) {
-				Debug.Log(J[r, c].ToString() + "\n");
-			}
-			*/
 			}
 		}
 		return j;
 	}
 
-	public bool HasDragged() {
-		return _equations.Any(e => e.IsDrag());
-	}
-
-	public void EvalJacobian(Expression[,] j, ref double[,] a, bool clearDrag) {
+	public void EvalJacobian(Expression[,] j, ref double[,] a) {
 		UpdateDirty();
 		for(var r = 0; r < j.GetLength(0); r++) {
-			if(clearDrag && _equations[r].IsDrag()) {
-				for(var c = 0; c < j.GetLength(1); c++) {
-					a[r, c] = 0.0;
-				}
-				continue;
-			}
 			for(var c = 0; c < j.GetLength(1); c++) {
 				a[r, c] = j[r, c].Eval();
 			}
@@ -139,7 +116,6 @@ public class EquationSystem  {
 	}
 
 	public void SolveLeastSquares(double[,] a, double[] b, ref double[] x) {
-
 		// A^T * A * X = A^T * B
 		var rows = a.GetLength(0);
 		var cols = a.GetLength(1);
@@ -177,7 +153,7 @@ public class EquationSystem  {
 	}
 
 	public bool TestRank(out int dof) {
-		EvalJacobian(_j, ref _a, clearDrag:false);
+		EvalJacobian(_j, ref _a);
 		var rank = GaussianMethod.Rank(_a);
 		dof = _a.GetLength(1) - rank;
 		return rank == _a.GetLength(0);
@@ -187,11 +163,6 @@ public class EquationSystem  {
 		if(isDirty) {
 			_equations = _sourceEquations.Select(e => e.DeepClone()).ToList();
 			_currentParams = _parameters.ToList();
-			/*
-		foreach(var e in equations) {
-			e.ReduceParams(currentParams);
-		}*/
-			//currentParams = parameters.Where(p => equations.Any(e => e.IsDependOn(p))).ToList();
 			_subs = SolveBySubstitution();
 
 			_j = WriteJacobian(_equations, _currentParams);
@@ -259,15 +230,8 @@ public class EquationSystem  {
 		StoreParams();
 		var steps = 0;
 		do {
-			var isDragStep = steps <= dragSteps;
-			Eval(ref _b, clearDrag: !isDragStep);
-			/*
-		if(steps > 0) {
-			BackSubstitution(subs);
-			return SolveResult.POSTPONE;
-		}
-		*/
-			if(IsConverged(checkDrag: isDragStep)) {
+			Eval(ref _b);
+			if(IsConverged()) {
 				if(steps > 0) {
 					dofChanged = true;
 					// TODO		Debug.Log(String.Format("solved {0} equations with {1} unknowns in {2} steps", equations.Count, currentParams.Count, steps));
@@ -276,13 +240,13 @@ public class EquationSystem  {
 				BackSubstitution(_subs);
 				return SolveResult.Okay;
 			}
-			EvalJacobian(_j, ref _a, clearDrag: !isDragStep);
+			EvalJacobian(_j, ref _a);
 			SolveLeastSquares(_a, _b, ref _x);
 			for(var i = 0; i < _currentParams.Count; i++) {
 				_currentParams[i].value -= _x[i];
 			}
 		} while(steps++ <= maxSteps);
-		IsConverged(checkDrag: false, printNonConverged: true);
+		IsConverged(printNonConverged: true);
 		if(revertWhenNotConverged) {
 			RevertParams();
 			dofChanged = false;
