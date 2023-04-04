@@ -40,65 +40,11 @@ public class ExpressionVector {
 		);
 	}
 
-	public static Expression PointLineDistance(ExpressionVector point, ExpressionVector l0, ExpressionVector l1) {
-		var d = l0 - l1;
-		return Cross(d, l0 - point).Magnitude() / d.Magnitude();
-	}
-
-	public static float PointLineDistance(Vector3 point, Vector3 l0, Vector3 l1) {
-		var d = l0 - l1;
-		return Vector3.Cross(d, l0 - point).Length() / d.Length();
-	}
-
-	public static ExpressionVector ProjectPointToLine(ExpressionVector p, ExpressionVector l0, ExpressionVector l1) {
-		var d = l1 - l0;
-		var t = Dot(d, p - l0) / Dot(d, d);
-		return l0 + d * t;
-	}
-
-	public static Vector3 ProjectPointToLine(Vector3 p, Vector3 l0, Vector3 l1) {
-		var d = l1 - l0;
-		var t = Vector3.Dot(d, p - l0) / Vector3.Dot(d, d);
-		return l0 + d * t;
-	}
-
 	public Expression Magnitude() {
 		return Expression.Sqrt(Expression.Sqr(x) + Expression.Sqr(y) + Expression.Sqr(z));
 	}
 
-	public ExpressionVector Normalized() {
-		return this / Magnitude();
-	}
-
 	public Vector3 Eval() {
 		return new Vector3((float)x.Eval(), (float)y.Eval(), (float)z.Eval());
-	}
-
-	public bool ValuesEquals(ExpressionVector o, double eps) {
-		return Math.Abs(x.Eval() - o.x.Eval()) < eps &&
-		       Math.Abs(y.Eval() - o.y.Eval()) < eps &&
-		       Math.Abs(z.Eval() - o.z.Eval()) < eps;
-	}
-
-	public static ExpressionVector RotateAround(ExpressionVector point, ExpressionVector axis, ExpressionVector origin, Expression angle) {
-		var a = axis.Normalized();
-		var c = Expression.Cos(angle);
-		var s = Expression.Sin(angle);
-		var u = new ExpressionVector(c + (1.0 - c) * a.x * a.x, (1.0 - c) * a.y * a.x + s * a.z, (1 - c) * a.z * a.x - s * a.y);
-		var v = new ExpressionVector((1.0 - c) * a.x * a.y - s * a.z, c + (1.0 - c) * a.y * a.y, (1.0 - c) * a.z * a.y + s * a.x);
-		var n = new ExpressionVector((1.0 - c) * a.x * a.z + s * a.y, (1.0 - c) * a.y * a.z - s * a.x,	c + (1 - c) * a.z * a.z);
-		var p = point - origin;
-		return p.x * u + p.y * v + p.z * n + origin;
-	}
-
-	public static Vector3 RotateAround(Vector3 point, Vector3 axis, Vector3 origin, float angle) {
-		var a = axis / axis.Length();
-		var c = Math.Cos(angle);
-		var s = Math.Sin(angle);
-		var u = new Vector3((float) (c + (1 - c) * a.X * a.X), (float) ((1 - c) * a.Y * a.X + s * a.Z), (float) ((1 - c) * a.Z * a.X - s * a.Y));
-		var v = new Vector3((float) ((1 - c) * a.X * a.Y - s * a.Z), (float) (c + (1 - c) * a.Y * a.Y), (float) ((1 - c) * a.Z * a.Y + s * a.X));
-		var n = new Vector3((float) ((1 - c) * a.X * a.Z + s * a.Y), (float) ((1 - c) * a.Y * a.Z - s * a.X), (float) (c + (1 - c) * a.Z * a.Z));
-		var p = point - origin;
-		return p.X * u + p.Y * v + p.Z * n + origin;
 	}
 }
