@@ -6,7 +6,7 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public abstract class Constraint {
-	private List<Constraint> _usedInConstraints = new();
+	private readonly List<IEntity> _entities = new();
 	public virtual IEnumerable<Param> parameters { get { yield break; } }
 	public virtual IEnumerable<Expression> equations { get { yield break; } }
 
@@ -16,12 +16,9 @@ public abstract class Constraint {
 
 	protected virtual Enum optionInternal { get { return Option.Default; } set { } }
 
-	protected void AddEntity<T>(T e) where T : IEntity {
-		if(e is Entity) (e as Entity).AddConstraint(this);
-	}
-
-	protected void AddConstraint(Constraint c) {
-		c._usedInConstraints.Add(this);
+	protected void AddEntity<T>(T entity) where T : IEntity {
+		_entities.Add(entity);
+		entity.AddConstraint(this);
 	}
 
 	public virtual void ChooseBestOption() {
@@ -52,15 +49,11 @@ public abstract class Constraint {
 	}
 
 	public IEntity GetEntity(int i) {
-		return sketch.feature.detail.GetObjectById(ids[i]) as IEntity;
-	}
-
-	protected Constraint GetConstraint(int i) {
-		return sketch.feature.detail.GetObjectById(ids[i]) as Constraint;
+		return _entities[i];
 	}
 
 	private int GetEntitiesCount() {
-		return ids.Count;
+		return _entities.Count;
 	}
 
 	public bool HasEntitiesOfType(EntityType type, int required) {

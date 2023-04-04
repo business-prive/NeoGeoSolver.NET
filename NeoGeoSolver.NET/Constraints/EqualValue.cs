@@ -3,6 +3,8 @@
 namespace NeoGeoSolver.NET.Constraints;
 
 public class EqualValue : Value {
+	private readonly List<Constraint> _usedInConstraints = new();
+	
 	protected override bool OnSatisfy() {
 		var c0 = GetConstraint(0) as Value;
 		var c1 = GetConstraint(1) as Value;
@@ -26,5 +28,13 @@ public class EqualValue : Value {
 			var c1 = GetConstraint(1) as Value;
 			yield return c0.GetValueParam().exp - c1.GetValueParam().exp * value;
 		}
+	}
+
+	private void AddConstraint(Constraint c) {
+		_usedInConstraints.Add(this);
+	}
+
+	private Constraint GetConstraint(int i) {
+		return _usedInConstraints[i];
 	}
 }
