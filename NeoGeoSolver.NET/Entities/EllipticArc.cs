@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Constraints;
+﻿using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
@@ -28,7 +27,6 @@ public class EllipticArc : Entity {
 		}
 		return Math.PI * 2.0;
 	}
-
 
 	public override ExpressionVector PointOn(Expression t) {
 		var angle = GetAngleExp();

@@ -39,8 +39,7 @@ public class ExpressionParser {
 	private int _index = 0;
     
 	public List<Param> parameters = new();
-    
-    
+
 	public static void Test() {
 		List<string> exps = new()
 		{
@@ -195,7 +194,6 @@ public class ExpressionParser {
 	}
 
 	private Expression ParseValue() {
-        
 		var digits = 0.0;
 		if(ParseDigits(ref digits)) {
 			return new Expression(digits);
@@ -275,7 +273,6 @@ public class ExpressionParser {
 	}
 
 	private Expression ParseExp(ref bool braced) {
-
 		var uop = ParseUnary();
 				
 		Expression a = null;

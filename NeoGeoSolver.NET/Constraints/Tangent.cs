@@ -48,10 +48,6 @@ public class Tangent : Constraint
     }
   }
 
-  public Tangent()
-  {
-  }
-
   public Tangent(IEntity l0, IEntity l1)
   {
     AddEntity(l0);

@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Solver;
+﻿using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Entities;
@@ -72,8 +71,8 @@ public class Function : Entity {
 	}
 
 	public override EntityType type { get { return EntityType.Function; } }
-	
-	public ExpressionVector GetExpClone(Expression t) {
+
+	private ExpressionVector GetExpClone(Expression t) {
 		var e = new ExpressionVector(_exp.x.DeepClone(), _exp.y.DeepClone(), 0.0);
 		if(t != null) {
 			e.x.Substitute(this._t, t);
@@ -91,13 +90,10 @@ public class Function : Entity {
 			yield return eq0.x;
 			yield return eq0.y;
 
-			//if(!p0.IsCoincidentWith(p1)) {
 			var e1 = _basis.TransformPosition(GetExpClone(_t1));
-
 			var eq1 = e1 - p1.exp;
 			yield return eq1.x;
 			yield return eq1.y;
-			//}
 
 			var eqc = _basis.p - c.exp;
 			yield return eqc.x;

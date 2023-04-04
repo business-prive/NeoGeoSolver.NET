@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Constraints;
+﻿using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
@@ -22,7 +21,7 @@ public class Arc : Entity {
 
 	public Point center { get { return c; } }
 
-	public Expression GetAngleExp() {
+	private Expression GetAngleExp() {
 		if(!p0.IsCoincidentWith(p1)) {
 			var d0 = p0.exp - c.exp;
 			var d1 = p1.exp - c.exp;

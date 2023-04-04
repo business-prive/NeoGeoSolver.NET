@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Entities;
 
 using NeoGeoSolver.NET.Solver;
 
