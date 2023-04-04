@@ -15,12 +15,6 @@ public static class EntityUtils {
     return it.Current;
   }
 
-  public static ExpressionVector CenterInPlane(this IEntity entity) {
-    var c = entity.Center();
-    if(c == null) return null;
-    return plane.ToFrom(c, entity.plane);
-  }
-
   public static IEnumerable<ExpressionVector> PointsInPlane(this IEntity entity) {
     if(plane == entity.plane) {
       for(var it = entity.points.GetEnumerator(); it.MoveNext();) {

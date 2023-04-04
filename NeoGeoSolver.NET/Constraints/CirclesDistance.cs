@@ -70,7 +70,7 @@ public class CirclesDistance : Value
       }
       else
       {
-        var dist = (c0.CenterInPlane() - c1.CenterInPlane()).Magnitude();
+        var dist = (c0.Center() - c1.Center()).Magnitude();
         switch (option)
         {
           case Option.Outside:
