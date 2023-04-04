@@ -85,7 +85,7 @@ public class Point : Entity
 
 	private bool IsCoincidentWith(IEntity point, IEntity exclude)
 	{
-		if (point.IsSameAs(this)) return true;
+		if (IsSameAs(point, this)) return true;
 		return false;
 	}
 
@@ -94,6 +94,12 @@ public class Point : Entity
 		return IsCoincidentWith(point, null);
 	}
 
+	private static bool IsSameAs(IEntity e0, IEntity e1) {
+    if(e0 == null) return e1 == null;
+    if(e1 == null) return e0 == null;
+    return e0 == e1 || e0.type == e1.type;
+  }
+  
 	public override ExpressionVector PointOn(Expression t)
 	{
 		return exp;

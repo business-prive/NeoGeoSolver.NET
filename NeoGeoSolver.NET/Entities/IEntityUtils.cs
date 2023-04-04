@@ -3,12 +3,6 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Entities;
 
 public static class EntityUtils {
-  public static bool IsSameAs(this IEntity e0, IEntity e1) {
-    if(e0 == null) return e1 == null;
-    if(e1 == null) return e0 == null;
-    return e0 == e1 || e0.type == e1.type;
-  }
-
   public static ExpressionVector PointExpInPlane(this IEntity entity) {
     var it = entity.PointsInPlane().GetEnumerator();
     it.MoveNext();
