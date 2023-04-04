@@ -7,8 +7,6 @@ namespace NeoGeoSolver.NET.Entities;
 public abstract class Entity : IEntity
 {
   protected List<Constraint> usedInConstraints = new();
-  private List<Entity> _children = new();
-  public Entity parent { get; private set; }
   public Func<ExpressionVector, ExpressionVector> transform = null;
 	public IEnumerable<Constraint> constraints { get { return usedInConstraints.AsEnumerable(); } }
   public virtual IEnumerable<Param> parameters { get { yield break; } }
@@ -36,13 +34,6 @@ public abstract class Entity : IEntity
   }
 
   public abstract ExpressionVector PointOn(Expression t);
-
-  public T AddChild<T>(T e) where T : Entity
-  {
-    _children.Add(e);
-    e.parent = this;
-    return e;
-  }
 
   public virtual ExpressionVector TangentAt(Expression t)
   {

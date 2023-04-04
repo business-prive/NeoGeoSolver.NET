@@ -12,9 +12,9 @@ public class EllipticArc : Entity {
 
 	public EllipticArc()
 	{
-		p0 = AddChild(new Point());
-		p1 = AddChild(new Point());
-		c = AddChild(new  Point());
+		p0 = new Point();
+		p1 = new Point();
+		c = new  Point();
 	}
 
 	public override EntityType type { get { return EntityType.EllipticArc; } }

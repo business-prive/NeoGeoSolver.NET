@@ -68,9 +68,9 @@ public class Function : Entity {
 
 	public Function()
 	{
-		p0 = AddChild(new Point());
-		p1 = AddChild(new Point());
-		c = AddChild(new  Point());
+		p0 = new Point();
+		p1 = new Point();
+		c = new  Point();
 		InitParser();
 	}
 

@@ -12,7 +12,7 @@ public class Circle : Entity {
 
 	public Circle()
 	{
-		c = AddChild(new Point());
+		c = new Point();
 	}
 
 	public override IEnumerable<Param> parameters {

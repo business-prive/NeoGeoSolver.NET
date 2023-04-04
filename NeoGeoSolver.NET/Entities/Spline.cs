@@ -10,7 +10,7 @@ public class Spline : Entity {
 	public Spline()
 	{
 		for(var i = 0; i < p.Length; i++) {
-			p[i] = AddChild(new Point());
+			p[i] = new Point();
 		}
 	}
 

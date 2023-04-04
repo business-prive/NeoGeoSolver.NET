@@ -14,7 +14,7 @@ public class Ellipse : Entity {
 
 	public Ellipse()
 	{
-		c = AddChild(new Point());
+		c = new Point();
 		_basis.SetPosParams(c.x, c.y);
 	}
 
