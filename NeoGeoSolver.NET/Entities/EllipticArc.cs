@@ -6,16 +6,9 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class EllipticArc : Entity {
 
-	public Point p0;
-	public Point p1;
-	public Point c;
-
-	public EllipticArc()
-	{
-		p0 = new Point();
-		p1 = new Point();
-		c = new  Point();
-	}
+	public Point p0 = new();
+	public Point p1 = new();
+	public Point c = new();
 
 	public override EntityType type { get { return EntityType.EllipticArc; } }
 

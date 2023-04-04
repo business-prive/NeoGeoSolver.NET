@@ -3,10 +3,10 @@
 namespace NeoGeoSolver.NET.Solver;
 
 public class ExpressionBasis {
-	private Param _px, _py, _pz;
-	private Param _ux, _uy, _uz;
-	private Param _vx, _vy, _vz;
-	private Param _nx, _ny, _nz;
+	private Param _px = new("ux", 0.0), _py = new("uy", 0.0), _pz = new("uz", 0.0);
+	private Param _ux = new("ux", 1.0), _uy = new("uy", 0.0), _uz = new("uz", 0.0);
+	private Param _vx = new("vx", 0.0), _vy = new("vy", 1.0), _vz = new("vz", 0.0);
+	private Param _nx = new("nx", 0.0), _ny = new("ny", 0.0), _nz = new("nz", 1.0);
 
 	public ExpressionVector u { get; private set; }
 	public ExpressionVector v { get; private set; }
@@ -14,22 +14,6 @@ public class ExpressionBasis {
 	public ExpressionVector p { get; private set; }
 
 	public ExpressionBasis() {
-		_px = new Param("ux", 0.0);
-		_py = new Param("uy", 0.0);
-		_pz = new Param("uz", 0.0);
-
-		_ux = new Param("ux", 1.0);
-		_uy = new Param("uy", 0.0);
-		_uz = new Param("uz", 0.0);
-
-		_vx = new Param("vx", 0.0);
-		_vy = new Param("vy", 1.0);
-		_vz = new Param("vz", 0.0);
-
-		_nx = new Param("nx", 0.0);
-		_ny = new Param("ny", 0.0);
-		_nz = new Param("nz", 1.0);
-
 		p = new ExpressionVector(_px, _py, _pz);
 		u = new ExpressionVector(_ux, _uy, _uz);
 		v = new ExpressionVector(_vx, _vy, _vz);

@@ -4,14 +4,8 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Entities;
 
 public class Line : Entity {
-	public Point p0;
-	public Point p1;
-
-	public Line()
-	{
-		p0 = new Point();
-		p1 = new Point();
-	}
+	public Point p0 = new();
+	public Point p1 = new();
 
 	public override EntityType type { get { return EntityType.Line; } }
 	public override IEnumerable<Expression> equations { get { yield break; } }

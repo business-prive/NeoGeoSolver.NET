@@ -5,16 +5,11 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Circle : Entity {
 
-	public Point c;
+	public Point c = new();
 	public Param radius = new("r");
 
 	public override EntityType type { get { return EntityType.Circle; } }
 	public override IEnumerable<Expression> equations { get { yield break; } }
-
-	public Circle()
-	{
-		c = new Point();
-	}
 
 	public override IEnumerable<Param> parameters {
 		get {

@@ -5,9 +5,9 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Entities;
 
 public class Function : Entity {
-	public Point p0;
-	public Point p1;
-	public Point c;
+	public Point p0 = new();
+	public Point p1 = new();
+	public Point c = new();
 
 	private string _functionX;
 	private string _functionY;
@@ -68,9 +68,6 @@ public class Function : Entity {
 
 	public Function()
 	{
-		p0 = new Point();
-		p1 = new Point();
-		c = new  Point();
 		InitParser();
 	}
 

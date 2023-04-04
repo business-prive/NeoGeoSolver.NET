@@ -5,7 +5,7 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Ellipse : Entity {
 
-	public Point c;
+	public Point c = new();
 	public Param r0 = new("r0");
 	public Param r1 = new("r1");
 	private ExpressionBasis2d _basis = new();
@@ -14,7 +14,6 @@ public class Ellipse : Entity {
 
 	public Ellipse()
 	{
-		c = new Point();
 		_basis.SetPosParams(c.x, c.y);
 	}
 

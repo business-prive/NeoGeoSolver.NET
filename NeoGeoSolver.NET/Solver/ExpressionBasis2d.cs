@@ -3,24 +3,15 @@ using NeoGeoSolver.NET.Utils;
 namespace NeoGeoSolver.NET.Solver;
 
 public class ExpressionBasis2d {
-  private Param _px, _py;
-  private Param _ux, _uy;
-  private Param _vx, _vy;
+  private Param _px = new("px", 0.0), _py = new("py", 0.0);
+  private Param _ux = new("ux", 1.0), _uy = new("uy", 0.0);
+  private Param _vx = new("vx", 0.0), _vy = new("vy", 1.0);
 
   public ExpressionVector u { get; private set; }
   public ExpressionVector v { get; private set; }
   public ExpressionVector p { get; private set; }
 
   public ExpressionBasis2d() {
-    _px = new Param("px", 0.0);
-    _py = new Param("py", 0.0);
-
-    _ux = new Param("ux", 1.0);
-    _uy = new Param("uy", 0.0);
-
-    _vx = new Param("vx", 0.0);
-    _vy = new Param("vy", 1.0);
-
     p = new ExpressionVector(_px, _py, 0.0);
     u = new ExpressionVector(_ux, _uy, 0.0);
     v = new ExpressionVector(_vx, _vy, 0.0);
