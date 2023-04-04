@@ -16,14 +16,6 @@ public class Spline : Entity {
 
 	public override EntityType type { get { return EntityType.Spline; } }
 
-	public override IEnumerable<Point> points {
-		get {
-			for(var i = 0; i < p.Length; i++) {
-				yield return p[i];
-			}
-		}
-	}
-
 	public override ExpressionVector PointOn(Expression t) {
 		var p0 = p[0].exp;
 		var p1 = p[1].exp;

@@ -53,12 +53,6 @@ public class Point : Entity {
 		}
 	}
 
-	public override IEnumerable<Point> points {
-		get {
-			yield return this;
-		}
-	}
-
 	private bool IsCoincidentWith(IEntity point, IEntity exclude) {
 		if(point.IsSameAs(this)) return true;
 		for(var i = 0; i < usedInConstraints.Count; i++) {

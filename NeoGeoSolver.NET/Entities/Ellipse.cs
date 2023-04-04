@@ -18,12 +18,6 @@ public class Ellipse : Entity {
 		_basis.SetPosParams(c.x, c.y);
 	}
 
-	public override IEnumerable<Point> points {
-		get {
-			yield return c;
-		}
-	}
-
 	public override IEnumerable<Param> parameters {
 		get {
 			yield return r0;

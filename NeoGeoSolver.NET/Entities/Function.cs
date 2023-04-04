@@ -110,14 +110,6 @@ public class Function : Entity {
 		}
 	}
 
-	public override IEnumerable<Point> points {
-		get {
-			yield return p0;
-			yield return p1;
-			yield return c;
-		}
-	}
-
 	public override IEnumerable<Param> parameters {
 		get {
 			if(!tBeginFixed) yield return _t0;

@@ -27,14 +27,6 @@ public class EllipticArc : Entity {
 		}
 	}
 
-	public override IEnumerable<Point> points {
-		get {
-			yield return p0;
-			yield return p1;
-			yield return c;
-		}
-	}
-
 	public Expression GetAngleExp() {
 		if(!p0.IsCoincidentWith(p1)) {
 			var d0 = p0.exp - c.exp;

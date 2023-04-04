@@ -15,12 +15,6 @@ public class Circle : Entity {
 		c = AddChild(new Point());
 	}
 
-	public override IEnumerable<Point> points {
-		get {
-			yield return c;
-		}
-	}
-
 	public override IEnumerable<Param> parameters {
 		get {
 			yield return radius;

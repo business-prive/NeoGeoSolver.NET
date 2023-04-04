@@ -27,14 +27,6 @@ public class Arc : Entity {
 		}
 	}
 
-	public override IEnumerable<Point> points {
-		get {
-			yield return p0;
-			yield return p1;
-			yield return c;
-		}
-	}
-
 	public Point center { get { return c; } }
 
 	public Expression GetAngleExp() {
