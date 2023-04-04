@@ -5,11 +5,11 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class PointLineDistance : Value
 {
-	public IEntity point
+	public Point point
 	{
 		get
 		{
-			return GetEntity(0);
+			return (Point) GetEntity(0);
 		}
 		set
 		{
@@ -17,11 +17,11 @@ public class PointLineDistance : Value
 		}
 	}
 
-	public IEntity line
+	public Line line
 	{
 		get
 		{
-			return GetEntity(1);
+			return (Line) GetEntity(1);
 		}
 		set
 		{
@@ -33,7 +33,7 @@ public class PointLineDistance : Value
 	{
 		get
 		{
-			return point.PointExpInPlane();
+			return point.exp;
 		}
 	}
 
@@ -41,7 +41,7 @@ public class PointLineDistance : Value
 	{
 		get
 		{
-			return line.PointsInPlane().ToArray()[0];
+			return line.p0.exp;
 		}
 	}
 
@@ -49,7 +49,7 @@ public class PointLineDistance : Value
 	{
 		get
 		{
-			return line.PointsInPlane().ToArray()[1];
+			return line.p1.exp;
 		}
 	}
 
