@@ -18,7 +18,6 @@ public abstract class Constraint {
 
 	protected void AddEntity<T>(T entity) where T : IEntity {
 		_entities.Add(entity);
-		entity.AddConstraint(this);
 	}
 
 	public virtual void ChooseBestOption() {
@@ -79,11 +78,9 @@ public abstract class Constraint {
 	protected void SetEntity(int i, IEntity e) {
 		var ent = GetEntity(i) as Entity;
 		if(ent != null) {
-			ent.RemoveConstraint(this);
 		}
 		ent = GetEntity(i) as Entity;
 		if(ent != null) {
-			ent.AddConstraint(this);
 		}
 	}
 }

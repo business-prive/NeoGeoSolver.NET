@@ -4,7 +4,7 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
-public abstract partial class Entity : IEntity
+public abstract class Entity : IEntity
 {
   protected List<Constraint> usedInConstraints = new();
   private List<Entity> _children = new();
