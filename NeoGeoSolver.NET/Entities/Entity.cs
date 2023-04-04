@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
@@ -11,25 +10,6 @@ public abstract class Entity : IEntity
   public abstract IEnumerable<Expression> equations { get; }
 
   public abstract EntityType type { get; }
-
-  protected IEnumerable<Vector3> getSegmentsUsingPointOn(int subdiv)
-  {
-    var pOn = new Param("pOn");
-    var on = PointOn(pOn);
-    for (var i = 0; i <= subdiv; i++)
-    {
-      pOn.value = (double) i / subdiv;
-      yield return on.Eval();
-    }
-  }
-
-  protected IEnumerable<Vector3> GetSegments(int subdiv, Func<double, Vector3> pointOn)
-  {
-    for (var i = 0; i <= subdiv; i++)
-    {
-      yield return pointOn((double) i / subdiv);
-    }
-  }
 
   public abstract ExpressionVector PointOn(Expression t);
 

@@ -32,11 +32,9 @@ public class Ellipse : Entity {
 		}
 	}
 
-	public Point center { get { return c; } }
-	public IEnumerable<Vector3> loopPoints {
-		get {
-			return getSegmentsUsingPointOn(36);
-		}
+	public override ExpressionVector Center()
+	{
+		return c.exp;
 	}
 
 	public override ExpressionVector PointOn(Expression t) {
