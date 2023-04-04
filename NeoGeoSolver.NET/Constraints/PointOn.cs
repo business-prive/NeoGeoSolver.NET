@@ -5,10 +5,10 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class PointOn : Value {
-	public IEntity point { get { return GetEntity(0); } set { SetEntity(0, value); } }
+	public Point point { get { return (Point) GetEntity(0); } set { SetEntity(0, value); } }
 	public IEntity on { get { return GetEntity(1); } set { SetEntity(1, value); } }
 
-	public ExpressionVector pointExp { get { return point.PointExpInPlane(); } }
+	public ExpressionVector pointExp { get { return point.exp; } }
 
 	protected override bool OnSatisfy() {
 		var sys = new EquationSystem();
