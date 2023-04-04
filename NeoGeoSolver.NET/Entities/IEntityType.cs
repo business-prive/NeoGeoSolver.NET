@@ -5,8 +5,6 @@ public enum EntityType {
   Line,
   Arc,
   Circle,
-  Helix,
-  Plane,
   Function,
   Spline,
   Ellipse,

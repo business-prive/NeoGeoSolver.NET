@@ -5,12 +5,8 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class Diameter : Value {
-
-	public bool showAsRadius = false;
-
 	public Diameter(IEntity c)
 	{
-		showAsRadius = (c.type == EntityType.Arc);
 		AddEntity(c);
 		Satisfy();
 	}

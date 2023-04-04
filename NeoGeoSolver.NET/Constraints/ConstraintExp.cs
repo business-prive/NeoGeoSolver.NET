@@ -9,10 +9,6 @@ public static class ConstraintExp {
 		if(angle360) return Math.PI - Expression.Atan2(nv, -nu);
 		return Expression.Atan2(nv, nu);
 	}
-	
-	public static Expression Angle3d(ExpressionVector d0, ExpressionVector d1) {
-		return Expression.Atan2(ExpressionVector.Cross(d0, d1).Magnitude(), ExpressionVector.Dot(d0, d1));
-	}
 
 	public static Expression PointLineDistance(ExpressionVector p, ExpressionVector p0, ExpressionVector p1) {
 		return ((p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y + p0.x * p1.y - p1.x * p0.y) / Expression.Sqrt(Expression.Sqr(p1.x - p0.x) + Expression.Sqr(p1.y - p0.y));

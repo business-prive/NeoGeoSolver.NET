@@ -73,7 +73,7 @@ public class Expression {
     this.op = op;
   }
 
-  static public Expression operator+(Expression a, Expression b) {
+  public static Expression operator+(Expression a, Expression b) {
     if(a.IsZeroConst()) return b;
     if(b.IsZeroConst()) return a;
     if(b.op == Op.Neg) return a - b.a;
@@ -81,13 +81,13 @@ public class Expression {
     return new Expression(Op.Add, a, b);
   }
 
-  static public Expression operator-(Expression a, Expression b) {
+  public static Expression operator-(Expression a, Expression b) {
     if(a.IsZeroConst()) return -b;
     if(b.IsZeroConst()) return a;
     return new Expression(Op.Sub, a, b);
   }
 
-  static public Expression operator*(Expression a, Expression b) {
+  public static Expression operator*(Expression a, Expression b) {
     if(a.IsZeroConst()) return Zero;
     if(b.IsZeroConst()) return Zero;
     if(a.IsOneConst()) return b;
@@ -98,7 +98,7 @@ public class Expression {
     return new Expression(Op.Mul, a, b);
   }
 
-  static public Expression operator/(Expression a, Expression b) {
+  public static Expression operator/(Expression a, Expression b) {
     if(b.IsOneConst()) return a;
     if(a.IsZeroConst()) return Zero;
     if(b.IsMinusOneConst()) return -a;
@@ -106,7 +106,7 @@ public class Expression {
   }
   //static public Exp operator^(Exp a, Exp b) { return new Exp(Op.Pow, a, b); }
 
-  static public Expression operator-(Expression a) {
+  public static Expression operator-(Expression a) {
     if(a.IsZeroConst()) return a;
     if(a.IsConst()) return -a.value;
     if(a.op == Op.Neg) return a.a;
@@ -150,22 +150,20 @@ public class Expression {
     );
   }
 
-	
-  static public Expression Sin	(Expression x) { return new Expression(Op.Sin,	x, null); }
-  static public Expression Cos	(Expression x) { return new Expression(Op.Cos,	x, null); }
-  static public Expression ACos	(Expression x) { return new Expression(Op.ACos,	x, null); }
-  static public Expression ASin	(Expression x) { return new Expression(Op.ASin,	x, null); }
-  static public Expression Sqrt	(Expression x) { return new Expression(Op.Sqrt,	x, null); }
-  static public Expression Sqr	(Expression x) { return new Expression(Op.Sqr,	x, null); }
-  static public Expression Abs	(Expression x) { return new Expression(Op.Abs,	x, null); }
-  static public Expression Sign	(Expression x) { return new Expression(Op.Sign,	x, null); }
-  static public Expression Atan2	(Expression x, Expression y) { return new Expression(Op.Atan2, x, y); }
-  static public Expression Expo	(Expression x) { return new Expression(Op.Exp,	x, null); }
-  static public Expression Sinh	(Expression x) { return new Expression(Op.Sinh,	x, null); }
-  static public Expression Cosh	(Expression x) { return new Expression(Op.Cosh,	x, null); }
-  static public Expression SFres	(Expression x) { return new Expression(Op.SFres,	x, null); }
-  static public Expression CFres	(Expression x) { return new Expression(Op.CFres,	x, null); }
-  //static public Exp Pow  (Exp x, Exp y) { return new Exp(Op.Pow,   x, y); }
+  public static Expression Sin	(Expression x) { return new Expression(Op.Sin,	x, null); }
+  public static Expression Cos	(Expression x) { return new Expression(Op.Cos,	x, null); }
+  public static Expression ACos	(Expression x) { return new Expression(Op.ACos,	x, null); }
+  public static Expression ASin	(Expression x) { return new Expression(Op.ASin,	x, null); }
+  public static Expression Sqrt	(Expression x) { return new Expression(Op.Sqrt,	x, null); }
+  public static Expression Sqr	(Expression x) { return new Expression(Op.Sqr,	x, null); }
+  public static Expression Abs	(Expression x) { return new Expression(Op.Abs,	x, null); }
+  public static Expression Sign	(Expression x) { return new Expression(Op.Sign,	x, null); }
+  public static Expression Atan2	(Expression x, Expression y) { return new Expression(Op.Atan2, x, y); }
+  public static Expression Expo	(Expression x) { return new Expression(Op.Exp,	x, null); }
+  public static Expression Sinh	(Expression x) { return new Expression(Op.Sinh,	x, null); }
+  public static Expression Cosh	(Expression x) { return new Expression(Op.Cosh,	x, null); }
+  public static Expression SFres	(Expression x) { return new Expression(Op.SFres,	x, null); }
+  public static Expression CFres	(Expression x) { return new Expression(Op.CFres,	x, null); }
 
   public Expression Drag(Expression to) {
     return new Expression(Op.Drag, this, to);
@@ -203,7 +201,10 @@ public class Expression {
       case Op.Cosh:	return Math.Cosh(a.Eval());
       case Op.SFres:	return SFres(a.Eval());
       case Op.CFres:	return CFres(a.Eval());
-      //case Op.Pow:	return Math.Pow(a.Eval(), b.Eval());
+
+      case Op.Undefined:
+      default:
+        throw new ArgumentOutOfRangeException();
     }
     return 0.0;
   }
@@ -262,28 +263,27 @@ public class Expression {
     switch(op) {
       case Op.Const:	return value.ToString();
       case Op.Param:	return param.name;
-      case Op.Add:	return a.ToString() + " + " + b.ToString();
-      case Op.Sub:	return a.ToString() + " - " + b.QuotedAdd();
+      case Op.Add:	return a + " + " + b;
+      case Op.Sub:	return a + " - " + b.QuotedAdd();
       case Op.Mul:	return a.QuotedAdd() + " * " + b.QuotedAdd();
       case Op.Div:	return a.QuotedAdd() + " / " + b.Quoted();
-      case Op.Sin:	return "sin(" + a.ToString() + ")";
-      case Op.Cos:	return "cos(" + a.ToString() + ")";
-      case Op.ASin:	return "asin(" + a.ToString() + ")";
-      case Op.ACos:	return "acos(" + a.ToString() + ")";
-      case Op.Sqrt:	return "sqrt(" + a.ToString() + ")";
+      case Op.Sin:	return "sin(" + a + ")";
+      case Op.Cos:	return "cos(" + a + ")";
+      case Op.ASin:	return "asin(" + a + ")";
+      case Op.ACos:	return "acos(" + a + ")";
+      case Op.Sqrt:	return "sqrt(" + a + ")";
       case Op.Sqr:	return a.Quoted() + " ^ 2";
-      case Op.Abs:	return "abs(" + a.ToString() + ")";
-      case Op.Sign:	return "sign(" + a.ToString() + ")";
-      case Op.Atan2:	return "atan2(" + a.ToString() + ", " + b.ToString() + ")";
+      case Op.Abs:	return "abs(" + a + ")";
+      case Op.Sign:	return "sign(" + a + ")";
+      case Op.Atan2:	return "atan2(" + a + ", " + b + ")";
       case Op.Neg:	return "-" + a.Quoted();
       case Op.Pos:	return "+" + a.Quoted();
-      case Op.Drag:   return a.ToString() + " ≈ " + b.QuotedAdd();
-      case Op.Exp:	return "exp(" + a.ToString() + ")";
-      case Op.Sinh:	return "sinh(" + a.ToString() + ")";
-      case Op.Cosh:	return "cosh(" + a.ToString() + ")";
-      case Op.SFres:	return "sfres(" + a.ToString() + ")";
-      case Op.CFres:	return "cfres(" + a.ToString() + ")";
-      //case Op.Pow:	return Quoted(a) + " ^ " + Quoted(b);
+      case Op.Drag:   return a + " ≈ " + b.QuotedAdd();
+      case Op.Exp:	return "exp(" + a + ")";
+      case Op.Sinh:	return "sinh(" + a + ")";
+      case Op.Cosh:	return "cosh(" + a + ")";
+      case Op.SFres:	return "sfres(" + a + ")";
+      case Op.CFres:	return "cfres(" + a + ")";
     }
     return "";
   }
@@ -418,7 +418,6 @@ public class Expression {
         param = null;
       }
     }
-
   }
 
   public bool HasTwoOperands() {

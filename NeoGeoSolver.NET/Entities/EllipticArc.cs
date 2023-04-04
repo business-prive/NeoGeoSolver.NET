@@ -17,7 +17,7 @@ public class EllipticArc : Entity {
 		c = AddChild(new  Point());
 	}
 
-	public override EntityType type { get { return EntityType.Arc; } }
+	public override EntityType type { get { return EntityType.EllipticArc; } }
 
 	public override IEnumerable<Expression> equations {
 		get {

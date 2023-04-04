@@ -9,7 +9,7 @@ public static class GaussianMethod {
 		var result = "";
 		for(var r = 0; r < a.GetLength(0); r++) {
 			for(var c = 0; c < a.GetLength(1); c++) {
-				result += a[r, c].ToString() + " ";
+				result += a[r, c] + " ";
 			}
 			result += "\n";
 		}
@@ -19,7 +19,7 @@ public static class GaussianMethod {
 	public static string Print<T>(this T[] a) {
 		var result = "";
 		for(var r = 0; r < a.GetLength(0); r++) {
-			result += a[r].ToString() + "\n";
+			result += a[r] + "\n";
 		}
 		return result;
 	}

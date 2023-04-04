@@ -38,7 +38,7 @@ public abstract class Constraint {
 		
 		for(var i = 0; i < names.Length; i++) {
 			optionInternal = (Enum)Enum.Parse(type, names[i]);
-			List<Expression> exprs = equations.ToList();
+			var exprs = equations.ToList();
 			
 			var curValue = exprs.Sum(e => Math.Abs(e.Eval()));
 			// TODO		Debug.Log(String.Format("check option {0} (min: {1}, cur: {2})\n", optionInternal, min_value, cur_value));

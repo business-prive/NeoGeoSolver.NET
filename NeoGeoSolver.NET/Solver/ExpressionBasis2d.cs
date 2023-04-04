@@ -12,8 +12,8 @@ public class ExpressionBasis2d {
   public ExpressionVector p { get; private set; }
 
   public ExpressionBasis2d() {
-    _px = new Param("ux", 0.0);
-    _py = new Param("uy", 0.0);
+    _px = new Param("px", 0.0);
+    _py = new Param("py", 0.0);
 
     _ux = new Param("ux", 1.0);
     _uy = new Param("uy", 0.0);
