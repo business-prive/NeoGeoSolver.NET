@@ -5,11 +5,11 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class LineCircleDistance : Value
 {
-  public IEntity line
+  public Line line
   {
     get
     {
-      return GetEntity(0);
+      return (Line) GetEntity(0);
     }
     set
     {
@@ -17,11 +17,11 @@ public class LineCircleDistance : Value
     }
   }
 
-  public IEntity circle
+  public Circle circle
   {
     get
     {
-      return GetEntity(1);
+      return (Circle) GetEntity(1);
     }
     set
     {
@@ -41,7 +41,7 @@ public class LineCircleDistance : Value
   {
     get
     {
-      return line.PointsInPlane().ToArray()[0];
+      return line.p0.exp;
     }
   }
 
@@ -49,7 +49,7 @@ public class LineCircleDistance : Value
   {
     get
     {
-      return line.PointsInPlane().ToArray()[1];
+      return line.p1.exp;
     }
   }
 
