@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoGeoSolver.NET", "NeoGeoSolver.NET\NeoGeoSolver.NET.csproj", "{4160FFC8-264D-4A4A-BA84-5FD9513CD5F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoGeoSolver.NET.Tests", "NeoGeoSolver.NET.Tests\NeoGeoSolver.NET.Tests.csproj", "{8DFE3413-3FBB-491B-B6F7-B9957C0389ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{4160FFC8-264D-4A4A-BA84-5FD9513CD5F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4160FFC8-264D-4A4A-BA84-5FD9513CD5F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4160FFC8-264D-4A4A-BA84-5FD9513CD5F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DFE3413-3FBB-491B-B6F7-B9957C0389ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DFE3413-3FBB-491B-B6F7-B9957C0389ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DFE3413-3FBB-491B-B6F7-B9957C0389ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DFE3413-3FBB-491B-B6F7-B9957C0389ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
