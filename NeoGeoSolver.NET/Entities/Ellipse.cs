@@ -28,7 +28,7 @@ public class Ellipse : Entity {
 		}
 	}
 
-	public override ExpressionVector Center()
+	public ExpressionVector Center()
 	{
 		return c.exp;
 	}

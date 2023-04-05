@@ -19,8 +19,4 @@ public abstract class Entity : IEntity
     result.z.Substitute(p, t);
     return result;
   }
-
-  public virtual Expression Length() => null;
-  public virtual Expression Radius() => null;
-  public virtual ExpressionVector Center() => null;
 }

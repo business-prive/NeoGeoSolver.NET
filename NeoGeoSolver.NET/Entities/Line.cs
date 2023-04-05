@@ -18,7 +18,7 @@ public class Line : Entity {
 		return p1.exp - p0.exp;
 	}
 
-	public override Expression Length() {
+	public Expression Length() {
 		return (p1.exp - p0.exp).Magnitude();
 	}
 }

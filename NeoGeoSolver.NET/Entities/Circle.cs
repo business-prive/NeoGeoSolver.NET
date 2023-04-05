@@ -27,15 +27,15 @@ public class Circle : Entity {
 		return new ExpressionVector(-Expression.Sin(angle), Expression.Cos(angle), 0.0);
 	}
 
-	public override Expression Length() {
+	public Expression Length() {
 		return new Expression(2.0) * Math.PI * Radius();
 	}
 
-	public override Expression Radius() {
+	public Expression Radius() {
 		return Expression.Abs(radius);
 	}
 
-	public override ExpressionVector Center() {
+	public ExpressionVector Center() {
 		return center.exp;
 	}
 }

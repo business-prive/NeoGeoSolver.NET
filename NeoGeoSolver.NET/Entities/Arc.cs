@@ -54,15 +54,15 @@ public class Arc : Entity {
 		);
 	}
 	
-	public override Expression Length() {
+	public Expression Length() {
 		return GetAngleExp() * Radius();
 	}
 
-	public override Expression Radius() {
+	public Expression Radius() {
 		return (p0.exp - c.exp).Magnitude();
 	}
 
-	public override ExpressionVector Center() {
+	public ExpressionVector Center() {
 		return c.exp;
 	}
 }
