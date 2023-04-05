@@ -5,15 +5,16 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class Length : Value {
-	public Length(IEntity e)
+  private readonly Line _line;
+	public Length(Line line)
 	{
-		AddEntity(e);
+		_line = line;
 		Satisfy();
 	}
 
 	public override IEnumerable<Expression> equations {
 		get {
-			yield return GetEntity(0).Length() - value;
+			yield return _line.Length() - value;
 		}
 	}
 }

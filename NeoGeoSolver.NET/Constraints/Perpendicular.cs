@@ -25,10 +25,13 @@ public class Perpendicular : Constraint
     }
   }
 
-  public Perpendicular(IEntity l0, IEntity l1)
+  private readonly Line _l0;
+  private readonly Line _l1;
+
+  public Perpendicular(Line l0, Line l1)
   {
-    AddEntity(l0);
-    AddEntity(l1);
+    _l0 = l0;
+    _l1 = l1;
     ChooseBestOption();
   }
 
@@ -36,11 +39,8 @@ public class Perpendicular : Constraint
   {
     get
     {
-      var l0 = GetEntityOfType(EntityType.Line, 0);
-      var l1 = GetEntityOfType(EntityType.Line, 1);
-
-      var d0 = l0.GetPointAtInPlane(0) - l0.GetPointAtInPlane(1);
-      var d1 = l1.GetPointAtInPlane(0) - l1.GetPointAtInPlane(1);
+      var d0 = _l0.p0.exp - _l0.p1.exp;
+      var d1 = _l1.p0.exp - _l1.p1.exp;
 
       var angle = ConstraintExp.Angle2d(d0, d1);
       switch (option)

@@ -4,9 +4,15 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class PointsCoincident : Constraint {
-	public Point p0 { get { return (Point) GetEntity(0); } set { SetEntity(0, value); } }
-	public Point p1 { get { return (Point) GetEntity(1); } set { SetEntity(1, value); } }
+	public Point p0 { get;}
+	public Point p1 { get;}
 
+  public PointsCoincident(Point pt0, Point pt1)
+  {
+    p0 = pt0;
+    p1 = pt1;
+  }
+  
 	public override IEnumerable<Expression> equations {
 		get {
 			var pe0 = p0.exp;

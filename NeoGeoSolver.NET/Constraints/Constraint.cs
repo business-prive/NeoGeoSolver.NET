@@ -5,7 +5,6 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public abstract class Constraint {
-	private readonly List<IEntity> _entities = new();
 	public virtual IEnumerable<Param> parameters { get { yield break; } }
 	public virtual IEnumerable<Expression> equations { get { yield break; } }
 
@@ -14,10 +13,6 @@ public abstract class Constraint {
 	}
 
 	protected virtual Enum optionInternal { get { return Option.Default; } set { } }
-
-	protected void AddEntity<T>(T entity) where T : IEntity {
-		_entities.Add(entity);
-	}
 
 	public void ChooseBestOption() {
 		var type = optionInternal.GetType();
@@ -40,38 +35,5 @@ public abstract class Constraint {
 		}
 		optionInternal = (Enum)Enum.Parse(type, names[bestOption]);
 		// TODO		Debug.Log("best option = " + optionInternal.ToString());
-	}
-
-	public IEntity GetEntity(int i) {
-		return _entities[i];
-	}
-
-	public bool HasEntitiesOfType(EntityType type, int required) {
-		var count = 0;
-		for(var i = 0; i < _entities.Count; i++) {
-			var e = GetEntity(i);
-			if(e.type == type) count++;
-		}
-		return count == required;
-	}
-
-	protected IEntity GetEntityOfType(EntityType type, int index) {
-		var curIndex = 0;
-		for(var i = 0; i < _entities.Count; i++) {
-			var e = GetEntity(i);
-			if(e.type != type) continue;
-			if(curIndex == index) return e;
-			curIndex++;
-		}
-		return null;
-	}
-
-	protected void SetEntity(int i, IEntity e) {
-		var ent = GetEntity(i) as Entity;
-		if(ent != null) {
-		}
-		ent = GetEntity(i) as Entity;
-		if(ent != null) {
-		}
 	}
 }

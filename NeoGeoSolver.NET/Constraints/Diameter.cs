@@ -5,13 +5,15 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class Diameter : Value {
-	public Diameter(IEntity c)
+  private readonly Circle _circle;
+
+	public Diameter(Circle circle)
 	{
-		AddEntity(c);
+		_circle = circle;
 		Satisfy();
 	}
 
-	private Expression radius { get { return GetEntity(0).Radius(); } }
+	private Expression radius { get { return _circle.Radius(); } }
 
 	public override IEnumerable<Expression> equations {
 		get {

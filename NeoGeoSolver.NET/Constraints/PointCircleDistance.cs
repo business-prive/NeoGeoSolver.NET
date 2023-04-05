@@ -4,20 +4,20 @@ using NeoGeoSolver.NET.Solver;
 namespace NeoGeoSolver.NET.Constraints;
 
 public class PointCircleDistance : Value {
-	public PointCircleDistance(IEntity pt, IEntity c)
+  private readonly Point _pt;
+  private readonly Circle _circle;
+	public PointCircleDistance(Point pt, Circle c)
 	{
-		AddEntity(pt);
-		AddEntity(c);
+		_pt = pt;
+		_circle = c;
 		Satisfy();
 	}
 
 	public override IEnumerable<Expression> equations {
 		get {
-			var point = GetEntity(0);
-			var circle = GetEntity(1);
-			var pPos = point.GetPointAtInPlane(0);
-			var cCen = circle.Center();
-			var cRad = circle.Radius();
+			var pPos = _pt.exp;
+			var cCen = _circle.Center();
+			var cRad = _circle.Radius();
 
 			yield return (pPos - cCen).Magnitude() - cRad - value.exp;
 		}

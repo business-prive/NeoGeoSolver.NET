@@ -7,26 +7,12 @@ public class PointLineDistance : Value
 {
 	public Point point
 	{
-		get
-		{
-			return (Point) GetEntity(0);
-		}
-		set
-		{
-			SetEntity(0, value);
-		}
+		get;set;
 	}
 
 	public Line line
 	{
-		get
-		{
-			return (Line) GetEntity(1);
-		}
-		set
-		{
-			SetEntity(1, value);
-		}
+		get;set;
 	}
 
 	public ExpressionVector pointExp
@@ -53,10 +39,10 @@ public class PointLineDistance : Value
 		}
 	}
 
-	public PointLineDistance(IEntity p0, IEntity p1)
+	public PointLineDistance(Point pt, Line line)
 	{
-		AddEntity(p0);
-		AddEntity(p1);
+		point = pt;
+		this.line = line;
 		SetValue(1.0);
 		Satisfy();
 	}

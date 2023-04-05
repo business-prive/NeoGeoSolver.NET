@@ -7,26 +7,12 @@ public class LineCircleDistance : Value
 {
   public Line line
   {
-    get
-    {
-      return (Line) GetEntity(0);
-    }
-    set
-    {
-      SetEntity(0, value);
-    }
+    get;set;
   }
 
   public Circle circle
   {
-    get
-    {
-      return (Circle) GetEntity(1);
-    }
-    set
-    {
-      SetEntity(1, value);
-    }
+    get;set;
   }
 
   public ExpressionVector centerExp
@@ -73,10 +59,10 @@ public class LineCircleDistance : Value
     }
   }
 
-  public LineCircleDistance(IEntity line, IEntity circle)
+  public LineCircleDistance(Line line, Circle circle)
   {
-    AddEntity(line);
-    AddEntity(circle);
+    this.line = line;
+    this.circle = circle;
     SetValue(1.0);
     ChooseBestOption();
     Satisfy();

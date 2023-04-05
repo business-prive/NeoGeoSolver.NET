@@ -14,10 +14,13 @@ public class Equal : Value
 
   private LengthType[] _lengthType = new LengthType[2];
 
-  public Equal(IEntity l0, IEntity l1)
+  private readonly Line _l0;
+  private readonly Line _l1;
+
+  public Equal(Line l0, Line l1)
   {
-    AddEntity(l0);
-    AddEntity(l1);
+    _l0 = l0;
+    _l1 = l1;
     value.value = 1.0;
   }
 
