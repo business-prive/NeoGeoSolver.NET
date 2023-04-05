@@ -22,25 +22,37 @@ public class Angle : Value {
 		}
 	}
 
+  private readonly Point[] _points = new Point[4];
 	public Angle(Point[] points)
 	{
-		foreach(var p in points) {
-			AddEntity(p);
-		}
+    if (points.Length != 4)
+    {
+      throw new ArgumentOutOfRangeException();
+    }
+
+		_points[0] = points[0];
+		_points[1] = points[1];
+		_points[2] = points[2];
+		_points[3] = points[3];
 		Satisfy();
 	}
 
+  private readonly Arc _arc;
+
 	public Angle(Arc arc)
 	{
-		AddEntity(arc);
+		_arc = arc;
 		value.value = Math.PI / 4;
 		Satisfy();
 	}
 
+  private readonly Line _l0;
+  private readonly Line _l1;
+
 	public Angle(Line l0, Line l1)
 	{
-		AddEntity(l0);
-		AddEntity(l1);
+		_l0 = l0;
+		_l1 = l1;
 		Satisfy();
 	}
 
@@ -59,29 +71,31 @@ public class Angle : Value {
 		var p = new ExpressionVector[4];
 		if(HasEntitiesOfType(EntityType.Point, 4)) {
 			for(var i = 0; i < 4; i++) {
-				p[i] = GetEntityOfType(EntityType.Point, i).GetPointAtInPlane(0);
+				p[i] = _points[i].exp;
 			}
 			if(supplementary) {
 				SystemExt.Swap(ref p[2], ref p[3]);
 			}
 		} else 
+
 		if(HasEntitiesOfType(EntityType.Line, 2)) {
-			var l0 = GetEntityOfType(EntityType.Line, 0);
-			p[0] = l0.GetPointAtInPlane(0);
-			p[1] = l0.GetPointAtInPlane(1);
-			var l1 = GetEntityOfType(EntityType.Line, 1);
-			p[2] = l1.GetPointAtInPlane(0);
-			p[3] = l1.GetPointAtInPlane(1);
+			var l0 = _l0;
+			p[0] = l0.p0.exp;
+			p[1] = l0.p1.exp;
+			var l1 = _l1;
+			p[2] = l1.p0.exp;
+			p[3] = l1.p1.exp;
 			if(supplementary) {
 				SystemExt.Swap(ref p[2], ref p[3]);
 			}
 		} else 
+
 		if(HasEntitiesOfType(EntityType.Arc, 1)) {
-			var arc = GetEntityOfType(EntityType.Arc, 0);
-			p[0] = arc.GetPointAtInPlane(0);
-			p[1] = arc.GetPointAtInPlane(2);
-			p[2] = arc.GetPointAtInPlane(2);
-			p[3] = arc.GetPointAtInPlane(1);
+			var arc = _arc;
+			p[0] = arc.p0.exp;
+			p[1] = arc.center.exp;
+			p[2] = arc.center.exp;
+			p[3] = arc.p1.exp;
 			if(supplementary) {
 				SystemExt.Swap(ref p[0], ref p[3]);
 				SystemExt.Swap(ref p[1], ref p[2]);

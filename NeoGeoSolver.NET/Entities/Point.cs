@@ -34,7 +34,7 @@ public class Point : Entity
 	{
 		x.value = pos.X;
 		y.value = pos.Y;
-    z.value = pos.z;
+    z.value = pos.Z;
 	}
 
 	public Vector3 pos

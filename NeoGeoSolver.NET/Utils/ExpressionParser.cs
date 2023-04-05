@@ -155,7 +155,7 @@ public class ExpressionParser {
 		var start = _index;
 		while(HasNext() && (IsDigit(next) || IsDelimiter(next))) _index++;
 		var str = _toParse.Substring(start, _index - start);
-		digits = str.ToDouble();
+		digits = double.Parse(str);
 		return true;
 	}
 

@@ -38,7 +38,7 @@ public class ExpressionBasis2d {
   public override string ToString() {
     var result = "";
     foreach(var p in parameters) {
-      result += p.value.ToStr() + " ";
+      result += p.value.ToString() + " ";
     }
     return result;
   }

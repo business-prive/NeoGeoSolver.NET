@@ -9,11 +9,4 @@ public static class EntityUtils {
     }
     return plane.ToFrom(entity.PointOn(t), entity.plane);
   }
-
-  public static ExpressionVector GetPointAtInPlane(this IEntity entity, int index) {
-    var points = entity.points.GetEnumerator();
-    var curIndex = -1;
-    while(curIndex++ < index && points.MoveNext());
-    return plane.ToFrom(points.Current, entity.plane);
-  }
 }

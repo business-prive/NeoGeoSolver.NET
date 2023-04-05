@@ -1,6 +1,4 @@
-﻿using NeoGeoSolver.NET.Utils;
-
-namespace NeoGeoSolver.NET.Solver;
+﻿namespace NeoGeoSolver.NET.Solver;
 
 public class ExpressionBasis {
 	private Param _px = new("ux", 0.0), _py = new("uy", 0.0), _pz = new("uz", 0.0);
@@ -40,7 +38,7 @@ public class ExpressionBasis {
 	public override string ToString() {
 		var result = "";
 		foreach(var p in parameters) {
-			result += p.value.ToStr() + " ";
+			result += p.value.ToString() + " ";
 		}
 		return result;
 	}
