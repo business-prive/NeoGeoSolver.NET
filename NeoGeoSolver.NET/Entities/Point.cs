@@ -9,14 +9,6 @@ public class Point : Entity
 	public Param y = new("y");
 	public Param z = new("z");
 
-	public override EntityType type
-	{
-		get
-		{
-			return EntityType.Point;
-		}
-	}
-
 	public override IEnumerable<Expression> equations
 	{
 		get

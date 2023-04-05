@@ -9,8 +9,6 @@ public class EllipticArc : Entity {
 	public Point p1 = new();
 	public Point c = new();
 
-	public override EntityType type { get { return EntityType.EllipticArc; } }
-
 	public override IEnumerable<Expression> equations {
 		get {
 			if(!p0.IsCoincidentWith(p1)) {

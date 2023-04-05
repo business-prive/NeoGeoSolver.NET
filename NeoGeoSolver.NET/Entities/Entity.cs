@@ -7,8 +7,6 @@ public abstract class Entity : IEntity
   public virtual IEnumerable<Param> parameters { get { yield break; } }
   public abstract IEnumerable<Expression> equations { get; }
 
-  public abstract EntityType type { get; }
-
   public abstract ExpressionVector PointOn(Expression t);
 
   public virtual ExpressionVector TangentAt(Expression t)

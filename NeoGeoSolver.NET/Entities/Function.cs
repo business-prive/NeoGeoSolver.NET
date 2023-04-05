@@ -62,15 +62,12 @@ public class Function : Entity {
 		_parser.parameters.Add(_t);
 		x = "t";
 		y = "cos(t * pi)";
-
 	}
 
 	public Function()
 	{
 		InitParser();
 	}
-
-	public override EntityType type { get { return EntityType.Function; } }
 
 	private ExpressionVector GetExpClone(Expression t) {
 		var e = new ExpressionVector(_exp.x.DeepClone(), _exp.y.DeepClone(), 0.0);

@@ -9,8 +9,6 @@ public class Ellipse : Entity {
 	public Param r1 = new("r1");
 	private ExpressionBasis2d _basis = new();
 
-	public override EntityType type { get { return EntityType.Ellipse; } }
-
 	public Ellipse()
 	{
 		_basis.SetPosParams(c.x, c.y);

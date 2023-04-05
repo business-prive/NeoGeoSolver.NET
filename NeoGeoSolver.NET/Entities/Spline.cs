@@ -13,7 +13,6 @@ public class Spline : Entity {
 		}
 	}
 
-	public override EntityType type { get { return EntityType.Spline; } }
 	public override IEnumerable<Expression> equations { get { yield break; } }
 
 	public override ExpressionVector PointOn(Expression t) {
