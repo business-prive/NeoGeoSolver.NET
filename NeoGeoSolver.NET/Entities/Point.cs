@@ -19,7 +19,7 @@ public class Point : Entity
     this(0, 0, 0)
   {
   }
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {
@@ -29,7 +29,7 @@ public class Point : Entity
 
   public ExpressionVector exp => new(x, y, z);
 
-  public override IEnumerable<Param> parameters
+  public override IEnumerable<Param> Parameters
   {
     get
     {

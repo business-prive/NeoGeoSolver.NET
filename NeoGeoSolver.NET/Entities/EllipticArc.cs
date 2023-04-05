@@ -9,7 +9,7 @@ public class EllipticArc : Entity {
 	public Point p1 = new();
 	public Point c = new();
 
-	public override IEnumerable<Expression> equations {
+	public override IEnumerable<Expression> Equations {
 		get {
 			if(!p0.IsCoincidentWith(p1)) {
 				yield return (p0.exp - c.exp).Magnitude() - (p1.exp - c.exp).Magnitude();

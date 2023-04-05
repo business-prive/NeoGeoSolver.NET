@@ -7,7 +7,7 @@ public class Circle : Entity
   public Point Centre = new();
   public Param Radius = new("r");
 
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {
@@ -15,7 +15,7 @@ public class Circle : Entity
     }
   }
 
-  public override IEnumerable<Param> parameters
+  public override IEnumerable<Param> Parameters
   {
     get
     {

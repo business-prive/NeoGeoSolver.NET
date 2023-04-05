@@ -79,7 +79,7 @@ public class Function : Entity {
 		return e;
 	}
 
-	public override IEnumerable<Expression> equations {
+	public override IEnumerable<Expression> Equations {
 		get {
 			var e0 = _basis.TransformPosition(GetExpClone(_t0));
 
@@ -100,7 +100,7 @@ public class Function : Entity {
 		}
 	}
 
-	public override IEnumerable<Param> parameters {
+	public override IEnumerable<Param> Parameters {
 		get {
 			if(!tBeginFixed) yield return _t0;
 			if(!tEndFixed) yield return _t1;

@@ -13,7 +13,7 @@ public class Spline : Entity {
 		}
 	}
 
-	public override IEnumerable<Expression> equations { get { yield break; } }
+	public override IEnumerable<Expression> Equations { get { yield break; } }
 
 	public override ExpressionVector PointOn(Expression t) {
 		var p0 = p[0].exp;

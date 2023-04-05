@@ -14,7 +14,7 @@ public class Ellipse : Entity {
 		_basis.SetPosParams(c.x, c.y);
 	}
 
-	public override IEnumerable<Param> parameters {
+	public override IEnumerable<Param> Parameters {
 		get {
 			yield return r0;
 			yield return r1;
@@ -22,7 +22,7 @@ public class Ellipse : Entity {
 		}
 	}
 
-	public override IEnumerable<Expression> equations {
+	public override IEnumerable<Expression> Equations {
 		get {
 			foreach(var e in _basis.equations) yield return e;
 		}

@@ -6,7 +6,7 @@ public class Line : Entity {
 	public Point p0 = new();
 	public Point p1 = new();
 
-	public override IEnumerable<Expression> equations { get { yield break; } }
+	public override IEnumerable<Expression> Equations { get { yield break; } }
 
 	public override ExpressionVector PointOn(Expression t) {
 		var pt0 = p0.exp;
