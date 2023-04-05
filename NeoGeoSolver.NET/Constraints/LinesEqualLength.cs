@@ -5,15 +5,6 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class LinesEqualLength : Value
 {
-  public enum LengthType
-  {
-    Length,
-    Radius,
-    Diameter
-  }
-
-  private LengthType[] _lengthType = new LengthType[2];
-
   private readonly Line _l0;
   private readonly Line _l1;
 
@@ -28,26 +19,7 @@ public class LinesEqualLength : Value
   {
     get
     {
-      var len = new Expression[2];
-
-      for (var i = 0; i < 2; i++)
-      {
-        var e = GetEntity(i);
-        switch (_lengthType[i])
-        {
-          case LengthType.Length:
-            len[i] = e.Length();
-            break;
-          case LengthType.Radius:
-            len[i] = e.Radius();
-            break;
-          case LengthType.Diameter:
-            len[i] = e.Radius() * 2.0;
-            break;
-        }
-      }
-
-      yield return len[0] - len[1] * value;
+      yield return _l0.Length() - _l1.Length() * value;
     }
   }
 }
