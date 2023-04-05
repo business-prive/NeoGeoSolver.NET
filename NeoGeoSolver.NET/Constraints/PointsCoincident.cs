@@ -12,7 +12,7 @@ public class PointsCoincident : Constraint {
     p0 = pt0;
     p1 = pt1;
   }
-  
+
 	public override IEnumerable<Expression> equations {
 		get {
 			var pe0 = p0.exp;
@@ -20,10 +20,5 @@ public class PointsCoincident : Constraint {
 			yield return pe0.x - pe1.x;
 			yield return pe0.y - pe1.y;
 		}
-	}
-
-	public IEntity GetOtherPoint(IEntity p) {
-		if(p0 == p) return p1;
-		return p0;
 	}
 }

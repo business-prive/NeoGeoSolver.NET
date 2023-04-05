@@ -34,6 +34,7 @@ public class Point : Entity
 	{
 		x.value = pos.X;
 		y.value = pos.Y;
+    z.value = pos.z;
 	}
 
 	public Vector3 pos
@@ -72,13 +73,13 @@ public class Point : Entity
 		}
 	}
 
-	private bool IsCoincidentWith(IEntity point, IEntity exclude)
+	private bool IsCoincidentWith(Point point, Point exclude)
 	{
 		if (IsSameAs(point, this)) return true;
 		return false;
 	}
 
-	public bool IsCoincidentWith(IEntity point)
+	public bool IsCoincidentWith(Point point)
 	{
 		return IsCoincidentWith(point, null);
 	}

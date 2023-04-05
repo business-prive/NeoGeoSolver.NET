@@ -19,13 +19,6 @@ public class PointsDistance : Value {
 		Satisfy();
 	}
 
-  public Line line {get;set;}
-	public PointsDistance(Line line)
-	{
-		this.line = line;
-		Satisfy();
-	}
-
 	public override IEnumerable<Expression> equations {
 		get {
 			yield return (p1Exp - p0Exp).Magnitude() - value.exp;

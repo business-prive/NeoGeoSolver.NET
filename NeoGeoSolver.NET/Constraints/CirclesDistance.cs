@@ -26,26 +26,22 @@ public class CirclesDistance : Value
     }
   }
 
-  public CirclesDistance(IEntity c0, IEntity c1)
+  private readonly Circle _c0;
+  private readonly Circle _c1;
+
+  public CirclesDistance(Circle c0, Circle c1)
   {
-    AddEntity(c0);
-    AddEntity(c1);
+    _c0 = c0;
+    _c1 = c1;
     value.value = 1;
     ChooseBestOption();
     Satisfy();
   }
 
-  private Point GetCenterPoint(IEntity e)
+  private bool IsCentersCoincident(Circle c0, Circle c1)
   {
-    if (e is Circle) return (e as Circle).center;
-    if (e is Arc) return (e as Arc).center;
-    return null;
-  }
-
-  private bool IsCentersCoincident(IEntity c0, IEntity c1)
-  {
-    var cp0 = GetCenterPoint(c0);
-    var cp1 = GetCenterPoint(c1);
+    var cp0 = c0.center;
+    var cp1 = c1.center;
     return cp0 != null && cp1 != null && cp0.IsCoincidentWith(cp1);
   }
 
@@ -53,8 +49,8 @@ public class CirclesDistance : Value
   {
     get
     {
-      var c0 = GetEntity(0);
-      var c1 = GetEntity(1);
+      var c0 = _c0;
+      var c1 = _c1;
       var r0 = c0.Radius();
       var r1 = c1.Radius();
       if (IsCentersCoincident(c0, c1))

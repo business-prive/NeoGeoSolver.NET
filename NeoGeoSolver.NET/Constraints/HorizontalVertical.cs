@@ -7,34 +7,32 @@ namespace NeoGeoSolver.NET.Constraints;
 public class HorizontalVertical : Constraint {
 	private ExpressionVector p0Exp {
 		get {
-			return GetPointInPlane(0);
+			return _p0.exp;
 		}
 	}
 
 	private ExpressionVector p1Exp {
 		get {
-			return GetPointInPlane(1);
+			return _p1.exp;
 		}
-	}
-
-	private ExpressionVector GetPointInPlane(int index) {
-		if(HasEntitiesOfType(EntityType.Point, 2)) {
-			return GetEntityOfType(EntityType.Point, index).PointExpInPlane();
-		}
-		return GetEntityOfType(EntityType.Line, 0).GetPointAtInPlane(index);
 	}
 
 	public HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.Ox;
 
-	public HorizontalVertical(IEntity p0, IEntity p1)
+  private readonly Point _p0;
+  private readonly Point _p1;
+
+	public HorizontalVertical(Point p0, Point p1)
 	{
-		AddEntity(p0);
-		AddEntity(p1);
+		_p0 = p0;
+		_p1 = p1;
 	}
 
-	public HorizontalVertical(IEntity line)
+  private readonly Line _line;
+
+	public HorizontalVertical(Line line)
 	{
-		AddEntity(line);
+		_line = line;
 	}
 
 	public override IEnumerable<Expression> equations {

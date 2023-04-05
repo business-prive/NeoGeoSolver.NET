@@ -22,7 +22,7 @@ public class Angle : Value {
 		}
 	}
 
-	public Angle(IEntity[] points)
+	public Angle(Point[] points)
 	{
 		foreach(var p in points) {
 			AddEntity(p);
@@ -30,14 +30,14 @@ public class Angle : Value {
 		Satisfy();
 	}
 
-	public Angle(IEntity arc)
+	public Angle(Arc arc)
 	{
 		AddEntity(arc);
 		value.value = Math.PI / 4;
 		Satisfy();
 	}
 
-	public Angle(IEntity l0, IEntity l1)
+	public Angle(Line l0, Line l1)
 	{
 		AddEntity(l0);
 		AddEntity(l1);
