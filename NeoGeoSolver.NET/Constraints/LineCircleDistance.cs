@@ -5,39 +5,9 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class LineCircleDistance : Value
 {
-  public Line line
-  {
-    get;set;
-  }
+  public Line Line { get; }
 
-  public Circle circle
-  {
-    get;set;
-  }
-
-  public ExpressionVector centerExp
-  {
-    get
-    {
-      return circle.CenterExpr();
-    }
-  }
-
-  public ExpressionVector lineP0Exp
-  {
-    get
-    {
-      return line.p0.exp;
-    }
-  }
-
-  public ExpressionVector lineP1Exp
-  {
-    get
-    {
-      return line.p1.exp;
-    }
-  }
+  public Circle Circle { get; }
 
   public enum Option
   {
@@ -61,8 +31,8 @@ public class LineCircleDistance : Value
 
   public LineCircleDistance(Line line, Circle circle)
   {
-    this.line = line;
-    this.circle = circle;
+    Line = line;
+    Circle = circle;
     SetValue(1.0);
     ChooseBestOption();
     Satisfy();
@@ -75,10 +45,10 @@ public class LineCircleDistance : Value
       switch (option)
       {
         case Option.Positive:
-          yield return ConstraintExp.PointLineDistance(centerExp, lineP0Exp, lineP1Exp) - circle.RadiusExpr() - value;
+          yield return ConstraintExp.PointLineDistance(Circle.CentreExpr(), Line.p0.exp, Line.p1.exp) - Circle.RadiusExpr() - value;
           break;
         case Option.Negative:
-          yield return ConstraintExp.PointLineDistance(centerExp, lineP0Exp, lineP1Exp) + circle.RadiusExpr() + value;
+          yield return ConstraintExp.PointLineDistance(Circle.CentreExpr(), Line.p0.exp, Line.p1.exp) + Circle.RadiusExpr() + value;
           break;
       }
     }

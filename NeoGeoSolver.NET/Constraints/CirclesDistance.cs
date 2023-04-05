@@ -66,7 +66,7 @@ public class CirclesDistance : Value
       }
       else
       {
-        var dist = (c0.CenterExpr() - c1.CenterExpr()).Magnitude();
+        var dist = (c0.CentreExpr() - c1.CentreExpr()).Magnitude();
         switch (option)
         {
           case Option.Outside:

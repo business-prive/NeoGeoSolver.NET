@@ -45,7 +45,7 @@ public class Circle : Entity
     return Expression.Abs(Radius);
   }
 
-  public ExpressionVector CenterExpr()
+  public ExpressionVector CentreExpr()
   {
     return Centre.exp;
   }
