@@ -1,10 +1,11 @@
-﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Entities;
+
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public class PointsAngle : Value {
+public class ArcAngle : Value {
 	private bool _supplementary;
 	public bool supplementary {
 		get {
@@ -12,23 +13,17 @@ public class PointsAngle : Value {
 		}
 		set {
 			if(value == _supplementary) return;
-  		supplementary = value;
+			supplementary = value;
 			this.value.value = 2.0 * Math.PI - this.value.value;
+			}
 		}
-	}
 
-  private readonly Point[] _points = new Point[4];
-	public PointsAngle(Point[] points)
+  private readonly Arc _arc;
+
+	public ArcAngle(Arc arc)
 	{
-    if (points.Length != 4)
-    {
-      throw new ArgumentOutOfRangeException();
-    }
-
-		_points[0] = points[0];
-		_points[1] = points[1];
-		_points[2] = points[2];
-		_points[3] = points[3];
+		_arc = arc;
+		value.value = Math.PI / 4;
 		Satisfy();
 	}
 
@@ -37,18 +32,21 @@ public class PointsAngle : Value {
 			var p = GetPointsExp();
 			var d0 = p[0] - p[1];
 			var d1 = p[3] - p[2];
-			var angle = ConstraintExp.Angle2d(d0, d1);
+			var angle = ConstraintExp.Angle2d(d0, d1, true);
 			yield return angle - value;
 		}
 	}
 
 	private ExpressionVector[] GetPointsExp() {
 		var p = new ExpressionVector[4];
-			for(var i = 0; i < 4; i++) {
-				p[i] = _points[i].exp;
-			}
+			var arc = _arc;
+			p[0] = arc.p0.exp;
+			p[1] = arc.center.exp;
+			p[2] = arc.center.exp;
+			p[3] = arc.p1.exp;
 			if(supplementary) {
-				SystemExt.Swap(ref p[2], ref p[3]);
+				SystemExt.Swap(ref p[0], ref p[3]);
+				SystemExt.Swap(ref p[1], ref p[2]);
 			}
 
 		return p;

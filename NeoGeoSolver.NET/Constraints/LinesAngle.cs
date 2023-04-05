@@ -1,10 +1,10 @@
-﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Entities;
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public class PointsAngle : Value {
+public class LinesAngle : Value {
 	private bool _supplementary;
 	public bool supplementary {
 		get {
@@ -12,23 +12,18 @@ public class PointsAngle : Value {
 		}
 		set {
 			if(value == _supplementary) return;
-  		supplementary = value;
-			this.value.value = 2.0 * Math.PI - this.value.value;
+			supplementary = value;
+			this.value.value = -(Math.Sign(this.value.value) * Math.PI - this.value.value);
 		}
 	}
 
-  private readonly Point[] _points = new Point[4];
-	public PointsAngle(Point[] points)
-	{
-    if (points.Length != 4)
-    {
-      throw new ArgumentOutOfRangeException();
-    }
+  private readonly Line _l0;
+  private readonly Line _l1;
 
-		_points[0] = points[0];
-		_points[1] = points[1];
-		_points[2] = points[2];
-		_points[3] = points[3];
+	public LinesAngle(Line l0, Line l1)
+	{
+		_l0 = l0;
+		_l1 = l1;
 		Satisfy();
 	}
 
@@ -44,9 +39,12 @@ public class PointsAngle : Value {
 
 	private ExpressionVector[] GetPointsExp() {
 		var p = new ExpressionVector[4];
-			for(var i = 0; i < 4; i++) {
-				p[i] = _points[i].exp;
-			}
+			var l0 = _l0;
+			p[0] = l0.p0.exp;
+			p[1] = l0.p1.exp;
+			var l1 = _l1;
+			p[2] = l1.p0.exp;
+			p[3] = l1.p1.exp;
 			if(supplementary) {
 				SystemExt.Swap(ref p[2], ref p[3]);
 			}
