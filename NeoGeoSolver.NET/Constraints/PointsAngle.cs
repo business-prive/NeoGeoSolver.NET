@@ -5,7 +5,7 @@ using NeoGeoSolver.NET.Utils;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public class Angle : Value {
+public class PointsAngle : Value {
 	private bool _supplementary;
 	public bool supplementary {
 		get {
@@ -23,7 +23,7 @@ public class Angle : Value {
 	}
 
   private readonly Point[] _points = new Point[4];
-	public Angle(Point[] points)
+	public PointsAngle(Point[] points)
 	{
     if (points.Length != 4)
     {
@@ -39,7 +39,7 @@ public class Angle : Value {
 
   private readonly Arc _arc;
 
-	public Angle(Arc arc)
+	public PointsAngle(Arc arc)
 	{
 		_arc = arc;
 		value.value = Math.PI / 4;
@@ -49,7 +49,7 @@ public class Angle : Value {
   private readonly Line _l0;
   private readonly Line _l1;
 
-	public Angle(Line l0, Line l1)
+	public PointsAngle(Line l0, Line l1)
 	{
 		_l0 = l0;
 		_l1 = l1;
