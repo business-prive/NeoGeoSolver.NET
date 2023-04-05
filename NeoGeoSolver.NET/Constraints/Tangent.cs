@@ -16,6 +16,7 @@ public class Tangent : Constraint
 
   private readonly Line _l0;
   private readonly Line _l1;
+
   public Tangent(Line l0, Line l1)
   {
     _l0 = l0;
@@ -129,6 +130,7 @@ public class Tangent : Constraint
 
     if (s0 != null)
     {
+#if false
       PointOn pOn = null;
       if (s0.Point0.IsCoincidentWithCurve(l1, ref pOn))
       {
@@ -145,10 +147,12 @@ public class Tangent : Constraint
         c = new Expression(_t1) - pOn.GetValueParam();
         return true;
       }
+#endif
     }
 
     if (s1 != null)
     {
+#if false
       PointOn pOn = null;
       if (s1.Point0.IsCoincidentWithCurve(l0, ref pOn))
       {
@@ -165,6 +169,7 @@ public class Tangent : Constraint
         tv1 = 1.0;
         return true;
       }
+#endif
     }
 
     return false;
@@ -176,6 +181,7 @@ public class Tangent : Constraint
   {
     get
     {
+#if false
       var l0 = _l0;
       var l1 = _l1;
 
@@ -222,6 +228,8 @@ public class Tangent : Constraint
         yield return eq.x;
         yield return eq.y;
       }
+#endif
+      return Enumerable.Empty<Expression>();
     }
   }
 }
