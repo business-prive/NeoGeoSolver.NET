@@ -40,10 +40,10 @@ public class ArcAngle : Value {
 	private ExpressionVector[] GetPointsExp() {
 		var p = new ExpressionVector[4];
 			var arc = _arc;
-			p[0] = arc.p0.exp;
-			p[1] = arc.center.exp;
-			p[2] = arc.center.exp;
-			p[3] = arc.p1.exp;
+			p[0] = arc.Point0.exp;
+			p[1] = arc.Centre.exp;
+			p[2] = arc.Centre.exp;
+			p[3] = arc.Point1.exp;
 			if(supplementary) {
 				SystemExt.Swap(ref p[0], ref p[3]);
 				SystemExt.Swap(ref p[1], ref p[2]);
