@@ -4,8 +4,14 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Circle : Entity
 {
-  public Point Centre = new();
-  public Param Radius = new("r");
+  public readonly Point Centre = new();
+  public readonly Param Radius = new("r");
+
+  public Circle(Point centre, Param radius)
+  {
+    Centre = centre;
+    Radius = radius;
+  }
 
   public override IEnumerable<Expression> Equations
   {

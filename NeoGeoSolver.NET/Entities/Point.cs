@@ -4,9 +4,9 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Point : Entity
 {
-  public Param x = new("x");
-  public Param y = new("y");
-  public Param z = new("z");
+  public readonly Param x = new("x");
+  public readonly Param y = new("y");
+  public readonly Param z = new("z");
 
   public Point(double xVal, double yVal, double zVal)
   {

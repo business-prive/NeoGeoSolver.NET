@@ -4,8 +4,8 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Line : Entity
 {
-  public Point Point0 = new();
-  public Point Point1 = new();
+  public readonly Point Point0 = new();
+  public readonly Point Point1 = new();
 
   public Line(Point p0, Point p1)
   {
