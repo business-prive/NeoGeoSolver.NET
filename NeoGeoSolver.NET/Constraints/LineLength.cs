@@ -4,9 +4,9 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public class Length : Value {
+public class LineLength : Value {
   private readonly Line _line;
-	public Length(Line line)
+	public LineLength(Line line)
 	{
 		_line = line;
 		Satisfy();
