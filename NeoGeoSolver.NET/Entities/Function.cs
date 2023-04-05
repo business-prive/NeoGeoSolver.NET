@@ -76,7 +76,7 @@ public class Function : Entity
   private void InitParser()
   {
     _parser = new ExpressionParser("0");
-    _parser.parameters.Add(_t);
+    _parser.Parameters.Add(_t);
     x = "t";
     y = "cos(t * pi)";
   }
