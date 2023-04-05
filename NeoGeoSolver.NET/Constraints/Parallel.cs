@@ -39,8 +39,8 @@ public class Parallel : Constraint
   {
     get
     {
-      var d0 = _l0.p0.exp - _l0.p1.exp;
-      var d1 = _l1.p0.exp - _l1.p1.exp;
+      var d0 = _l0.Point0.exp - _l0.Point1.exp;
+      var d1 = _l1.Point0.exp - _l1.Point1.exp;
 
       var angle = ConstraintExp.Angle2d(d0, d1);
       switch (option)
