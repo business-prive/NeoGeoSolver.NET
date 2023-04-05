@@ -10,15 +10,16 @@ public class Point : Entity
 
   public Point(double xVal, double yVal, double zVal)
   {
-    x.value = xVal;
-    y.value = yVal;
-    z.value = zVal;
+    x.Value = xVal;
+    y.Value = yVal;
+    z.Value = zVal;
   }
 
   public Point() :
     this(0, 0, 0)
   {
   }
+
   public override IEnumerable<Expression> Equations
   {
     get

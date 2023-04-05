@@ -12,10 +12,10 @@ public class LinesEqualLength : Value
   {
     _l0 = l0;
     _l1 = l1;
-    value.value = 1.0;
+    value.Value = 1.0;
   }
 
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {

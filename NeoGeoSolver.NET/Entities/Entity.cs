@@ -4,7 +4,14 @@ namespace NeoGeoSolver.NET.Entities;
 
 public abstract class Entity : IEntity
 {
-  public virtual IEnumerable<Param> Parameters { get { yield break; } }
+  public virtual IEnumerable<Param> Parameters
+  {
+    get
+    {
+      yield break;
+    }
+  }
+
   public abstract IEnumerable<Expression> Equations { get; }
 
   public abstract ExpressionVector PointOn(Expression t);

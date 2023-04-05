@@ -28,7 +28,7 @@ public class Tangent : Constraint
     }
   }
 
-  public override IEnumerable<Param> parameters
+  public override IEnumerable<Param> Parameters
   {
     get
     {
@@ -59,11 +59,11 @@ public class Tangent : Constraint
   private bool Satisfy()
   {
     var sys = new EquationSystem();
-    sys.AddParameters(parameters);
+    sys.AddParameters(Parameters);
     _addAngle = false;
-    var exprs = equations.ToList();
+    var exprs = Equations.ToList();
     _addAngle = true;
-    sys.AddEquations(equations);
+    sys.AddEquations(Equations);
 
     var bestI = 0.0;
     var bestJ = 0.0;
@@ -72,19 +72,19 @@ public class Tangent : Constraint
     {
       for (var j = 0.0; j < 1.0; j += 0.25 / 2.0)
       {
-        _t0.value = i;
-        _t1.value = j;
+        _t0.Value = i;
+        _t1.Value = j;
         sys.Solve();
         var curValue = exprs.Sum(e => Math.Abs(e.Eval()));
         if (min >= 0.0 && min < curValue) continue;
-        bestI = _t0.value;
-        bestJ = _t1.value;
+        bestI = _t0.Value;
+        bestJ = _t1.Value;
         min = curValue;
       }
     }
 
-    _t0.value = bestI;
-    _t1.value = bestJ;
+    _t0.Value = bestI;
+    _t1.Value = bestJ;
     return true;
   }
 
@@ -170,7 +170,7 @@ public class Tangent : Constraint
 
   private bool _addAngle = true;
 
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {
@@ -200,14 +200,14 @@ public class Tangent : Constraint
         }
       }
 
-      var tv0 = _t0.value;
-      var tv1 = _t1.value;
+      var tv0 = _t0.Value;
+      var tv1 = _t1.Value;
       Expression c = null;
       Param p = null;
       if (IsCoincident(ref tv0, ref tv1, ref c, ref p))
       {
-        _t0.value = tv0;
-        _t1.value = tv1;
+        _t0.Value = tv0;
+        _t1.Value = tv1;
         if (c != null) yield return c;
       }
       else

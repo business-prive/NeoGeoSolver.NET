@@ -12,10 +12,10 @@ public class CirclesEqualRadius : Value
   {
     _c0 = c0;
     _c1 = c1;
-    value.value = 1.0;
+    value.Value = 1.0;
   }
 
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {

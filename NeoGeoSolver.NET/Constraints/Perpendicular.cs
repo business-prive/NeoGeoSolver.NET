@@ -35,7 +35,7 @@ public class Perpendicular : Constraint
     ChooseBestOption();
   }
 
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {

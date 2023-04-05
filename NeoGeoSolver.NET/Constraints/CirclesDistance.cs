@@ -33,7 +33,7 @@ public class CirclesDistance : Value
   {
     _c0 = c0;
     _c1 = c1;
-    value.value = 1;
+    value.Value = 1;
     ChooseBestOption();
     Satisfy();
   }
@@ -45,7 +45,7 @@ public class CirclesDistance : Value
     return cp0 != null && cp1 != null && cp0.IsCoincidentWith(cp1);
   }
 
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {
@@ -57,11 +57,11 @@ public class CirclesDistance : Value
       {
         if (option == Option.FirstInside)
         {
-          yield return r0 - r1 - value.exp;
+          yield return r0 - r1 - value.Expr;
         }
         else
         {
-          yield return r1 - r0 - value.exp;
+          yield return r1 - r0 - value.Expr;
         }
       }
       else
@@ -70,13 +70,13 @@ public class CirclesDistance : Value
         switch (option)
         {
           case Option.Outside:
-            yield return (dist - r0 - r1) - value.exp;
+            yield return (dist - r0 - r1) - value.Expr;
             break;
           case Option.FirstInside:
-            yield return (r1 - r0 - dist) - value.exp;
+            yield return (r1 - r0 - dist) - value.Expr;
             break;
           case Option.SecondInside:
-            yield return (r0 - r1 - dist) - value.exp;
+            yield return (r0 - r1 - dist) - value.Expr;
             break;
         }
       }

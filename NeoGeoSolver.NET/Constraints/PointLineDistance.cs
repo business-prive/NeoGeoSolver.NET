@@ -17,7 +17,7 @@ public class PointLineDistance : Value
     Satisfy();
   }
 
-  public override IEnumerable<Expression> equations
+  public override IEnumerable<Expression> Equations
   {
     get
     {

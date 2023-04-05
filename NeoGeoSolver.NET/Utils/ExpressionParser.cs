@@ -128,7 +128,7 @@ public class ExpressionParser {
 	}
 
 	private Param GetParam(string name) {
-		return parameters.Find(p => p.name == name);
+		return parameters.Find(p => p.Name == name);
 	}
 
 	private void Skip(char c) {
