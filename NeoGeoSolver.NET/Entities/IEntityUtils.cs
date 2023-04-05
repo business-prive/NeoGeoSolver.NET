@@ -14,6 +14,6 @@ public static class EntityUtils
 
     return plane.ToFrom(entity.PointOn(t), entity.plane);
 #endif
-    return null;
+    return new ExpressionVector(Expression.Zero, Expression.Zero, Expression.Zero);
   }
 }
