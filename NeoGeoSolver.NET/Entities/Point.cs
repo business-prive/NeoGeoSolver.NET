@@ -1,89 +1,70 @@
-﻿using System.Numerics;
-using NeoGeoSolver.NET.Solver;
+﻿using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Entities;
 
 public class Point : Entity
 {
-	public Param x = new("x");
-	public Param y = new("y");
-	public Param z = new("z");
+  public Param x = new("x");
+  public Param y = new("y");
+  public Param z = new("z");
 
-	public override IEnumerable<Expression> equations
-	{
-		get
-		{
-			yield break;
-		}
-	}
+  public Point(double xVal, double yVal, double zVal)
+  {
+    x.value = xVal;
+    y.value = yVal;
+    z.value = zVal;
+  }
 
-	public Vector3 GetPosition()
-	{
-		return new Vector3((float) x.value, (float) y.value, (float) z.value);
-	}
+  public Point() :
+    this(0, 0, 0)
+  {
+  }
+  public override IEnumerable<Expression> equations
+  {
+    get
+    {
+      yield break;
+    }
+  }
 
-	public void SetPosition(Vector3 pos)
-	{
-		x.value = pos.X;
-		y.value = pos.Y;
-    z.value = pos.Z;
-	}
+  public ExpressionVector exp => new(x, y, z);
 
-	public Vector3 pos
-	{
-		get
-		{
-			return GetPosition();
-		}
-		set
-		{
-			SetPosition(value);
-		}
-	}
+  public override IEnumerable<Param> parameters
+  {
+    get
+    {
+      yield return x;
+      yield return y;
+    }
+  }
 
-	private ExpressionVector _exp;
+  public bool IsCoincidentWith(Point point)
+  {
+    if (IsSameAs(point, this))
+    {
+      return true;
+    }
 
-	public ExpressionVector exp
-	{
-		get
-		{
-			if (_exp == null)
-			{
-				_exp = new ExpressionVector(x, y, z);
-			}
+    return false;
+  }
 
-			return _exp;
-		}
-	}
+  private static bool IsSameAs(IEntity e0, IEntity e1)
+  {
+    if (e0 == null)
+    {
+      return e1 == null;
+    }
 
-	public override IEnumerable<Param> parameters
-	{
-		get
-		{
-			yield return x;
-			yield return y;
-		}
-	}
+    if (e1 == null)
+    {
+      return e0 == null;
+    }
 
-	private bool IsCoincidentWith(Point point, Point exclude)
-	{
-		if (IsSameAs(point, this)) return true;
-		return false;
-	}
-
-	public bool IsCoincidentWith(Point point)
-	{
-		return IsCoincidentWith(point, null);
-	}
-
-	private static bool IsSameAs(IEntity e0, IEntity e1) {
-    if(e0 == null) return e1 == null;
-    if(e1 == null) return e0 == null;
     return e0 == e1 || e0.GetType() == e1.GetType();
   }
-  
-	public override ExpressionVector PointOn(Expression t)
-	{
-		return exp;
-	}
+
+  public override ExpressionVector PointOn(Expression t)
+  {
+    return exp;
+  }
 }
