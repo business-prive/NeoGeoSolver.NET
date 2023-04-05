@@ -18,7 +18,7 @@ public class Line : Entity {
 		return p1.exp - p0.exp;
 	}
 
-	public Expression Length() {
+	public Expression LengthExpr() {
 		return (p1.exp - p0.exp).Magnitude();
 	}
 }

@@ -16,8 +16,8 @@ public class PointCircleDistance : Value {
 	public override IEnumerable<Expression> equations {
 		get {
 			var pPos = _pt.exp;
-			var cCen = _circle.Center();
-			var cRad = _circle.Radius();
+			var cCen = _circle.CenterExpr();
+			var cRad = _circle.RadiusExpr();
 
 			yield return (pPos - cCen).Magnitude() - cRad - value.exp;
 		}

@@ -19,7 +19,7 @@ public class CirclesEqualRadius : Value
   {
     get
     {
-      yield return _c0.Radius() - _c1.Radius() * value;
+      yield return _c0.RadiusExpr() - _c1.RadiusExpr() * value;
     }
   }
 }

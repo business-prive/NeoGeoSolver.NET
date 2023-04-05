@@ -14,7 +14,7 @@ public class LineLength : Value {
 
 	public override IEnumerable<Expression> equations {
 		get {
-			yield return _line.Length() - value;
+			yield return _line.LengthExpr() - value;
 		}
 	}
 }

@@ -52,15 +52,15 @@ public class EllipticArc : Entity {
 		);
 	}
 	
-	public Expression Length() {
-		return GetAngleExp() * Radius();
+	public Expression LengthExpr() {
+		return GetAngleExp() * RadiusExpr();
 	}
 
-	public Expression Radius() {
+	public Expression RadiusExpr() {
 		return (p0.exp - c.exp).Magnitude();
 	}
 
-	public ExpressionVector Center() {
+	public ExpressionVector CentreExpr() {
 		return c.exp;
 	}
 }

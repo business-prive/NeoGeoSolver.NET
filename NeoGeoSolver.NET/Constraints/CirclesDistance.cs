@@ -40,8 +40,8 @@ public class CirclesDistance : Value
 
   private bool IsCentersCoincident(Circle c0, Circle c1)
   {
-    var cp0 = c0.center;
-    var cp1 = c1.center;
+    var cp0 = c0.Centre;
+    var cp1 = c1.Centre;
     return cp0 != null && cp1 != null && cp0.IsCoincidentWith(cp1);
   }
 
@@ -51,8 +51,8 @@ public class CirclesDistance : Value
     {
       var c0 = _c0;
       var c1 = _c1;
-      var r0 = c0.Radius();
-      var r1 = c1.Radius();
+      var r0 = c0.RadiusExpr();
+      var r1 = c1.RadiusExpr();
       if (IsCentersCoincident(c0, c1))
       {
         if (option == Option.FirstInside)
@@ -66,7 +66,7 @@ public class CirclesDistance : Value
       }
       else
       {
-        var dist = (c0.Center() - c1.Center()).Magnitude();
+        var dist = (c0.CenterExpr() - c1.CenterExpr()).Magnitude();
         switch (option)
         {
           case Option.Outside:

@@ -13,7 +13,7 @@ public class Diameter : Value {
 		Satisfy();
 	}
 
-	private Expression radius { get { return _circle.Radius(); } }
+	private Expression radius { get { return _circle.RadiusExpr(); } }
 
 	public override IEnumerable<Expression> equations {
 		get {

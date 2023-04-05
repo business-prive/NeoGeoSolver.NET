@@ -19,7 +19,7 @@ public class LinesEqualLength : Value
   {
     get
     {
-      yield return _l0.Length() - _l1.Length() * value;
+      yield return _l0.LengthExpr() - _l1.LengthExpr() * value;
     }
   }
 }
