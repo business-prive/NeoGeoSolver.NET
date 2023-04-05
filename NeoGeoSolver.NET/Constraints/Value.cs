@@ -5,7 +5,7 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public abstract class Value : Constraint
 {
-  protected Param value = new("value");
+  protected readonly Param value = new("value");
   public bool Reference { get; set; }
 
   private Vector3 _position;

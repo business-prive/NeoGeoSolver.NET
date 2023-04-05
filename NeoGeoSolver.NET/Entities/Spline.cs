@@ -4,7 +4,7 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Spline : Entity
 {
-  public Point[] Points = new Point[4];
+  public readonly Point[] Points = new Point[4];
 
   public Spline(Point[] points)
   {

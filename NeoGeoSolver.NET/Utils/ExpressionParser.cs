@@ -38,7 +38,7 @@ public class ExpressionParser {
 	private string _toParse;
 	private int _index = 0;
     
-	public List<Param> parameters = new();
+	public readonly List<Param> parameters = new();
 
 	public static void Test() {
 		List<string> exps = new()

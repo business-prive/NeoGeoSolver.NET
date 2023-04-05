@@ -25,7 +25,7 @@ public class ExpressionBasis2d
     p.y = _py;
   }
 
-  public IEnumerable<Param> parameters
+  public IEnumerable<Param> Parameters
   {
     get
     {
@@ -41,7 +41,7 @@ public class ExpressionBasis2d
   public override string ToString()
   {
     var result = "";
-    foreach (var p in parameters)
+    foreach (var p in Parameters)
     {
       result += p.Value + " ";
     }

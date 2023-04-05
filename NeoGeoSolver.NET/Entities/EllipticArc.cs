@@ -5,27 +5,27 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class EllipticArc : Entity
 {
-  public Point p0 = new();
-  public Point p1 = new();
-  public Point c = new();
+  public readonly Point Point0 = new();
+  public readonly Point Point1 = new();
+  public readonly Point Centre = new();
 
   public override IEnumerable<Expression> Equations
   {
     get
     {
-      if (!p0.IsCoincidentWith(p1))
+      if (!Point0.IsCoincidentWith(Point1))
       {
-        yield return (p0.exp - c.exp).Magnitude() - (p1.exp - c.exp).Magnitude();
+        yield return (Point0.exp - Centre.exp).Magnitude() - (Point1.exp - Centre.exp).Magnitude();
       }
     }
   }
 
   public Expression GetAngleExp()
   {
-    if (!p0.IsCoincidentWith(p1))
+    if (!Point0.IsCoincidentWith(Point1))
     {
-      var d0 = p0.exp - c.exp;
-      var d1 = p1.exp - c.exp;
+      var d0 = Point0.exp - Centre.exp;
+      var d1 = Point1.exp - Centre.exp;
       return ConstraintExp.Angle2d(d0, d1, angle360: true);
     }
 
@@ -37,9 +37,9 @@ public class EllipticArc : Entity
     var angle = GetAngleExp();
     var cos = Expression.Cos(angle * t);
     var sin = Expression.Sin(angle * t);
-    var rv = p0.exp - c.exp;
+    var rv = Point0.exp - Centre.exp;
 
-    return c.exp + new ExpressionVector(
+    return Centre.exp + new ExpressionVector(
       cos * rv.x - sin * rv.y,
       sin * rv.x + cos * rv.y,
       0.0
@@ -51,13 +51,12 @@ public class EllipticArc : Entity
     var angle = GetAngleExp();
     var cos = Expression.Cos(angle * t + Math.PI / 2);
     var sin = Expression.Sin(angle * t + Math.PI / 2);
-    var rv = p0.exp - c.exp;
+    var rv = Point0.exp - Centre.exp;
 
     return new ExpressionVector(
       cos * rv.x - sin * rv.y,
       sin * rv.x + cos * rv.y,
-      0.0
-    );
+      0.0);
   }
 
   public Expression LengthExpr()
@@ -67,11 +66,11 @@ public class EllipticArc : Entity
 
   public Expression RadiusExpr()
   {
-    return (p0.exp - c.exp).Magnitude();
+    return (Point0.exp - Centre.exp).Magnitude();
   }
 
   public ExpressionVector CentreExpr()
   {
-    return c.exp;
+    return Centre.exp;
   }
 }

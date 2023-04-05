@@ -6,7 +6,7 @@ public class ExpressionVector
 {
   public Expression x;
   public Expression y;
-  public Expression z;
+  public readonly Expression z;
 
   public ExpressionVector(Expression xExpr, Expression yExpr, Expression zExpr)
   {

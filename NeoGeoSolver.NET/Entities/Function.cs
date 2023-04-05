@@ -5,9 +5,9 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Function : Entity
 {
-  public Point p0 = new();
-  public Point p1 = new();
-  public Point c = new();
+  public readonly Point Point0 = new();
+  public readonly Point Point1 = new();
+  public readonly Point Centre = new();
 
   private string _functionX;
   private string _functionY;
@@ -105,16 +105,16 @@ public class Function : Entity
     {
       var e0 = _basis.TransformPosition(GetExpClone(_t0));
 
-      var eq0 = e0 - p0.exp;
+      var eq0 = e0 - Point0.exp;
       yield return eq0.x;
       yield return eq0.y;
 
       var e1 = _basis.TransformPosition(GetExpClone(_t1));
-      var eq1 = e1 - p1.exp;
+      var eq1 = e1 - Point1.exp;
       yield return eq1.x;
       yield return eq1.y;
 
-      var eqc = _basis.p - c.exp;
+      var eqc = _basis.p - Centre.exp;
       yield return eqc.x;
       yield return eqc.y;
 
@@ -139,7 +139,7 @@ public class Function : Entity
         yield return _t1;
       }
 
-      foreach (var p in _basis.parameters)
+      foreach (var p in _basis.Parameters)
       {
         yield return p;
       }

@@ -23,7 +23,7 @@ public class Ellipse : Entity
     {
       yield return Radius0;
       yield return Radius1;
-      foreach (var p in _basis.parameters)
+      foreach (var p in _basis.Parameters)
       {
         yield return p;
       }

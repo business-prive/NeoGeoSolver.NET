@@ -14,6 +14,16 @@ public class Tangent : Constraint
   private Param _t0 = new("t0");
   private Param _t1 = new("t1");
 
+  private readonly Line _l0;
+  private readonly Line _l1;
+  public Tangent(Line l0, Line l1)
+  {
+    _l0 = l0;
+    _l1 = l1;
+    Satisfy();
+    ChooseBestOption();
+  }
+
   public Option option { get; set; }
 
   protected override Enum optionInternal
@@ -46,14 +56,6 @@ public class Tangent : Constraint
         if (p != null) yield return p;
       }
     }
-  }
-
-  public Tangent(IEntity l0, IEntity l1)
-  {
-    AddEntity(l0);
-    AddEntity(l1);
-    Satisfy();
-    ChooseBestOption();
   }
 
   private bool Satisfy()
@@ -90,34 +92,34 @@ public class Tangent : Constraint
 
   private bool IsCoincident(ref double tv0, ref double tv1, ref Expression c, ref Param p)
   {
-    var l0 = GetEntity(0);
-    var l1 = GetEntity(1);
+    var l0 = _l0;
+    var l1 = _l1;
     var s0 = l0;
     var s1 = l1;
     if (s0 != null && s1 != null)
     {
-      if (s0.begin.IsCoincidentWith(s1.begin))
+      if (s0.Point0.IsCoincidentWith(s1.Point0))
       {
         tv0 = 0.0;
         tv1 = 0.0;
         return true;
       }
 
-      if (s0.begin.IsCoincidentWith(s1.end))
+      if (s0.Point0.IsCoincidentWith(s1.Point1))
       {
         tv0 = 0.0;
         tv1 = 1.0;
         return true;
       }
 
-      if (s0.end.IsCoincidentWith(s1.begin))
+      if (s0.Point1.IsCoincidentWith(s1.Point0))
       {
         tv0 = 1.0;
         tv1 = 0.0;
         return true;
       }
 
-      if (s0.end.IsCoincidentWith(s1.end))
+      if (s0.Point1.IsCoincidentWith(s1.Point1))
       {
         tv0 = 1.0;
         tv1 = 1.0;
@@ -128,7 +130,7 @@ public class Tangent : Constraint
     if (s0 != null)
     {
       PointOn pOn = null;
-      if (s0.begin.IsCoincidentWithCurve(l1, ref pOn))
+      if (s0.Point0.IsCoincidentWithCurve(l1, ref pOn))
       {
         tv0 = 0.0;
         p = _t1;
@@ -136,7 +138,7 @@ public class Tangent : Constraint
         return true;
       }
 
-      if (s0.end.IsCoincidentWithCurve(l1, ref pOn))
+      if (s0.Point1.IsCoincidentWithCurve(l1, ref pOn))
       {
         tv0 = 1.0;
         p = _t1;
@@ -148,7 +150,7 @@ public class Tangent : Constraint
     if (s1 != null)
     {
       PointOn pOn = null;
-      if (s1.begin.IsCoincidentWithCurve(l0, ref pOn))
+      if (s1.Point0.IsCoincidentWithCurve(l0, ref pOn))
       {
         p = _t0;
         c = new Expression(_t0) - pOn.GetValueParam();
@@ -156,7 +158,7 @@ public class Tangent : Constraint
         return true;
       }
 
-      if (s1.end.IsCoincidentWithCurve(l0, ref pOn))
+      if (s1.Point1.IsCoincidentWithCurve(l0, ref pOn))
       {
         p = _t0;
         c = new Expression(_t0) - pOn.GetValueParam();
@@ -174,8 +176,8 @@ public class Tangent : Constraint
   {
     get
     {
-      var l0 = GetEntity(0);
-      var l1 = GetEntity(1);
+      var l0 = _l0;
+      var l1 = _l1;
 
       var dir0 = l0.TangentAt(_t0);
       var dir1 = l1.TangentAt(_t1);
@@ -208,7 +210,10 @@ public class Tangent : Constraint
       {
         _t0.Value = tv0;
         _t1.Value = tv1;
-        if (c != null) yield return c;
+        if (c != null)
+        {
+          yield return c;
+        }
       }
       else
       {

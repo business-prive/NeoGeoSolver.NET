@@ -5,35 +5,21 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class PointOn : Value
 {
-  public Point point
+  public Point Point { get; }
+
+  public IEntity On { get; }
+
+  public PointOn(Point point, IEntity on)
   {
-    get
-    {
-      return (Point) GetEntity(0);
-    }
-    set
-    {
-      SetEntity(0, value);
-    }
+    Point = point;
+    On = on;
   }
 
-  public IEntity on
+  public ExpressionVector PointExp
   {
     get
     {
-      return GetEntity(1);
-    }
-    set
-    {
-      SetEntity(1, value);
-    }
-  }
-
-  public ExpressionVector pointExp
-  {
-    get
-    {
-      return point.exp;
+      return Point.exp;
     }
   }
 
@@ -51,7 +37,11 @@ public class PointOn : Value
       value.Value = i;
       sys.Solve();
       var curValue = exprs.Sum(e => Math.Abs(e.Eval()));
-      if (min >= 0.0 && min < curValue) continue;
+      if (min >= 0.0 && min < curValue)
+      {
+        continue;
+      }
+
       bestI = value.Value;
       min = curValue;
     }
@@ -64,8 +54,8 @@ public class PointOn : Value
   {
     get
     {
-      var p = pointExp;
-      var eq = on.PointOnInPlane(value) - p;
+      var p = PointExp;
+      var eq = On.PointOnInPlane(value) - p;
 
       yield return eq.x;
       yield return eq.y;

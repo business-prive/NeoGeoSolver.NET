@@ -5,13 +5,13 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class PointCircleDistance : Value
 {
-  private readonly Point _pt;
-  private readonly Circle _circle;
+  public readonly Point Point;
+  public readonly Circle Circle;
 
-  public PointCircleDistance(Point pt, Circle c)
+  public PointCircleDistance(Point pt, Circle circle)
   {
-    _pt = pt;
-    _circle = c;
+    Point = pt;
+    Circle = circle;
     Satisfy();
   }
 
@@ -19,9 +19,9 @@ public class PointCircleDistance : Value
   {
     get
     {
-      var pPos = _pt.exp;
-      var cCen = _circle.CentreExpr();
-      var cRad = _circle.RadiusExpr();
+      var pPos = Point.exp;
+      var cCen = Circle.CentreExpr();
+      var cRad = Circle.RadiusExpr();
 
       yield return (pPos - cCen).Magnitude() - cRad - value.Expr;
     }

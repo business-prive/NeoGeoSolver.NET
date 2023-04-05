@@ -2,21 +2,21 @@
 
 public class Param
 {
-  public string Name;
+  public readonly string Name;
   public double Value;
 
   public Expression Expr { get; private set; }
 
   public Param(string name)
   {
-    this.Name = name;
+    Name = name;
     Expr = new Expression(this);
   }
 
   public Param(string name, double value)
   {
-    this.Name = name;
-    this.Value = value;
+    Name = name;
+    Value = value;
     Expr = new Expression(this);
   }
 }

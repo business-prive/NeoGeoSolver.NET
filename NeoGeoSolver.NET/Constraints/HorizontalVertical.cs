@@ -21,7 +21,7 @@ public class HorizontalVertical : Constraint
     }
   }
 
-  public HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.Ox;
+  public readonly HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.Ox;
 
   private readonly Point _p0;
   private readonly Point _p1;

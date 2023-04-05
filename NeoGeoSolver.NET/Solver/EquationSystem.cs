@@ -11,7 +11,7 @@ public class EquationSystem
   }
 
   public bool isDirty { get; private set; }
-  public int maxSteps = 20;
+  public readonly int maxSteps = 20;
   public bool revertWhenNotConverged = true;
 
   private Expression[,] _j;

@@ -39,7 +39,7 @@ public class Expression
   public Expression a;
   public Expression b;
   public Param param;
-  public double value;
+  public double Value;
 
   private Expression()
   {
@@ -47,7 +47,7 @@ public class Expression
 
   public Expression(double value)
   {
-    this.value = value;
+    Value = value;
     op = Op.Const;
   }
 
@@ -75,7 +75,7 @@ public class Expression
     }
 
     var result = new Expression();
-    result.value = value;
+    result.Value = value;
     result.op = Op.Const;
     return result;
   }
@@ -161,7 +161,7 @@ public class Expression
 
     if (a.IsConst() && b.IsConst())
     {
-      return a.value * b.value;
+      return a.Value * b.Value;
     }
 
     return new Expression(Op.Mul, a, b);
@@ -196,7 +196,7 @@ public class Expression
 
     if (a.IsConst())
     {
-      return -a.value;
+      return -a.Value;
     }
 
     if (a.op == Op.Neg)
@@ -319,7 +319,7 @@ public class Expression
     switch (op)
     {
       case Op.Const:
-        return value;
+        return Value;
       case Op.Param:
         return param.Value;
       case Op.Add:
@@ -385,17 +385,17 @@ public class Expression
 
   public bool IsZeroConst()
   {
-    return op == Op.Const && value == 0.0;
+    return op == Op.Const && Value == 0.0;
   }
 
   public bool IsOneConst()
   {
-    return op == Op.Const && value == 1.0;
+    return op == Op.Const && Value == 1.0;
   }
 
   public bool IsMinusOneConst()
   {
-    return op == Op.Const && value == -1.0;
+    return op == Op.Const && Value == -1.0;
   }
 
   public bool IsConst()
@@ -463,7 +463,7 @@ public class Expression
     switch (op)
     {
       case Op.Const:
-        return value.ToString();
+        return Value.ToString();
       case Op.Param:
         return param.Name;
       case Op.Add:
@@ -620,7 +620,7 @@ public class Expression
       a = e.a;
       b = e.b;
       param = e.param;
-      value = e.value;
+      Value = e.Value;
     }
   }
 
@@ -629,7 +629,7 @@ public class Expression
     var result = new Expression();
     result.op = op;
     result.param = param;
-    result.value = value;
+    result.Value = Value;
     if (a != null)
     {
       result.a = a.DeepClone();
