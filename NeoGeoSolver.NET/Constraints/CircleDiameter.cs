@@ -9,7 +9,7 @@ public class CircleDiameter : Value
 
   public CircleDiameter(Circle circle)
   {
-    circle = circle;
+    _circle = circle;
     Satisfy();
   }
 
