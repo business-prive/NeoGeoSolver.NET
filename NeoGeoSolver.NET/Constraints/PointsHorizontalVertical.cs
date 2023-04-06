@@ -5,22 +5,23 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class PointsHorizontalVertical : Constraint
 {
-  public readonly HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.Ox;
+  public readonly HorizontalVerticalOrientation Orientation = HorizontalVerticalOrientation.Ox;
 
   private readonly Point _p0;
   private readonly Point _p1;
 
-  public PointsHorizontalVertical(Point p0, Point p1)
+  public PointsHorizontalVertical(Point p0, Point p1, HorizontalVerticalOrientation orientation)
   {
     _p0 = p0;
     _p1 = p1;
+     Orientation = orientation;
   }
 
   public override IEnumerable<Expression> Equations
   {
     get
     {
-      switch (orientation)
+      switch (Orientation)
       {
         case HorizontalVerticalOrientation.Ox:
           yield return _p0.exp.x - _p1.exp.x;
