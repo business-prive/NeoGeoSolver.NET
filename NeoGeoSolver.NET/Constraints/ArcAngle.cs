@@ -51,10 +51,10 @@ public class ArcAngle : Value
   {
     var p = new ExpressionVector[4];
     var arc = _arc;
-    p[0] = arc.Point0.exp;
-    p[1] = arc.Centre.exp;
-    p[2] = arc.Centre.exp;
-    p[3] = arc.Point1.exp;
+    p[0] = arc.Point0.Expr;
+    p[1] = arc.Centre.Expr;
+    p[2] = arc.Centre.Expr;
+    p[3] = arc.Point1.Expr;
     if (Supplementary)
     {
       SystemExt.Swap(ref p[0], ref p[3]);

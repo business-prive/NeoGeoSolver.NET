@@ -48,11 +48,11 @@ public class LinesAngle : Value
   {
     var p = new ExpressionVector[4];
     var l0 = _l0;
-    p[0] = l0.Point0.exp;
-    p[1] = l0.Point1.exp;
+    p[0] = l0.Point0.Expr;
+    p[1] = l0.Point1.Expr;
     var l1 = _l1;
-    p[2] = l1.Point0.exp;
-    p[3] = l1.Point1.exp;
+    p[2] = l1.Point0.Expr;
+    p[3] = l1.Point1.Expr;
     if (supplementary)
     {
       SystemExt.Swap(ref p[2], ref p[3]);

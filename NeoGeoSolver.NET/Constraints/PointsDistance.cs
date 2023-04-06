@@ -9,7 +9,7 @@ public class PointsDistance : Value
   {
     get
     {
-      return Point0.exp;
+      return Point0.Expr;
     }
   }
 
@@ -17,7 +17,7 @@ public class PointsDistance : Value
   {
     get
     {
-      return Point1.exp;
+      return Point1.Expr;
     }
   }
 

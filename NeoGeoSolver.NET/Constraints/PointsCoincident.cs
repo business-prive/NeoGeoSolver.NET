@@ -18,8 +18,8 @@ public class PointsCoincident : Constraint
   {
     get
     {
-      var pe0 = Point0.exp;
-      var pe1 = Point1.exp;
+      var pe0 = Point0.Expr;
+      var pe1 = Point1.Expr;
       yield return pe0.x - pe1.x;
       yield return pe0.y - pe1.y;
     }

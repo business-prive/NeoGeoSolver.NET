@@ -24,13 +24,13 @@ public class PointsHorizontalVertical : Constraint
       switch (Orientation)
       {
         case HorizontalVerticalOrientation.Ox:
-          yield return _p0.exp.x - _p1.exp.x;
+          yield return _p0.Expr.x - _p1.Expr.x;
           break;
         case HorizontalVerticalOrientation.Oy:
-          yield return _p0.exp.y - _p1.exp.y;
+          yield return _p0.Expr.y - _p1.Expr.y;
           break;
         case HorizontalVerticalOrientation.Oz:
-          yield return _p0.exp.z - _p1.exp.z;
+          yield return _p0.Expr.z - _p1.Expr.z;
           break;
       }
     }

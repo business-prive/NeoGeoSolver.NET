@@ -43,7 +43,7 @@ public class Ellipse : Entity
 
   public ExpressionVector CentreExpr()
   {
-    return Centre.exp;
+    return Centre.Expr;
   }
 
   public override ExpressionVector PointOn(Expression t)

@@ -19,7 +19,7 @@ public class PointOn : Value
   {
     get
     {
-      return Point.exp;
+      return Point.Expr;
     }
   }
 

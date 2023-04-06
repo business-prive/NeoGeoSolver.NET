@@ -19,7 +19,7 @@ public class PointCircleDistance : Value
   {
     get
     {
-      var pPos = Point.exp;
+      var pPos = Point.Expr;
       var cCen = Circle.CentreExpr();
       var cRad = Circle.RadiusExpr();
 

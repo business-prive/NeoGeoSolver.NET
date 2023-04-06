@@ -21,7 +21,7 @@ public class PointLineDistance : Value
   {
     get
     {
-      yield return ConstraintExp.PointLineDistance(Point.exp, Line.Point0.exp, Line.Point1.exp) - value;
+      yield return ConstraintExp.PointLineDistance(Point.Expr, Line.Point0.Expr, Line.Point1.Expr) - value;
     }
   }
 }

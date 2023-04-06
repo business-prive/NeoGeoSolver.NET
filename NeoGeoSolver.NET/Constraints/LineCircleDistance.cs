@@ -45,10 +45,10 @@ public class LineCircleDistance : Value
       switch (option)
       {
         case Option.Positive:
-          yield return ConstraintExp.PointLineDistance(Circle.CentreExpr(), Line.Point0.exp, Line.Point1.exp) - Circle.RadiusExpr() - value;
+          yield return ConstraintExp.PointLineDistance(Circle.CentreExpr(), Line.Point0.Expr, Line.Point1.Expr) - Circle.RadiusExpr() - value;
           break;
         case Option.Negative:
-          yield return ConstraintExp.PointLineDistance(Circle.CentreExpr(), Line.Point0.exp, Line.Point1.exp) + Circle.RadiusExpr() + value;
+          yield return ConstraintExp.PointLineDistance(Circle.CentreExpr(), Line.Point0.Expr, Line.Point1.Expr) + Circle.RadiusExpr() + value;
           break;
       }
     }

@@ -15,7 +15,7 @@ public class EllipticArc : Entity
     {
       if (!Point0.IsCoincidentWith(Point1))
       {
-        yield return (Point0.exp - Centre.exp).Magnitude() - (Point1.exp - Centre.exp).Magnitude();
+        yield return (Point0.Expr - Centre.Expr).Magnitude() - (Point1.Expr - Centre.Expr).Magnitude();
       }
     }
   }
@@ -24,8 +24,8 @@ public class EllipticArc : Entity
   {
     if (!Point0.IsCoincidentWith(Point1))
     {
-      var d0 = Point0.exp - Centre.exp;
-      var d1 = Point1.exp - Centre.exp;
+      var d0 = Point0.Expr - Centre.Expr;
+      var d1 = Point1.Expr - Centre.Expr;
       return ConstraintExp.Angle2d(d0, d1, angle360: true);
     }
 
@@ -37,9 +37,9 @@ public class EllipticArc : Entity
     var angle = GetAngleExp();
     var cos = Expression.Cos(angle * t);
     var sin = Expression.Sin(angle * t);
-    var rv = Point0.exp - Centre.exp;
+    var rv = Point0.Expr - Centre.Expr;
 
-    return Centre.exp + new ExpressionVector(
+    return Centre.Expr + new ExpressionVector(
       cos * rv.x - sin * rv.y,
       sin * rv.x + cos * rv.y,
       0.0
@@ -51,7 +51,7 @@ public class EllipticArc : Entity
     var angle = GetAngleExp();
     var cos = Expression.Cos(angle * t + Math.PI / 2);
     var sin = Expression.Sin(angle * t + Math.PI / 2);
-    var rv = Point0.exp - Centre.exp;
+    var rv = Point0.Expr - Centre.Expr;
 
     return new ExpressionVector(
       cos * rv.x - sin * rv.y,
@@ -66,11 +66,11 @@ public class EllipticArc : Entity
 
   public Expression RadiusExpr()
   {
-    return (Point0.exp - Centre.exp).Magnitude();
+    return (Point0.Expr - Centre.Expr).Magnitude();
   }
 
   public ExpressionVector CentreExpr()
   {
-    return Centre.exp;
+    return Centre.Expr;
   }
 }

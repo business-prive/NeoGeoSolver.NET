@@ -23,18 +23,18 @@ public class Line : Entity
 
   public override ExpressionVector PointOn(Expression t)
   {
-    var pt0 = Point0.exp;
-    var pt1 = Point1.exp;
+    var pt0 = Point0.Expr;
+    var pt1 = Point1.Expr;
     return pt0 + (pt1 - pt0) * t;
   }
 
   public override ExpressionVector TangentAt(Expression t)
   {
-    return Point1.exp - Point0.exp;
+    return Point1.Expr - Point0.Expr;
   }
 
   public Expression LengthExpr()
   {
-    return (Point1.exp - Point0.exp).Magnitude();
+    return (Point1.Expr - Point0.Expr).Magnitude();
   }
 }

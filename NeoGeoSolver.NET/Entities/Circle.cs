@@ -32,7 +32,7 @@ public class Circle : Entity
   public override ExpressionVector PointOn(Expression t)
   {
     var angle = t * 2.0 * Math.PI;
-    return Centre.exp + new ExpressionVector(Expression.Cos(angle), Expression.Sin(angle), 0.0) * RadiusExpr();
+    return Centre.Expr + new ExpressionVector(Expression.Cos(angle), Expression.Sin(angle), 0.0) * RadiusExpr();
   }
 
   public override ExpressionVector TangentAt(Expression t)
@@ -53,6 +53,6 @@ public class Circle : Entity
 
   public ExpressionVector CentreExpr()
   {
-    return Centre.exp;
+    return Centre.Expr;
   }
 }

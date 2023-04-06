@@ -105,16 +105,16 @@ public class Function : Entity
     {
       var e0 = _basis.TransformPosition(GetExpClone(_t0));
 
-      var eq0 = e0 - Point0.exp;
+      var eq0 = e0 - Point0.Expr;
       yield return eq0.x;
       yield return eq0.y;
 
       var e1 = _basis.TransformPosition(GetExpClone(_t1));
-      var eq1 = e1 - Point1.exp;
+      var eq1 = e1 - Point1.Expr;
       yield return eq1.x;
       yield return eq1.y;
 
-      var eqc = _basis.p - Centre.exp;
+      var eqc = _basis.p - Centre.Expr;
       yield return eqc.x;
       yield return eqc.y;
 

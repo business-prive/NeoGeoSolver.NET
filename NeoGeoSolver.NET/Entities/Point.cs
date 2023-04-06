@@ -28,7 +28,7 @@ public class Point : Entity
     }
   }
 
-  public ExpressionVector exp => new(x, y, z);
+  public ExpressionVector Expr => new(x, y, z);
 
   public override IEnumerable<Param> Parameters
   {
@@ -67,6 +67,6 @@ public class Point : Entity
 
   public override ExpressionVector PointOn(Expression t)
   {
-    return exp;
+    return Expr;
   }
 }
