@@ -574,7 +574,11 @@ public class Expression
 
   public Param GetSubstitutionParamA()
   {
-    if (!IsSubstitionForm()) return null;
+    if (!IsSubstitionForm())
+    {
+      return null;
+    }
+
     return a.param;
   }
 
