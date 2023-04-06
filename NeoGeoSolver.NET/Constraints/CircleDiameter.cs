@@ -3,11 +3,11 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public class Diameter : Value
+public class CircleDiameter : Value
 {
   private readonly Circle _circle;
 
-  public Diameter(Circle circle)
+  public CircleDiameter(Circle circle)
   {
     _circle = circle;
     Satisfy();
