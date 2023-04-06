@@ -16,7 +16,11 @@ public class LinesAngle : Value
     }
     set
     {
-      if (value == _supplementary) return;
+      if (value == _supplementary)
+      {
+        return;
+      }
+
       supplementary = value;
       this.value.Value = -(Math.Sign(this.value.Value) * Math.PI - this.value.Value);
     }
