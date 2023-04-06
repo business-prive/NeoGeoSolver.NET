@@ -16,13 +16,6 @@ public class PointsHorizontalVertical : Constraint
     _p1 = p1;
   }
 
-  private readonly Line _line;
-
-  public PointsHorizontalVertical(Line line)
-  {
-    _line = line;
-  }
-
   public override IEnumerable<Expression> Equations
   {
     get
