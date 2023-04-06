@@ -1,5 +1,3 @@
-using NeoGeoSolver.NET.Utils;
-
 namespace NeoGeoSolver.NET.Tests.Constraints;
 
 [TestFixture]
@@ -17,8 +15,11 @@ public sealed class PointsHorizontalVertical_Tests
 
     var result = eqnSys.Solve();
 
-    result.Should().Be(EquationSystem.SolveResult.Okay);
-    pt1.x.Value.Should().Be(0);
+    using (new AssertionScope())
+    {
+      result.Should().Be(EquationSystem.SolveResult.Okay);
+      pt1.x.Value.Should().Be(0);
+    }
   }
 
   [Test]
@@ -33,7 +34,10 @@ public sealed class PointsHorizontalVertical_Tests
 
     var result = eqnSys.Solve();
 
-    result.Should().Be(EquationSystem.SolveResult.Okay);
-    pt1.y.Value.Should().Be(0);
+    using (new AssertionScope())
+    {
+      result.Should().Be(EquationSystem.SolveResult.Okay);
+      pt1.y.Value.Should().Be(0);
+    }
   }
 }
