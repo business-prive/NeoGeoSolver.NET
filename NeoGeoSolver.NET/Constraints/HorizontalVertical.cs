@@ -5,22 +5,6 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class HorizontalVertical : Constraint
 {
-  private ExpressionVector p0Exp
-  {
-    get
-    {
-      return _p0.exp;
-    }
-  }
-
-  private ExpressionVector p1Exp
-  {
-    get
-    {
-      return _p1.exp;
-    }
-  }
-
   public readonly HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.Ox;
 
   private readonly Point _p0;
@@ -46,13 +30,13 @@ public class HorizontalVertical : Constraint
       switch (orientation)
       {
         case HorizontalVerticalOrientation.Ox:
-          yield return p0Exp.x - p1Exp.x;
+          yield return _p0.exp.x - _p1.exp.x;
           break;
         case HorizontalVerticalOrientation.Oy:
-          yield return p0Exp.y - p1Exp.y;
+          yield return _p0.exp.y - _p1.exp.y;
           break;
         case HorizontalVerticalOrientation.Oz:
-          yield return p0Exp.z - p1Exp.z;
+          yield return _p0.exp.z - _p1.exp.z;
           break;
       }
     }
