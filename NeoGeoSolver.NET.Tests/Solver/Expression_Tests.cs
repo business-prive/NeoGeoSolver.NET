@@ -1,6 +1,6 @@
 using NeoGeoSolver.NET.Utils;
 
-namespace NeoGeoSolver.NET.Tests;
+namespace NeoGeoSolver.NET.Tests.Solver;
 
 [TestFixture]
 public sealed class Expression_Tests
