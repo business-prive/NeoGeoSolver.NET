@@ -36,6 +36,7 @@ public class Point : Entity
     {
       yield return x;
       yield return y;
+      yield return z;
     }
   }
 
