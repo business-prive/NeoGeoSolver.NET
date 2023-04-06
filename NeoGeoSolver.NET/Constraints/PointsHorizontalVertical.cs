@@ -3,14 +3,14 @@ using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
-public class HorizontalVertical : Constraint
+public class PointsHorizontalVertical : Constraint
 {
   public readonly HorizontalVerticalOrientation orientation = HorizontalVerticalOrientation.Ox;
 
   private readonly Point _p0;
   private readonly Point _p1;
 
-  public HorizontalVertical(Point p0, Point p1)
+  public PointsHorizontalVertical(Point p0, Point p1)
   {
     _p0 = p0;
     _p1 = p1;
@@ -18,7 +18,7 @@ public class HorizontalVertical : Constraint
 
   private readonly Line _line;
 
-  public HorizontalVertical(Line line)
+  public PointsHorizontalVertical(Line line)
   {
     _line = line;
   }
