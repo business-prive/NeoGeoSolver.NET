@@ -9,23 +9,15 @@ public class CircleDiameter : Value
 
   public CircleDiameter(Circle circle)
   {
-    _circle = circle;
+    circle = circle;
     Satisfy();
-  }
-
-  private Expression RadiusExpr
-  {
-    get
-    {
-      return _circle.RadiusExpr();
-    }
   }
 
   public override IEnumerable<Expression> Equations
   {
     get
     {
-      yield return RadiusExpr * 2.0 - value.Expr;
+      yield return _circle.RadiusExpr() * 2.0 - value.Expr;
     }
   }
 }
