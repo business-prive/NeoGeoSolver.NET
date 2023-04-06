@@ -5,14 +5,13 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class PointLineDistance : Value
 {
-  public Point Point { get; }
-
-  public Line Line { get; }
+  private readonly Point _point;
+  private readonly Line _line;
 
   public PointLineDistance(Point pt, Line line)
   {
-    Point = pt;
-    Line = line;
+    _point = pt;
+    _line = line;
     SetValue(1.0);
     Satisfy();
   }
@@ -21,7 +20,7 @@ public class PointLineDistance : Value
   {
     get
     {
-      yield return ConstraintExp.PointLineDistance(Point.Expr, Line.Point0.Expr, Line.Point1.Expr) - value;
+      yield return ConstraintExp.PointLineDistance(_point.Expr, _line.Point0.Expr, _line.Point1.Expr) - value;
     }
   }
 }

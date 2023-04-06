@@ -1,4 +1,3 @@
-using System.Numerics;
 using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
@@ -7,8 +6,6 @@ public abstract class Value : Constraint
 {
   protected readonly Param value = new("value");
   public bool Reference { get; set; }
-
-  private Vector3 _position;
 
   public override IEnumerable<Param> Parameters
   {
