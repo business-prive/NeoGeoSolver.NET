@@ -59,7 +59,7 @@ public class PointsAngle : Value
     var p = new ExpressionVector[4];
     for (var i = 0; i < 4; i++)
     {
-      p[i] = _points[i].exp;
+      p[i] = _points[i].Expr;
     }
 
     if (Supplementary)
