@@ -16,57 +16,43 @@ public sealed class ExpressionParser_Tests
     var sut = new ExpressionParser("");
   }
 
-  public static void Test()
+  [TestCase("a + b")]
+  [TestCase("  a  - -b")]
+  [TestCase("43 + d * c")]
+  [TestCase("2.3 * d + c ")]
+  [TestCase("(a * b) + c ")]
+  [TestCase("a * (b + c)")]
+  [TestCase(" a * b + c * (d + e) * f - 1 ")]
+  [TestCase(" a * (b + c) * (d + e) * (f - 1) ")]
+  [TestCase(" (a * ((b + c) + (d + e)) * 3 + (f - 1) * 5)) ")]
+  public static void Parse_completes(string exprStr)
   {
-    List<string> exps = new()
-    {
-      "a + b",
-      "  a  - -b",
-      "43 + d * c",
-      "2.3 * d + c ",
-      "(a * b) + c ",
-      "a * (b + c)",
-      " a * b + c * (d + e) * f - 1 ",
-      " a * (b + c) * (d + e) * (f - 1) ",
-      " (a * ((b + c) + (d + e)) * 3 + (f - 1) * 5)) ",
-    };
+    var parser = new ExpressionParser(exprStr);
+    var exp = parser.Parse();
+    // TODO		Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\"");
+  }
 
-    foreach (var e in exps)
-    {
-      var parser = new ExpressionParser(e);
-      var exp = parser.Parse();
-      // TODO		Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\"");
-    }
+  [TestCase("2 * 3", 6.0)]
+  [TestCase("2 + 1", 3.0)]
+  [TestCase("-2 + 2", 0.0)]
+  [TestCase("+2 - -2", 4.0)]
+  [TestCase("-2 * -2", 4.0)]
+  [TestCase("+1 * +2", 2.0)]
+  [TestCase("2 + 3 * 6", 20.0)]
+  [TestCase("2 + (3 * 6)", 20.0)]
+  [TestCase("(2 + 3) * 6", 30.0)]
+  [TestCase("((2 + 3) * (6))", 30.0)]
+  [TestCase("cos(0)", 1.0)]
+  [TestCase("sqr(cos(2)) + sqr(sin(2))", 1.0)]
+  [TestCase("pi", Math.PI)]
+  [TestCase("e", Math.E)]
+  public static void Eval_returns_expected(string exprStr, double expResult)
+  {
+    var parser = new ExpressionParser(exprStr);
+    var exp = parser.Parse();
 
-    Dictionary<string, double> results = new()
-    {
-      {"2 * 3", 6.0},
-      {"2 + 1", 3.0},
-      {"-2 + 2", 0.0},
-      {"+2 - -2", 4.0},
-      {"-2 * -2", 4.0},
-      {"+1 * +2", 2.0},
-      {"2 + 3 * 6", 20.0},
-      {"2 + (3 * 6)", 20.0},
-      {"(2 + 3) * 6", 30.0},
-      {"((2 + 3) * (6))", 30.0},
-      {"cos(0)", 1.0},
-      {"sqr(cos(2)) + sqr(sin(2))", 1.0},
-      {"pi", Math.PI},
-      {"e", Math.E},
-    };
+    var result = exp.Eval();
 
-    foreach (var e in results)
-    {
-      var parser = new ExpressionParser(e.Key);
-      var exp = parser.Parse();
-      //TODO		Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\" = " + exp.Eval().ToStr());
-      if (exp.Eval() != e.Value)
-      {
-        {
-          // TODO		Debug.Log("result fail: get \"" + exp.Eval() + "\" excepted: \"" + e.Value + "\"");
-        }
-      }
-    }
+    result.Should().Be(expResult);
   }
 }
