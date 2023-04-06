@@ -28,8 +28,10 @@ public sealed class ExpressionParser_Tests
   public static void Parse_completes(string exprStr)
   {
     var parser = new ExpressionParser(exprStr);
-    var exp = parser.Parse();
-    // TODO		Debug.Log("src: \"" + e + "\" -> \"" + exp.ToString() + "\"");
+
+    Action act = () => _ = parser.Parse();
+
+    act.Should().NotThrow();
   }
 
   [TestCase("2 * 3", 6.0)]
