@@ -4,45 +4,20 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class EqualValue : Value
 {
-  private readonly List<Constraint> _usedInConstraints = new();
-
-  protected override bool OnSatisfy()
-  {
-    var c0 = GetConstraint(0) as Value;
-    var c1 = GetConstraint(1) as Value;
-    if (Math.Sign(c0.GetValue()) != Math.Sign(c1.GetValue()))
-    {
-      value.Value = -1;
-    }
-
-    return true;
-  }
+  private readonly Value _val0;
+  private readonly Value _val1;
 
   public EqualValue(Value c0, Value c1)
   {
-    AddConstraint(c0);
-    AddConstraint(c1);
-    value.Value = 1.0;
-    Satisfy();
+    _val0 = c0;
+    _val1 = c1;
   }
 
   public override IEnumerable<Expression> Equations
   {
     get
     {
-      var c0 = GetConstraint(0) as Value;
-      var c1 = GetConstraint(1) as Value;
-      yield return c0.GetValueParam().Expr - c1.GetValueParam().Expr * value;
+      yield return _val0.GetValueParam().Expr - _val1.GetValueParam().Expr - value;
     }
-  }
-
-  private void AddConstraint(Constraint c)
-  {
-    _usedInConstraints.Add(this);
-  }
-
-  private Constraint GetConstraint(int i)
-  {
-    return _usedInConstraints[i];
   }
 }
