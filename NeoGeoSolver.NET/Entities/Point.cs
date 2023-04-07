@@ -42,27 +42,11 @@ public class Point : Entity
 
   public bool IsCoincidentWith(Point point)
   {
-    if (IsSameAs(point, this))
-    {
-      return true;
-    }
+    const double Tolerance = 1e-6;
 
-    return false;
-  }
-
-  private static bool IsSameAs(IEntity e0, IEntity e1)
-  {
-    if (e0 == null)
-    {
-      return e1 == null;
-    }
-
-    if (e1 == null)
-    {
-      return e0 == null;
-    }
-
-    return e0 == e1 || e0.GetType() == e1.GetType();
+    return Math.Abs(x.Value - point.x.Value) < Tolerance &&
+           Math.Abs(y.Value - point.x.Value) < Tolerance &&
+           Math.Abs(z.Value - point.z.Value) < Tolerance;
   }
 
   public override ExpressionVector PointOn(Expression t)
