@@ -1,7 +1,7 @@
 namespace NeoGeoSolver.NET.Tests.Constraints;
 
 [TestFixture]
-public class LinesAngle_Tests
+public sealed class LinesAngle_Tests
 {
   [Test]
   public void Angle_works()
