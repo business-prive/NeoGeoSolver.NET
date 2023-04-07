@@ -1,7 +1,7 @@
 namespace NeoGeoSolver.NET.Tests.Constraints;
 
 [TestFixture]
-public class PointLineDistance_Tests
+public sealed class PointLineDistance_Tests
 {
   [TestCase(10, 10)]
   [TestCase(0, 0)]

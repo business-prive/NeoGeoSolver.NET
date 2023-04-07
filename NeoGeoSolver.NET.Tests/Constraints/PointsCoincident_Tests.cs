@@ -1,10 +1,10 @@
 namespace NeoGeoSolver.NET.Tests.Constraints;
 
 [TestFixture]
-public class PointsCoincident_Tests
+public sealed class PointsCoincident_Tests
 {
   [Test]
-  public void PointsCoincident_work()
+  public void Coincident_work()
   {
     var p0 = new Point(0, 0, 0);
     var p1 = new Point(5, 10, 0);
