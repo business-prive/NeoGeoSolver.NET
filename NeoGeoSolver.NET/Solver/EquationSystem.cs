@@ -5,9 +5,7 @@ public class EquationSystem
   public enum SolveResult
   {
     Okay,
-    DidntConvege,
-    Redundant,
-    Postpone
+    DidntConvege
   }
 
   public bool isDirty { get; private set; }
