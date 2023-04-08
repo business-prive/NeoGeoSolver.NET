@@ -8,7 +8,7 @@ public class LinesAngle : Value
 {
   private bool _supplementary;
 
-  public bool supplementary
+  public bool Supplementary
   {
     get
     {
@@ -21,7 +21,7 @@ public class LinesAngle : Value
         return;
       }
 
-      supplementary = value;
+      Supplementary = value;
       this.value.Value = -(Math.Sign(this.value.Value) * Math.PI - this.value.Value);
     }
   }
@@ -57,7 +57,7 @@ public class LinesAngle : Value
     var l1 = _l1;
     p[2] = l1.Point0.Expr;
     p[3] = l1.Point1.Expr;
-    if (supplementary)
+    if (Supplementary)
     {
       SystemExt.Swap(ref p[2], ref p[3]);
     }
