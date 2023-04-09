@@ -37,7 +37,7 @@ The constraints that are currently supported are the following:
 * lines perpendicular
 
 ## Unsupported constraints
-* collinear lines
+* ~~collinear lines~~
 * point on arc
 * arc radius
 * equal radius arcs
