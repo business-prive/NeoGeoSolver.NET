@@ -47,8 +47,8 @@ The constraints that are currently supported are the following:
 * point to line horizontal distance
 * concentric arcs
   * use points coincident
-* concentric circles
-  * use points coincident
+* ~~concentric circles~~
+  * ~~use points coincident~~
 * concentric circ arc
   * use points coincident
 
