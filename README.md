@@ -49,8 +49,8 @@ The constraints that are currently supported are the following:
   * ~~use points coincident~~
 * ~~concentric circles~~
   * ~~use points coincident~~
-* concentric circ arc
-  * use points coincident
+* ~~concentric circ arc~~
+  * ~~use points coincident~~
 
 ## Further work
 * implement unsupported constraints
