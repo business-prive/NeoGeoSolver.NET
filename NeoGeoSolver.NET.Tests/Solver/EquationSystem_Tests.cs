@@ -7,7 +7,9 @@ public sealed class EquationSystem_Tests
   public void Square_around_circle()
   {
     const double Tolerance = 1e-6;
-    
+
+    #region Entities
+
     // circle on origin with radius 10
     var circle = new Circle(new Point(0, 0, 0), new Param("radius", 10));
 
@@ -19,6 +21,8 @@ public sealed class EquationSystem_Tests
     var line1 = new Line(new Point(0, 12, 0), new Point(12, 0, 0));
     var line2 = new Line(new Point(11, 0, 0), new Point(0, -12, 0));
     var line3 = new Line(new Point(0, -12, 0), new Point(-12, 0, 0));
+
+    #endregion
 
     #region Constraints
 
@@ -60,9 +64,9 @@ public sealed class EquationSystem_Tests
     };
 
     #endregion
-    
+
     var eqns = constrs.SelectMany(constr => constr.Equations);
-    
+
     // all points free
     var pointParams = new[]
     {
@@ -71,7 +75,7 @@ public sealed class EquationSystem_Tests
       line2.Point0.x, line2.Point0.y, line2.Point1.x, line2.Point1.y,
       line3.Point0.x, line3.Point0.y, line3.Point1.x, line3.Point1.y
     };
-    
+
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(eqns);
     eqnSys.AddParameters(pointParams);
