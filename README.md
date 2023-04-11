@@ -53,6 +53,7 @@ The constraints that are currently supported are the following:
   * ~~use points coincident~~
 
 ## Further work
+* change arc definition to centre-radius-start_angle-end_angle
 * implement unsupported constraints
 * remove unused constraints
   * tangent (use line-entity distance with zero distance)
