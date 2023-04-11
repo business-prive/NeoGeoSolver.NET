@@ -6,6 +6,8 @@ public sealed class EquationSystem_Tests
   [Test]
   public void Square_around_circle()
   {
+    const double Tolerance = 1e-6;
+    
     // circle on origin with radius 10
     var circle = new Circle(new Point(0, 0, 0), new Param("radius", 10));
 
@@ -17,6 +19,8 @@ public sealed class EquationSystem_Tests
     var line1 = new Line(new Point(0, 12, 0), new Point(12, 0, 0));
     var line2 = new Line(new Point(11, 0, 0), new Point(0, -12, 0));
     var line3 = new Line(new Point(0, -12, 0), new Point(-12, 0, 0));
+
+    #region Constraints
 
     var line0_tan_circle = line0.IsTangentTo(circle);
     var line1_tan_circle = line1.IsTangentTo(circle);
@@ -54,6 +58,9 @@ public sealed class EquationSystem_Tests
 
       line0_hor
     };
+
+    #endregion
+    
     var eqns = constrs.SelectMany(constr => constr.Equations);
     
     // all points free
@@ -74,6 +81,11 @@ public sealed class EquationSystem_Tests
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
+
+      line0.Point0.x.Value.Should().BeApproximately(-10, Tolerance);
+      line0.Point0.y.Value.Should().BeApproximately(10, Tolerance);
+      line0.Point1.x.Value.Should().BeApproximately(10, Tolerance);
+      line0.Point1.y.Value.Should().BeApproximately(10, Tolerance);
     }
   }
 }
