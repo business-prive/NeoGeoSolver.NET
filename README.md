@@ -14,11 +14,11 @@ $ dotnet build
 $ dotnet test
 ```
 
-
 ## Supported constraints
 
 The constraints that are currently supported are the following:
-* arc circ equal radius
+* arc circ concentric
+* arcs concentric
 * points coincident
 * points distance
 * points horizontal
@@ -37,10 +37,11 @@ The constraints that are currently supported are the following:
 * lines perpendicular
 
 ## Unsupported constraints
+* arc circ equal radius
 * ~~collinear lines~~
 * point on arc
 * arc radius
-* equal radius arcs
+* arcs equal radius
 * point to point vertical distance
 * point to point horizontal distance
 * point to line vertical distance
@@ -58,15 +59,14 @@ The constraints that are currently supported are the following:
 * remove unused constraints
   * tangent (use line-entity distance with zero distance)
   * point on (use point-entity distance with zero distance)
-  * equal value
-  * point angle
-  * points coincident (use points distance with zero distance)
+  * equal value (might be useful?)
+  * points angle
 * remove unused entities
   * function (no docs + not normally used in CAD)
   * spline (no docs + not normally used in CAD)
   * ellipse + ellipsearc (not normally used in CAD)
-* more unit tests for solver
-  * multiple constraints
+* ~~more unit tests for solver~~
+  * ~~multiple constraints~~
 * portable UI aka test harness
 
 ## Further information
