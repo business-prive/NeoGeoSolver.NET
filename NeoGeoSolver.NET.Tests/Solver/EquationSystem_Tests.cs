@@ -86,6 +86,11 @@ public sealed class EquationSystem_Tests
       line0.Point0.y.Value.Should().BeApproximately(10, Tolerance);
       line0.Point1.x.Value.Should().BeApproximately(10, Tolerance);
       line0.Point1.y.Value.Should().BeApproximately(10, Tolerance);
+
+      line1.Point0.x.Value.Should().BeApproximately(10, Tolerance);
+      line1.Point0.y.Value.Should().BeApproximately(10, Tolerance);
+      line1.Point1.x.Value.Should().BeApproximately(10, Tolerance);
+      line1.Point1.y.Value.Should().BeApproximately(-10, Tolerance);
     }
   }
 }
