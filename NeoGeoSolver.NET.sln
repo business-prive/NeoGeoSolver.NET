@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoGeoSolver.NET.Tests", "N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoGeoSolver.NET.UI.Web", "NeoGeoSolver.NET.UI.Web\NeoGeoSolver.NET.UI.Web.csproj", "{4C21B1C0-F560-4A23-BAFA-B41F69148222}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoGeoSolver.NET.UI.Web.Drawing", "NeoGeoSolver.NET.UI.Web.Drawing\NeoGeoSolver.NET.UI.Web.Drawing.csproj", "{40D34EA3-5EC4-45FD-ADA8-A7F40D2C6FED}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +30,5 @@ Global
 		{4C21B1C0-F560-4A23-BAFA-B41F69148222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C21B1C0-F560-4A23-BAFA-B41F69148222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C21B1C0-F560-4A23-BAFA-B41F69148222}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40D34EA3-5EC4-45FD-ADA8-A7F40D2C6FED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40D34EA3-5EC4-45FD-ADA8-A7F40D2C6FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40D34EA3-5EC4-45FD-ADA8-A7F40D2C6FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40D34EA3-5EC4-45FD-ADA8-A7F40D2C6FED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
