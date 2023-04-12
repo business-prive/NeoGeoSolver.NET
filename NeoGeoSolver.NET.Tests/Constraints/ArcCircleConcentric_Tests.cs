@@ -9,7 +9,7 @@ public sealed class ArcCircleConcentric_Tests
     var centre0 = new Point(0, 0, 0);
     var c0p0 = new Point(10, 0, 0);
     var c0p1 = new Point(0, 10, 0);
-    var arc0 = new Arc(c0p0, c0p1, centre0);
+    var arc0 = new Arc(centre0, c0p0, c0p1);
     var centre1 = new Point(10, 0, 0);
     var radius = new Param("radius", 10);
     var arc1 = new Circle(centre1, radius);
