@@ -16,14 +16,14 @@ public sealed class LineCircleDistance_Tests
     constr.SetValue(0);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(p1.x);
+    eqnSys.AddParameter(p1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      p1.x.Value.Should().BeApproximately(10, 1e-4);
+      p1.X.Value.Should().BeApproximately(10, 1e-4);
     }
   }
   
@@ -40,14 +40,14 @@ public sealed class LineCircleDistance_Tests
     constr.SetValue(10);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(p1.x);
+    eqnSys.AddParameter(p1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      p1.x.Value.Should().BeApproximately(20, 1e-4);
+      p1.X.Value.Should().BeApproximately(20, 1e-4);
     }
   }
 }

@@ -70,10 +70,10 @@ public sealed class EquationSystem_Tests
     // all points free
     var pointParams = new[]
     {
-      line0.Point0.x, line0.Point0.y, line0.Point1.x, line0.Point1.y,
-      line1.Point0.x, line1.Point0.y, line1.Point1.x, line1.Point1.y,
-      line2.Point0.x, line2.Point0.y, line2.Point1.x, line2.Point1.y,
-      line3.Point0.x, line3.Point0.y, line3.Point1.x, line3.Point1.y
+      line0.Point0.X, line0.Point0.Y, line0.Point1.X, line0.Point1.Y,
+      line1.Point0.X, line1.Point0.Y, line1.Point1.X, line1.Point1.Y,
+      line2.Point0.X, line2.Point0.Y, line2.Point1.X, line2.Point1.Y,
+      line3.Point0.X, line3.Point0.Y, line3.Point1.X, line3.Point1.Y
     };
 
     var eqnSys = new EquationSystem();
@@ -86,25 +86,25 @@ public sealed class EquationSystem_Tests
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
 
-      line0.Point0.x.Value.Should().BeApproximately(-10, Tolerance);
-      line0.Point0.y.Value.Should().BeApproximately(10, Tolerance);
-      line0.Point1.x.Value.Should().BeApproximately(10, Tolerance);
-      line0.Point1.y.Value.Should().BeApproximately(10, Tolerance);
+      line0.Point0.X.Value.Should().BeApproximately(-10, Tolerance);
+      line0.Point0.Y.Value.Should().BeApproximately(10, Tolerance);
+      line0.Point1.X.Value.Should().BeApproximately(10, Tolerance);
+      line0.Point1.Y.Value.Should().BeApproximately(10, Tolerance);
 
-      line1.Point0.x.Value.Should().BeApproximately(10, Tolerance);
-      line1.Point0.y.Value.Should().BeApproximately(10, Tolerance);
-      line1.Point1.x.Value.Should().BeApproximately(10, Tolerance);
-      line1.Point1.y.Value.Should().BeApproximately(-10, Tolerance);
+      line1.Point0.X.Value.Should().BeApproximately(10, Tolerance);
+      line1.Point0.Y.Value.Should().BeApproximately(10, Tolerance);
+      line1.Point1.X.Value.Should().BeApproximately(10, Tolerance);
+      line1.Point1.Y.Value.Should().BeApproximately(-10, Tolerance);
 
-      line2.Point0.x.Value.Should().BeApproximately(10, Tolerance);
-      line2.Point0.y.Value.Should().BeApproximately(-10, Tolerance);
-      line2.Point1.x.Value.Should().BeApproximately(-10, Tolerance);
-      line2.Point1.y.Value.Should().BeApproximately(-10, Tolerance);
+      line2.Point0.X.Value.Should().BeApproximately(10, Tolerance);
+      line2.Point0.Y.Value.Should().BeApproximately(-10, Tolerance);
+      line2.Point1.X.Value.Should().BeApproximately(-10, Tolerance);
+      line2.Point1.Y.Value.Should().BeApproximately(-10, Tolerance);
 
-      line3.Point0.x.Value.Should().BeApproximately(-10, Tolerance);
-      line3.Point0.y.Value.Should().BeApproximately(-10, Tolerance);
-      line3.Point1.x.Value.Should().BeApproximately(-10, Tolerance);
-      line3.Point1.y.Value.Should().BeApproximately(10, Tolerance);
+      line3.Point0.X.Value.Should().BeApproximately(-10, Tolerance);
+      line3.Point0.Y.Value.Should().BeApproximately(-10, Tolerance);
+      line3.Point1.X.Value.Should().BeApproximately(-10, Tolerance);
+      line3.Point1.Y.Value.Should().BeApproximately(10, Tolerance);
     }
   }
 }

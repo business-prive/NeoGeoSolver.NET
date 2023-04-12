@@ -14,14 +14,14 @@ public sealed class ArcAngle_Tests
     constr.SetValue(Math.PI / 4d);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(pt1.x);
+    eqnSys.AddParameter(pt1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      pt1.x.Value.Should().BeApproximately(10, 1e-6);
+      pt1.X.Value.Should().BeApproximately(10, 1e-6);
     }
   }
 }

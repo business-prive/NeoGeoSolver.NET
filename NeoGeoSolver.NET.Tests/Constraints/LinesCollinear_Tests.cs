@@ -15,14 +15,14 @@ public sealed class LinesCollinear_Tests
     var constr = new LinesCollinear(line0, line1);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(l1pt1.y);
+    eqnSys.AddParameter(l1pt1.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      l1pt1.y.Value.Should().BeApproximately(20, 1e-4);
+      l1pt1.Y.Value.Should().BeApproximately(20, 1e-4);
     }
   }
 
@@ -38,14 +38,14 @@ public sealed class LinesCollinear_Tests
     var constr = new LinesCollinear(line0, line1);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(l0pt1.y);
+    eqnSys.AddParameter(l0pt1.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      l0pt1.y.Value.Should().BeApproximately(10, 1e-4);
+      l0pt1.Y.Value.Should().BeApproximately(10, 1e-4);
     }
   }
 }

@@ -18,14 +18,14 @@ public sealed class Perpendicular_Tests
     };
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(line1.Point1.y);
+    eqnSys.AddParameter(line1.Point1.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      line1.Point1.y.Value.Should().BeApproximately(0, 1e-6);
+      line1.Point1.Y.Value.Should().BeApproximately(0, 1e-6);
     }
   }
 
@@ -44,14 +44,14 @@ public sealed class Perpendicular_Tests
     };
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(line1.Point1.y);
+    eqnSys.AddParameter(line1.Point1.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      line1.Point1.y.Value.Should().BeApproximately(0, 1e-6); 
+      line1.Point1.Y.Value.Should().BeApproximately(0, 1e-6); 
     }
   }
 }

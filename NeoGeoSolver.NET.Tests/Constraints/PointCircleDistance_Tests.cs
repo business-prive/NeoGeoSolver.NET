@@ -15,14 +15,14 @@ public sealed class PointCircleDistance_Tests
     constr.SetValue(dist);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(point.y);
+    eqnSys.AddParameter(point.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      point.y.Value.Should().BeApproximately(yVal, 1e-6);
+      point.Y.Value.Should().BeApproximately(yVal, 1e-6);
     }
   }
 }

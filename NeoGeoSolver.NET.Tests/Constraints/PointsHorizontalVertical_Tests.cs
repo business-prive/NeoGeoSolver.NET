@@ -11,14 +11,14 @@ public sealed class PointsHorizontalVertical_Tests
     var constr = new PointsHorizontalVertical(pt0, pt1, HorizontalVerticalOrientation.Ox);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(pt1.x);
+    eqnSys.AddParameter(pt1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      pt1.x.Value.Should().Be(0);
+      pt1.X.Value.Should().Be(0);
     }
   }
 
@@ -30,14 +30,14 @@ public sealed class PointsHorizontalVertical_Tests
     var constr = new PointsHorizontalVertical(pt0, pt1, HorizontalVerticalOrientation.Oy);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(pt1.y);
+    eqnSys.AddParameter(pt1.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      pt1.y.Value.Should().Be(0);
+      pt1.Y.Value.Should().Be(0);
     }
   }
 }

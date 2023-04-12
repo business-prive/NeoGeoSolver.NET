@@ -11,16 +11,16 @@ public sealed class PointsCoincident_Tests
     var constr = new PointsCoincident(p0, p1);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(p1.x);
-    eqnSys.AddParameter(p1.y);
+    eqnSys.AddParameter(p1.X);
+    eqnSys.AddParameter(p1.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      p1.x.Value.Should().BeApproximately(0, 1e-6);
-      p1.y.Value.Should().BeApproximately(0, 1e-6);
+      p1.X.Value.Should().BeApproximately(0, 1e-6);
+      p1.Y.Value.Should().BeApproximately(0, 1e-6);
     }
   }
   

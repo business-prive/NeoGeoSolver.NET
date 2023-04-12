@@ -13,14 +13,14 @@ public sealed class LineLength_Tests
     constr.SetValue(10);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(line.Point1.x);
+    eqnSys.AddParameter(line.Point1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      line.Point1.x.Value.Should().BeApproximately(0, 1e-4);
+      line.Point1.X.Value.Should().BeApproximately(0, 1e-4);
     }
   }
 }

@@ -13,14 +13,14 @@ public sealed class PointsDistance_Tests
     constr.SetValue(dist);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(p1.x);
+    eqnSys.AddParameter(p1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      p1.x.Value.Should().BeApproximately(dist, 1e-6);
+      p1.X.Value.Should().BeApproximately(dist, 1e-6);
     }
   }
 }

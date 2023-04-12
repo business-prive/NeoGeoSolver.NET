@@ -4,15 +4,15 @@ namespace NeoGeoSolver.NET.Entities;
 
 public class Point : Entity
 {
-  public readonly Param x = new("x");
-  public readonly Param y = new("y");
-  public readonly Param z = new("z");
+  public readonly Param X = new("x");
+  public readonly Param Y = new("y");
+  public readonly Param Z = new("z");
 
   public Point(double xVal, double yVal, double zVal)
   {
-    x.Value = xVal;
-    y.Value = yVal;
-    z.Value = zVal;
+    X.Value = xVal;
+    Y.Value = yVal;
+    Z.Value = zVal;
   }
 
   public Point() :
@@ -28,15 +28,15 @@ public class Point : Entity
     }
   }
 
-  public ExpressionVector Expr => new(x, y, z);
+  public ExpressionVector Expr => new(X, Y, Z);
 
   public override IEnumerable<Param> Parameters
   {
     get
     {
-      yield return x;
-      yield return y;
-      yield return z;
+      yield return X;
+      yield return Y;
+      yield return Z;
     }
   }
 
@@ -44,9 +44,9 @@ public class Point : Entity
   {
     const double Tolerance = 1e-6;
 
-    return Math.Abs(x.Value - point.x.Value) < Tolerance &&
-           Math.Abs(y.Value - point.x.Value) < Tolerance &&
-           Math.Abs(z.Value - point.z.Value) < Tolerance;
+    return Math.Abs(X.Value - point.X.Value) < Tolerance &&
+           Math.Abs(Y.Value - point.X.Value) < Tolerance &&
+           Math.Abs(Z.Value - point.Z.Value) < Tolerance;
   }
 
   public override ExpressionVector PointOn(Expression t)

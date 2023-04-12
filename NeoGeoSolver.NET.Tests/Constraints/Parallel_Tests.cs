@@ -18,14 +18,14 @@ public sealed class Parallel_Tests
     };
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(line1.Point1.x);
+    eqnSys.AddParameter(line1.Point1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      line1.Point1.x.Value.Should().BeApproximately(0, 1e-6);
+      line1.Point1.X.Value.Should().BeApproximately(0, 1e-6);
     }
   }
 
@@ -44,14 +44,14 @@ public sealed class Parallel_Tests
     };
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(line1.Point0.x);
+    eqnSys.AddParameter(line1.Point0.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      line1.Point0.x.Value.Should().BeApproximately(10, 1e-6); 
+      line1.Point0.X.Value.Should().BeApproximately(10, 1e-6); 
     }
   }
 }

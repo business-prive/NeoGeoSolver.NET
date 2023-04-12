@@ -15,14 +15,14 @@ public sealed class PointsAngle_Tests
     constr.SetValue(Math.PI / 4d);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(l1pt1.y);
+    eqnSys.AddParameter(l1pt1.Y);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      l1pt1.y.Value.Should().BeApproximately(-10, 1e-6);
+      l1pt1.Y.Value.Should().BeApproximately(-10, 1e-6);
     }
   }
 }

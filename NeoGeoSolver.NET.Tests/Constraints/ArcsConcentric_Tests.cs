@@ -17,14 +17,14 @@ public sealed class ArcsConcentric_Tests
     var constr = new ArcsConcentric(arc0, arc1);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);
-    eqnSys.AddParameter(centre1.x);
+    eqnSys.AddParameter(centre1.X);
 
     var result = eqnSys.Solve();
 
     using (new AssertionScope())
     {
       result.Should().Be(EquationSystem.SolveResult.Okay);
-      centre1.x.Value.Should().BeApproximately(0, 1e-4);
+      centre1.X.Value.Should().BeApproximately(0, 1e-4);
     }
   }
 }
