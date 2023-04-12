@@ -1,0 +1,143 @@
+@page "/"
+
+@using Excubo.Blazor.Canvas
+
+<div class="mat-layout-grid">
+  <table style="width: 100%">
+    <colgroup>
+      <col span="1" style="width: 10%;">
+      <col span="1" style="width: 70%;">
+      <col span="1" style="width: 20%;">
+    </colgroup>
+
+    <tbody>
+    <tr>
+      <td style="vertical-align:top">
+        <div>
+          <div>
+            <MatH4>
+              <a href="https://github.com/TrevorDArcyEvans/SketchSolve.NET">SketchSolve.NET</a>
+            </MatH4>
+          </div>
+          <hr/>
+          <div>
+            <MatH5>Application Mode</MatH5>
+            <MatRadioGroup @bind-Value="_appMode" Items="@ApplicationModes">
+              <ItemTemplate>
+                <div>
+                  <MatRadioButton Value="@context">@context.ToString()</MatRadioButton>
+                </div>
+              </ItemTemplate>
+            </MatRadioGroup>
+          </div>
+          <hr/>
+          <p/>
+
+          <div>
+            <MatH5>Entity</MatH5>
+            <MatRadioGroup @bind-Value="@_drawEnt" Items="@DrawableEntities">
+              <ItemTemplate>
+                <div>
+                  <MatRadioButton Value="@context" Disabled="@(_appMode == ApplicationMode.Select)">@context.ToString()</MatRadioButton>
+                </div>
+              </ItemTemplate>
+            </MatRadioGroup>
+            <MatButton OnClick="OnDelete" Outlined="true" Icon="delete" Disabled="@(_appMode != ApplicationMode.Select)">Delete</MatButton>
+          </div>
+          <hr/>
+          <p/>
+
+          <div>
+            <MatH5>Constraints</MatH5>
+            <MatSelectItem @bind-Value="@_selConstraintType" Items="@ConstraintTypes">
+            </MatSelectItem>
+            <p/>
+            <MatNumericUpDownField Label="Value" Minimum="1" FieldType="MatNumericUpDownFieldType.Numeric" @bind-Value="@_value"/>
+            <p/>
+            <MatButton OnClick="OnApply" Outlined="true" Icon="check">Apply</MatButton>
+            <p/>
+            <MatButton OnClick="OnClearAll" Outlined="true" Icon="clear_all">Clear all</MatButton>
+          </div>
+          <hr/>
+          <p/>
+
+          <div>
+            <MatButton OnClick="OnSolve" Outlined="true" Icon="play_arrow" Disabled="@(_constraints.Count == 0)">Solve</MatButton>
+          </div>
+
+          <div>
+            @_currMouse.ToString()
+          </div>
+        </div>
+      </td>
+
+      <td style="vertical-align:top">
+        <div @ref="_container" style="width:1000px">
+          <Canvas
+            @onmousemove="MouseMoveCanvasAsync"
+            @onmouseup="MouseUpCanvas"
+            @onmousedown="MouseDownCanvas"
+            width="1000"
+            height="800"
+            @ref="_canvas"
+            style="border: 1px solid blue"/>
+        </div>
+      </td>
+
+      <td style="vertical-align:top">
+        <div>
+          <MatH6>Selected entity constraints</MatH6>
+          <MatAccordion Multi="true">
+            <MatExpansionPanel Expanded="true">
+              <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>Points</MatExpansionPanelHeader>
+              </MatExpansionPanelSummary>
+              <MatExpansionPanelDetails Style="@(_canShowPointConstraints ? "" : "visibility: hidden")">
+                <MatCheckbox
+                  @bind-Value="@_isPtFixed"
+                  Label="Fixed"
+                  Disabled="true"/>
+                <MatIconButton OnClick="OnDeleteSelectedPointConstraint" Outlined="true" Icon="clear" Disabled="!_isPtFixed"/>
+              </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+
+            <MatExpansionPanel Expanded="true">
+              <MatExpansionPanelSummary>
+                <MatExpansionPanelHeader>Entity</MatExpansionPanelHeader>
+              </MatExpansionPanelSummary>
+              <MatExpansionPanelDetails Style="@(_canShowEntityConstraints ? "" : "visibility: hidden")">
+                <table>
+                  <tbody>
+                  @{
+                    foreach (var selCons in _selConstraints)
+                    {
+                      <tr>
+                        <td>@selCons.GetType().Name</td>
+                        <td>
+                          <MatIconButton
+                            OnClick="() => OnDeleteSelectedEntityConstraint(selCons)"
+                            Outlined="true"
+                            Icon="clear"/>
+                        </td>
+
+                      </tr>
+                    }
+                  }
+                  </tbody>
+                </table>
+              </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+          </MatAccordion>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+@code
+{
+  private readonly ApplicationMode[] ApplicationModes = Enum.GetValues<ApplicationMode>();
+  private readonly DrawableEntity[] DrawableEntities = Enum.GetValues<DrawableEntity>();
+  private readonly ConstraintType[] ConstraintTypes = Enum.GetValues<ConstraintType>();
+}
