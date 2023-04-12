@@ -13,14 +13,6 @@ public class Line : Entity
     Point1 = p1;
   }
 
-  public override IEnumerable<Expression> Equations
-  {
-    get
-    {
-      yield break;
-    }
-  }
-
   public Expression LengthExpr()
   {
     return (Point1.Expr - Point0.Expr).Magnitude();

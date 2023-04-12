@@ -1,6 +1,4 @@
-﻿using NeoGeoSolver.NET.Solver;
-
-namespace NeoGeoSolver.NET.Entities;
+﻿namespace NeoGeoSolver.NET.Entities;
 
 public class Arc : Entity
 {
@@ -13,16 +11,5 @@ public class Arc : Entity
     Centre = centre;
     Point0 = pt0;
     Point1 = pt1;
-  }
-
-  public override IEnumerable<Expression> Equations
-  {
-    get
-    {
-      if (!Point0.IsCoincidentWith(Point1))
-      {
-        yield return (Point0.Expr - Centre.Expr).Magnitude() - (Point1.Expr - Centre.Expr).Magnitude();
-      }
-    }
   }
 }

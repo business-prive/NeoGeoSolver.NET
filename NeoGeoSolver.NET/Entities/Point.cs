@@ -20,25 +20,7 @@ public class Point : Entity
   {
   }
 
-  public override IEnumerable<Expression> Equations
-  {
-    get
-    {
-      yield break;
-    }
-  }
-
   public ExpressionVector Expr => new(X, Y, Z);
-
-  public override IEnumerable<Param> Parameters
-  {
-    get
-    {
-      yield return X;
-      yield return Y;
-      yield return Z;
-    }
-  }
 
   public bool IsCoincidentWith(Point point)
   {

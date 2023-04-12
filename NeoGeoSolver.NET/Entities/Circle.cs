@@ -13,22 +13,6 @@ public class Circle : Entity
     Radius = radius;
   }
 
-  public override IEnumerable<Expression> Equations
-  {
-    get
-    {
-      yield break;
-    }
-  }
-
-  public override IEnumerable<Param> Parameters
-  {
-    get
-    {
-      yield return Radius;
-    }
-  }
-
   public Expression RadiusExpr()
   {
     return Expression.Abs(Radius);
