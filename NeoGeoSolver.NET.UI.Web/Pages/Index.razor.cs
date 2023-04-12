@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Excubo.Blazor.Canvas;
 using Excubo.Blazor.Canvas.Contexts;
@@ -9,8 +10,10 @@ using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using NeoGeoSolver.NET.UI.Web.Drawing;
-using NeoGeoSolver.NET.UI.Web.Drawing.Model;
+using NeoGeoSolver.NET.Constraints;
+using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.UI.Web.Interface;
+using NeoGeoSolver.NET.UI.Web.Model;
 
 namespace NeoGeoSolver.NET.UI.Web.Pages;
 
@@ -49,7 +52,7 @@ public partial class Index
   private DrawableEntity _drawEnt;
 
   private ConstraintType _selConstraintType;
-  private readonly List<BaseConstraint> _constraints = new();
+  private readonly List<Constraint> _constraints = new();
 
   private readonly List<IDrawable> _drawables = new();
 
@@ -57,7 +60,7 @@ public partial class Index
   private bool _isPtFixed;
 
   private bool _canShowEntityConstraints;
-  private readonly List<BaseConstraint> _selConstraints = new();
+  private readonly List<Constraint> _selConstraints = new();
 
   private int _value = 200;
 
@@ -145,7 +148,7 @@ public partial class Index
       if (selPts.Count == 1)
       {
         var selPt = selPts.Single().Point;
-        _isPtFixed = !selPt.X.Free && !selPt.X.Free;
+        _isPtFixed = !selPt.x.Free && !selPt.x.Free;
 
         // get all constraints associate with this point
         var selPtCons = _constraints
@@ -644,7 +647,7 @@ public partial class Index
           .Where(arc => arc.IsSelected)
           .ToList();
 
-        BaseConstraint cons = null;
+        Constraint cons = null;
 
         if (selCircs.Count == 2 && selArcs.Count == 0)
         {
@@ -785,7 +788,7 @@ public partial class Index
           return;
         }
 
-        BaseConstraint cons = null;
+        Constraint cons = null;
 
         // Quadrants are defined:
         //    0 --> east
@@ -839,7 +842,7 @@ public partial class Index
     _isPtFixed = false;
   }
 
-  private void OnDeleteSelectedEntityConstraint(BaseConstraint cons)
+  private void OnDeleteSelectedEntityConstraint(Constraint cons)
   {
     _ = _constraints.Remove(cons);
     _ = _selConstraints.Remove(cons);

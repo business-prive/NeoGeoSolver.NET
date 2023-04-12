@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NeoGeoSolver.NET.Entities;
 
-namespace NeoGeoSolver.NET.UI.Web.Drawing.Model;
+namespace NeoGeoSolver.NET.UI.Web.Model;
 
 public abstract class PointDrawer : EntityDrawer
 {

@@ -2,7 +2,7 @@
 using System.Drawing;
 using NeoGeoSolver.NET.Entities;
 
-namespace NeoGeoSolver.NET.UI.Web.Drawing;
+namespace NeoGeoSolver.NET.UI.Web;
 
 using Point = System.Drawing.Point;
 

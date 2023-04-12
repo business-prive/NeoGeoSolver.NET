@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using Excubo.Blazor.Canvas.Contexts;
-using NeoGeoSolver.NET.UI.Web.Drawing.Model;
+using NeoGeoSolver.NET.UI.Web.Model;
 
-namespace NeoGeoSolver.NET.UI.Web.Drawing;
+namespace NeoGeoSolver.NET.UI.Web.Interface;
 
 public interface IDrawable
 {

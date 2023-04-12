@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Excubo.Blazor.Canvas.Contexts;
 using NeoGeoSolver.NET.Entities;
 
-namespace NeoGeoSolver.NET.UI.Web.Drawing.Model;
+namespace NeoGeoSolver.NET.UI.Web.Model;
 
 public class ArcDrawer : EntityDrawer
 {

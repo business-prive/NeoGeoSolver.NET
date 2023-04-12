@@ -3,8 +3,9 @@ using System.Drawing;
 using System.Threading.Tasks;
 using Excubo.Blazor.Canvas;
 using Excubo.Blazor.Canvas.Contexts;
+using NeoGeoSolver.NET.UI.Web.Interface;
 
-namespace NeoGeoSolver.NET.UI.Web.Drawing.Model;
+namespace NeoGeoSolver.NET.UI.Web.Model;
 
 public abstract class EntityDrawer : IDrawable
 {
