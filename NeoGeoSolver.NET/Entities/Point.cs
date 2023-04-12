@@ -48,9 +48,4 @@ public class Point : Entity
            Math.Abs(Y.Value - point.X.Value) < Tolerance &&
            Math.Abs(Z.Value - point.Z.Value) < Tolerance;
   }
-
-  public override ExpressionVector PointOn(Expression t)
-  {
-    return Expr;
-  }
 }

@@ -29,23 +29,6 @@ public class Circle : Entity
     }
   }
 
-  public override ExpressionVector PointOn(Expression t)
-  {
-    var angle = t * 2.0 * Math.PI;
-    return Centre.Expr + new ExpressionVector(Expression.Cos(angle), Expression.Sin(angle), 0.0) * RadiusExpr();
-  }
-
-  public override ExpressionVector TangentAt(Expression t)
-  {
-    var angle = t * 2.0 * Math.PI;
-    return new ExpressionVector(-Expression.Sin(angle), Expression.Cos(angle), 0.0);
-  }
-
-  public Expression LengthExpr()
-  {
-    return new Expression(2.0) * Math.PI * RadiusExpr();
-  }
-
   public Expression RadiusExpr()
   {
     return Expression.Abs(Radius);
