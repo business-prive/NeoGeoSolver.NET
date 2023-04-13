@@ -15,7 +15,6 @@ $ dotnet test
 ```
 
 ## Supported constraints
-
 * arc circle concentric
 * arcs concentric
 * arc radius
@@ -34,12 +33,14 @@ $ dotnet test
 * lines collinear
 * line length
 * lines equal length
+* line tangent to arc
 * line tangent to circle
 * angle (between two lines)
 * line horizontal
 * line vertical
 * lines parallel
 * lines perpendicular
+* equal value (might be useful?)
 
 ## Unsupported constraints
 * point to point vertical distance
@@ -50,10 +51,9 @@ $ dotnet test
 ## Further work
 * ~~change arc definition to centre-radius-start_angle-end_angle~~
 * implement unsupported constraints
-* remove unused constraints
+* ~~remove unused constraints~~
   * ~~tangent (use line-entity distance with zero distance)~~
   * ~~point on (use point-entity distance with zero distance)~~
-  * equal value (might be useful?)
   * ~~points angle~~
 * ~~remove unused entities~~
   * ~~function (no docs + not normally used in CAD)~~
