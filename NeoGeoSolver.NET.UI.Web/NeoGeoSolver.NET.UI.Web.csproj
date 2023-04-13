@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NeoGeoSolver.NET.UI.Web.Drawing\NeoGeoSolver.NET.UI.Web.Drawing.csproj" />
     <ProjectReference Include="..\NeoGeoSolver.NET\NeoGeoSolver.NET.csproj" />
   </ItemGroup>
 
