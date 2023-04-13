@@ -1,15 +1,17 @@
-﻿namespace NeoGeoSolver.NET.Entities;
+﻿using NeoGeoSolver.NET.Solver;
+
+namespace NeoGeoSolver.NET.Entities;
 
 public class Arc : Entity
 {
   public readonly Point Centre = new();
-  public readonly Point Point0 = new();
-  public readonly Point Point1 = new();
+  public readonly Param StartAngle = new("StartAngle");
+  public readonly Param EndAngle = new("EndAngle");
 
-  public Arc(Point centre, Point pt0, Point pt1)
+  public Arc(Point centre, Param startAngle, Param endAngle)
   {
     Centre = centre;
-    Point0 = pt0;
-    Point1 = pt1;
+    StartAngle = startAngle;
+    EndAngle = endAngle;
   }
 }

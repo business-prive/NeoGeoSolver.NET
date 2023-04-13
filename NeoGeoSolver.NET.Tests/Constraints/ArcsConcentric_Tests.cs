@@ -7,13 +7,13 @@ public sealed class ArcsConcentric_Tests
   public void Concentric_works()
   {
     var centre0 = new Point(0, 0, 0);
-    var c0p0 = new Point(10, 0, 0);
-    var c0p1 = new Point(0, 10, 0);
-    var arc0 = new Arc(centre0, c0p0, c0p1);
+    var startAngle0 = new Param("startAngle0", 0);
+    var endAngle0 = new Param("endAngle0", Math.PI);
+    var arc0 = new Arc(centre0, startAngle0, endAngle0);
     var centre1 = new Point(10, 0, 0);
-    var c1p0 = new Point(10, 0, 0);
-    var c1p1 = new Point(20, 10, 0);
-    var arc1 = new Arc(centre1, c1p0, c1p1);
+    var startAngle1 = new Param("startAngle1", 0);
+    var endAngle1 = new Param("endAngle1", 0);
+    var arc1 = new Arc(centre1, startAngle1, endAngle1);
     var constr = new ArcsConcentric(arc0, arc1);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(constr.Equations);

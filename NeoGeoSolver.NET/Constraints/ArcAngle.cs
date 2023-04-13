@@ -39,28 +39,8 @@ public class ArcAngle : Value
   {
     get
     {
-      var p = GetPointsExp();
-      var d0 = p[0] - p[1];
-      var d1 = p[3] - p[2];
-      var angle = ConstraintExp.Angle2d(d0, d1, true);
+      var angle = _arc.EndAngle.Expr - _arc.StartAngle.Expr;
       yield return angle - value;
     }
-  }
-
-  private ExpressionVector[] GetPointsExp()
-  {
-    var p = new ExpressionVector[4];
-    var arc = _arc;
-    p[0] = arc.Point0.Expr;
-    p[1] = arc.Centre.Expr;
-    p[2] = arc.Centre.Expr;
-    p[3] = arc.Point1.Expr;
-    if (Supplementary)
-    {
-      SystemExt.Swap(ref p[0], ref p[3]);
-      SystemExt.Swap(ref p[1], ref p[2]);
-    }
-
-    return p;
   }
 }
