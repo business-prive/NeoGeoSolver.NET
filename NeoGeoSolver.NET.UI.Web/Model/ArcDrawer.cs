@@ -26,10 +26,12 @@ public class ArcDrawer : EntityDrawer
   {
     Arc = arc;
 
-    var startVec = new Vector(Math.Cos(Arc.StartAngle.Value), Math.Sin(Arc.StartAngle.Value));
-    var startPt = Arc.Centre + Arc.Rad.Value * startVec;
-    var endVec = new Vector(Math.Cos(Arc.EndAngle.Value), Math.Sin(Arc.EndAngle.Value));
-    var endPt = Arc.Centre + Arc.Rad.Value * endVec;
+    var startPtX = Arc.Centre.X.Value + Arc.Radius.Value * Math.Cos(Arc.StartAngle.Value);
+    var startPtY = Arc.Centre.Y.Value + Arc.Radius.Value * Math.Sin(Arc.StartAngle.Value);
+    var startPt = new Point(startPtX, startPtY, 0);
+    var endPtX = Arc.Centre.X.Value + Arc.Radius.Value * Math.Cos(Arc.EndAngle.Value);
+    var endPtY = Arc.Centre.Y.Value + Arc.Radius.Value * Math.Sin(Arc.EndAngle.Value);
+    var endPt = new Point(endPtX, endPtY, 0);
 
     // NOTE:  Start+End are now disconnected from the underlying Arc
     //          ie changes to Start+End will not affect underlying Arc
@@ -47,7 +49,7 @@ public class ArcDrawer : EntityDrawer
     await Initialise(batch);
 
     var drawCCW = DrawArcCounterClockwise(Arc.StartAngle.Value, Arc.EndAngle.Value);
-    await batch.ArcAsync(Arc.Centre.X.Value, Arc.Centre.Y.Value, Arc.Rad.Value, Arc.StartAngle.Value, Arc.EndAngle.Value, drawCCW);
+    await batch.ArcAsync(Arc.Centre.X.Value, Arc.Centre.Y.Value, Arc.Radius.Value, Arc.StartAngle.Value, Arc.EndAngle.Value, drawCCW);
     await batch.StrokeAsync();
 
     await End.DrawAsync(batch);

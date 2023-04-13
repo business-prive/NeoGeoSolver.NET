@@ -14,6 +14,6 @@ public sealed class StartPointDrawer : PointDrawer
 
   protected override async Task DrawAsyncInternal(Batch2D batch)
   {
-    await batch.ArcAsync(Point.x.Value, Point.x.Value, CircleRadius, 0, 2 * Math.PI);
+    await batch.ArcAsync(Point.X.Value, Point.X.Value, CircleRadius, 0, 2 * Math.PI);
   }
 }

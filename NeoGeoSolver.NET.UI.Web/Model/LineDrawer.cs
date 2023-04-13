@@ -33,8 +33,8 @@ public sealed class LineDrawer : EntityDrawer
     await batch.BeginPathAsync();
     await Initialise(batch);
 
-    await batch.MoveToAsync(Line.Point0.x.Value, Line.Point0.y.Value);
-    await batch.LineToAsync(Line.Point1.x.Value, Line.Point1.y.Value);
+    await batch.MoveToAsync(Line.Point0.X.Value, Line.Point0.Y.Value);
+    await batch.LineToAsync(Line.Point1.X.Value, Line.Point1.Y.Value);
     await batch.StrokeAsync();
 
     await End.DrawAsync(batch);

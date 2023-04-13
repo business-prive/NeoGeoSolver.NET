@@ -13,6 +13,6 @@ public sealed class EndPointDrawer : PointDrawer
 
   protected override async Task DrawAsyncInternal(Batch2D batch)
   {
-    await batch.RectAsync(Point.x.Value - RectSize / 2,  Point.y.Value - RectSize / 2, RectSize, RectSize);
+    await batch.RectAsync(Point.X.Value - RectSize / 2,  Point.Y.Value - RectSize / 2, RectSize, RectSize);
   }
 }

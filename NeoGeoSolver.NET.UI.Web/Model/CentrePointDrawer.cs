@@ -15,11 +15,11 @@ public sealed class CentrePointDrawer : PointDrawer
   {
     await batch.BeginPathAsync();
     await Initialise(batch);
-    await batch.MoveToAsync(Point.x.Value, Point.y.Value + RectSize / 2);
-    await batch.LineToAsync(Point.x.Value, Point.y.Value - RectSize / 2);
+    await batch.MoveToAsync(Point.X.Value, Point.Y.Value + RectSize / 2);
+    await batch.LineToAsync(Point.X.Value, Point.Y.Value - RectSize / 2);
       
-    await batch.MoveToAsync(Point.x.Value + RectSize / 2, Point.y.Value);
-    await batch.LineToAsync(Point.x.Value - RectSize / 2, Point.y.Value);
+    await batch.MoveToAsync(Point.X.Value + RectSize / 2, Point.Y.Value);
+    await batch.LineToAsync(Point.X.Value - RectSize / 2, Point.Y.Value);
     await batch.StrokeAsync();
   }
 }

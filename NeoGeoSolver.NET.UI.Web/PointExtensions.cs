@@ -19,20 +19,20 @@ public static class PointExtensions
 
   public static bool IsNear(this Entities.Point pt, Point other)
   {
-    var dX = pt.x.Value - other.X;
-    var dY = pt.y.Value - other.Y;
+    var dX = pt.X.Value - other.X;
+    var dY = pt.Y.Value - other.Y;
     var distSq = dX * dX + dY * dY;
     return distSq < ToleranceRadius;
   }
 
   public static Point ToDrawing(this Entities.Point pt)
   {
-    return new Point((int) pt.x.Value, (int) pt.y.Value);
+    return new Point((int) pt.X.Value, (int) pt.Y.Value);
   }
 
   public static Entities.Point ToModel(this Entities.Point pt)
   {
-    return new Entities.Point((int) pt.x.Value, (int) pt.y.Value, 0);
+    return new Entities.Point((int) pt.X.Value, (int) pt.Y.Value, 0);
   }
 
   public static Entities.Point ToModel(this Point pt)
@@ -52,9 +52,9 @@ public static class PointExtensions
   public static bool IsNear(this Point pt, Arc arc)
   {
     //see what the current radius to the point is
-    var a1CenterX = arc.Centre.x.Value;
-    var a1CenterY = arc.Centre.y.Value;
-    var a1Radius = arc.Rad.Value;
+    var a1CenterX = arc.Centre.X.Value;
+    var a1CenterY = arc.Centre.Y.Value;
+    var a1Radius = arc.Radius.Value;
     var a1StartA = arc.StartAngle.Value;
     var a1StartY = a1CenterY + a1Radius * Math.Sin(a1StartA);
     var a1StartX = a1CenterX + a1Radius * Math.Cos(a1StartA);

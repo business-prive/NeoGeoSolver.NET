@@ -4,6 +4,7 @@ using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Excubo.Blazor.Canvas.Contexts;
 using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.UI.Web.Model;
 
@@ -23,7 +24,7 @@ public class CircleDrawer : EntityDrawer
 
   public override bool IsNear(System.Drawing.Point pt)
   {
-    var arc = new Arc(Circle.Centre, Circle.Radius, new Parameter(0), new Parameter(2 * Math.PI));
+    var arc = new Arc(Circle.Centre, Circle.Radius, new Param("StartAngle", 0), new Param("EndAngle", 2 * Math.PI));
     return pt.IsNear(arc);
   }
 
@@ -34,7 +35,7 @@ public class CircleDrawer : EntityDrawer
     await batch.BeginPathAsync();
     await Initialise(batch);
 
-    await batch.ArcAsync(Circle.Centre.x.Value, Circle.Centre.y.Value, Circle.Radius.Value, 0d, 2 * Math.PI);
+    await batch.ArcAsync(Circle.Centre.X.Value, Circle.Centre.Y.Value, Circle.Radius.Value, 0d, 2 * Math.PI);
     await batch.StrokeAsync();
   }
 }

@@ -18,54 +18,62 @@ public sealed class UpdatableCircleDrawer : CircleDrawer
   public UpdatableCircleDrawer(Circle circle) :
     base(circle)
   {
-    North = new StartPointDrawer(new Point(Circle.Centre.x.Value, Circle.Centre.y.Value + Circle.Radius.Value, 0));
-    South = new StartPointDrawer(new Point(Circle.Centre.x.Value, Circle.Centre.y.Value - Circle.Radius.Value, 0));
-    East = new StartPointDrawer(new Point(Circle.Centre.x.Value + Circle.Radius.Value, Circle.Centre.y.Value, 0));
-    West = new StartPointDrawer(new Point(Circle.Centre.x.Value - Circle.Radius.Value, Circle.Centre.y.Value, 0));
+    North = new StartPointDrawer(new Point(Circle.Centre.X.Value, Circle.Centre.Y.Value + Circle.Radius.Value, 0));
+    South = new StartPointDrawer(new Point(Circle.Centre.X.Value, Circle.Centre.Y.Value - Circle.Radius.Value, 0));
+    East = new StartPointDrawer(new Point(Circle.Centre.X.Value + Circle.Radius.Value, Circle.Centre.Y.Value, 0));
+    West = new StartPointDrawer(new Point(Circle.Centre.X.Value - Circle.Radius.Value, Circle.Centre.Y.Value, 0));
   }
 
   protected override async Task DrawAsyncInternal(Batch2D batch)
   {
     const double Tolerance = 1e-5;
-    var nVec = North.Point - Circle.Centre;
-    var sVec = South.Point - Circle.Centre;
-    var eVec = East.Point - Circle.Centre;
-    var wVec = West.Point - Circle.Centre;
+    var nVecX = North.Point.X.Value - Circle.Centre.X.Value;
+    var nVecY = North.Point.Y.Value - Circle.Centre.Y.Value;
+    var nVec = Math.Sqrt(nVecX * nVecX + nVecY * nVecY);
+    var sVecX = South.Point.X.Value - Circle.Centre.X.Value;
+    var sVecY = South.Point.Y.Value - Circle.Centre.Y.Value;
+    var sVec = Math.Sqrt(sVecX * sVecX + sVecY * sVecY);
+    var eVecX = East.Point.X.Value - Circle.Centre.X.Value;
+    var eVecY = East.Point.Y.Value - Circle.Centre.Y.Value;
+    var eVec = Math.Sqrt(eVecX * eVecX + eVecY * eVecY);
+    var wVecX = West.Point.X.Value - Circle.Centre.X.Value;
+    var wVecY = West.Point.Y.Value - Circle.Centre.Y.Value;
+    var wVec = Math.Sqrt(wVecX * wVecX + wVecY * wVecY);
 
     // if Center has moved, then *all* of NSEW will be inside/outside a Rad from Center
-    if (!(Math.Abs(Circle.Radius.Value - nVec.Length) > Tolerance) ||
-        !(Math.Abs(Circle.Radius.Value - sVec.Length) > Tolerance) ||
-        !(Math.Abs(Circle.Radius.Value - eVec.Length) > Tolerance) ||
-        !(Math.Abs(Circle.Radius.Value - wVec.Length) > Tolerance))
+    if (!(Math.Abs(Circle.Radius.Value - nVec) > Tolerance) ||
+        !(Math.Abs(Circle.Radius.Value - sVec) > Tolerance) ||
+        !(Math.Abs(Circle.Radius.Value - eVec) > Tolerance) ||
+        !(Math.Abs(Circle.Radius.Value - wVec) > Tolerance))
     {
       // update Rad based on new NSEW
-      if (Math.Abs(Circle.Radius.Value - nVec.Length) > Tolerance)
+      if (Math.Abs(Circle.Radius.Value - nVec) > Tolerance)
       {
-        Circle.Radius.Value = nVec.Length;
+        Circle.Radius.Value = nVec;
       }
-      else if (Math.Abs(Circle.Radius.Value - sVec.Length) > Tolerance)
+      else if (Math.Abs(Circle.Radius.Value - sVec) > Tolerance)
       {
-        Circle.Radius.Value = sVec.Length;
+        Circle.Radius.Value = sVec;
       }
-      else if (Math.Abs(Circle.Radius.Value - eVec.Length) > Tolerance)
+      else if (Math.Abs(Circle.Radius.Value - eVec) > Tolerance)
       {
-        Circle.Radius.Value = eVec.Length;
+        Circle.Radius.Value = eVec;
       }
-      else if (Math.Abs(Circle.Radius.Value - wVec.Length) > Tolerance)
+      else if (Math.Abs(Circle.Radius.Value - wVec) > Tolerance)
       {
-        Circle.Radius.Value = wVec.Length;
+        Circle.Radius.Value = wVec;
       }
     }
 
     // update NSEW to sit on Circle
-    North.Point.x.Value = Circle.Centre.x.Value;
-    North.Point.y.Value = Circle.Centre.y.Value + Circle.Radius.Value;
-    South.Point.x.Value = Circle.Centre.x.Value;
-    South.Point.y.Value = Circle.Centre.y.Value - Circle.Radius.Value;
-    East.Point.x.Value = Circle.Centre.x.Value + Circle.Radius.Value;
-    East.Point.y.Value = Circle.Centre.y.Value;
-    West.Point.x.Value = Circle.Centre.x.Value - Circle.Radius.Value;
-    West.Point.y.Value = Circle.Centre.y.Value;
+    North.Point.X.Value = Circle.Centre.X.Value;
+    North.Point.Y.Value = Circle.Centre.Y.Value + Circle.Radius.Value;
+    South.Point.X.Value = Circle.Centre.X.Value;
+    South.Point.Y.Value = Circle.Centre.Y.Value - Circle.Radius.Value;
+    East.Point.X.Value = Circle.Centre.X.Value + Circle.Radius.Value;
+    East.Point.Y.Value = Circle.Centre.Y.Value;
+    West.Point.X.Value = Circle.Centre.X.Value - Circle.Radius.Value;
+    West.Point.Y.Value = Circle.Centre.Y.Value;
 
     await North.DrawAsync(batch);
     await South.DrawAsync(batch);

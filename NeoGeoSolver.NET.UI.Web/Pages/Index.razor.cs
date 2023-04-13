@@ -148,7 +148,7 @@ public partial class Index
       if (selPts.Count == 1)
       {
         var selPt = selPts.Single().Point;
-        _isPtFixed = !selPt.x.Free && !selPt.x.Free;
+        _isPtFixed = !selPt.X.Free && !selPt.X.Free;
 
         // get all constraints associate with this point
         var selPtCons = _constraints
