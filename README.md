@@ -1,6 +1,9 @@
 # NeoGeoSolver
 
-This project provdes a geometric constraint solver as a set of reusable C# components.
+![screenshot-ui](docs/screenshot.png)
+
+This project provdes a geometric constraint solver for CAD systems
+as a set of reusable C# components.
 
 ## Prerequisites
 * .NET 7
@@ -79,4 +82,5 @@ $ dotnet test
 ## Acknowledgements
 
 This repository was forked from [BimCAD](https://github.com/BimCad-online/BimCADOnline) which
-in turn was forked from [NoteCAD](https://github.com/NoteCAD/NoteCAD).
+in turn was forked from [NoteCAD](https://github.com/NoteCAD/NoteCAD);
+which I suspect was based on [geosolver-python](https://github.com/imuli/geosolver-python)
