@@ -20,6 +20,7 @@ $ dotnet test
 * arcs concentric
 * arc radius
 * arcs equal radius
+* arc circle equal radius
 * points coincident
 * points distance
 * points horizontal
@@ -40,7 +41,6 @@ $ dotnet test
 * lines perpendicular
 
 ## Unsupported constraints
-* arc circ equal radius
 * point on arc
 * point to point vertical distance
 * point to point horizontal distance
