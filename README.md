@@ -16,7 +16,6 @@ $ dotnet test
 
 ## Supported constraints
 
-The constraints that are currently supported are the following:
 * arc circ concentric
 * arcs concentric
 * points coincident
