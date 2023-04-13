@@ -16,16 +16,20 @@ $ dotnet test
 
 ## Supported constraints
 
-* arc circ concentric
+* arc circle concentric
 * arcs concentric
+* arc radius
+* arcs equal radius
 * points coincident
 * points distance
 * points horizontal
 * points vertical
 * point on circle
 * point to line distance
+* circles concentric
 * circle diameter
 * circles equal diameter
+* lines collinear
 * line length
 * lines equal length
 * line tangent to circle
@@ -37,20 +41,11 @@ $ dotnet test
 
 ## Unsupported constraints
 * arc circ equal radius
-* ~~collinear lines~~
 * point on arc
-* arc radius
-* arcs equal radius
 * point to point vertical distance
 * point to point horizontal distance
 * point to line vertical distance
 * point to line horizontal distance
-* ~~concentric arcs~~
-  * ~~use points coincident~~
-* ~~concentric circles~~
-  * ~~use points coincident~~
-* ~~concentric circ arc~~
-  * ~~use points coincident~~
 
 ## Further work
 * change arc definition to centre-radius-start_angle-end_angle
