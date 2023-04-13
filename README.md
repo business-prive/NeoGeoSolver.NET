@@ -25,6 +25,7 @@ $ dotnet test
 * points distance
 * points horizontal
 * points vertical
+* point on arc
 * point on circle
 * point to line distance
 * circles concentric
@@ -41,24 +42,23 @@ $ dotnet test
 * lines perpendicular
 
 ## Unsupported constraints
-* point on arc
 * point to point vertical distance
 * point to point horizontal distance
 * point to line vertical distance
 * point to line horizontal distance
 
 ## Further work
-* change arc definition to centre-radius-start_angle-end_angle
+* ~~change arc definition to centre-radius-start_angle-end_angle~~
 * implement unsupported constraints
 * remove unused constraints
-  * tangent (use line-entity distance with zero distance)
-  * point on (use point-entity distance with zero distance)
+  * ~~tangent (use line-entity distance with zero distance)~~
+  * ~~point on (use point-entity distance with zero distance)~~
   * equal value (might be useful?)
-  * points angle
-* remove unused entities
-  * function (no docs + not normally used in CAD)
-  * spline (no docs + not normally used in CAD)
-  * ellipse + ellipsearc (not normally used in CAD)
+  * ~~points angle~~
+* ~~remove unused entities~~
+  * ~~function (no docs + not normally used in CAD)~~
+  * ~~spline (no docs + not normally used in CAD)~~
+  * ~~ellipse + ellipsearc (not normally used in CAD)~~
 * ~~more unit tests for solver~~
   * ~~multiple constraints~~
 * portable UI aka test harness
