@@ -7,19 +7,6 @@ public abstract class Value : Constraint
   protected readonly Param value = new("value");
   public bool Reference { get; set; }
 
-  public override IEnumerable<Param> Parameters
-  {
-    get
-    {
-      if (!Reference)
-      {
-        yield break;
-      }
-
-      yield return value;
-    }
-  }
-
   public double GetValue()
   {
     return value.Value;

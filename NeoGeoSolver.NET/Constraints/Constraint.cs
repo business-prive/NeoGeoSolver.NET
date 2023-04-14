@@ -4,14 +4,6 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public abstract class Constraint
 {
-  public virtual IEnumerable<Param> Parameters
-  {
-    get
-    {
-      yield break;
-    }
-  }
-
   public virtual IEnumerable<Expression> Equations
   {
     get
