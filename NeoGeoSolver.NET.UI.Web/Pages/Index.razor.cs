@@ -29,11 +29,22 @@ public partial class Index
   [Inject]
   private IMatToaster _toaster { get; set; }
 
+  #region Canvas management
+
   private ElementReference _container;
   private Canvas _canvas;
   private Context2D _context;
   private Point CanvasPos = new(0, 0);
   private Point CanvasDims = new(0, 0);
+
+  private Point _mouseDown = new(0, 0);
+  private Point _currMouse = new(0, 0);
+
+  private bool _isMouseDown;
+
+  #endregion
+
+  #region Drawing
 
   private Point _lineStart = Point.Empty;
   private LineDrawer _tempLine;
@@ -45,18 +56,17 @@ public partial class Index
   private Point _circCentre = Point.Empty;
   private CircleDrawer _tempCirc;
 
-  private Point _mouseDown = new(0, 0);
-  private Point _currMouse = new(0, 0);
-
-  private bool _isMouseDown;
-
   private ApplicationMode _appMode = ApplicationMode.Draw;
   private DrawableEntity _drawEnt;
 
+  private readonly List<IDrawable> _drawables = new();
+
+  #endregion
+
+  #region Constraints
+
   private ConstraintType _selConstraintType;
   private readonly List<Constraint> _constraints = new();
-
-  private readonly List<IDrawable> _drawables = new();
 
   private bool _canShowPointConstraints;
   private bool _isPtFixed;
@@ -65,6 +75,10 @@ public partial class Index
   private readonly List<Constraint> _selConstraints = new();
 
   private int _value = 200;
+
+  #endregion
+
+  #region Drawing
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
@@ -95,6 +109,10 @@ public partial class Index
     }
   }
 
+  #endregion
+
+  #region MouseDown
+
   private void MouseDownCanvas(MouseEventArgs e)
   {
     _mouseDown.X = _currMouse.X = (int) (e.ClientX - CanvasPos.X);
@@ -103,97 +121,14 @@ public partial class Index
 
     if (_appMode == ApplicationMode.Select)
     {
-      // get points under mouse
-      var selPtsNearMouse = _drawables
-        .SelectMany(draw => draw.SelectionPoints)
-        .Where(pt => pt.Point.IsNear(_currMouse))
-        .ToList();
-      if (selPtsNearMouse.Any())
-      {
-        // add points under mouse to current selections
-        selPtsNearMouse.ForEach(pt => pt.IsSelected = true);
-      }
-
-
-      // only select entities under mouse which do not have any points selected
-      var selDrawsNearMouse = _drawables
-        .Where(draw => !draw.SelectionPoints.Any(pt => pt.IsSelected))
-        .Where(draw => draw.IsNear(_currMouse))
-        .ToList();
-      if (selDrawsNearMouse.Any())
-      {
-        // add entities under mouse to current selections
-        selDrawsNearMouse.ForEach(draw => draw.IsSelected = true);
-      }
-
-
-      // nothing under mouse, so clear all selections
-      _canShowPointConstraints = _canShowEntityConstraints = false;
-
-      if (!selPtsNearMouse.Any() && !selDrawsNearMouse.Any())
-      {
-        _drawables
-          .SelectMany(draw => draw.SelectionPoints)
-          .ToList()
-          .ForEach(pt => pt.IsSelected = false);
-        _drawables
-          .ToList()
-          .ForEach(draw => draw.IsSelected = false);
-      }
-
-
-      // update point constraints which depends on selection
-      var selPts = _drawables
-        .SelectMany(draw => draw.SelectionPoints)
-        .Where(pt => pt.IsSelected)
-        .ToList();
-      if (selPts.Count == 1)
-      {
-        var selPt = selPts.Single().Point;
-        _isPtFixed = _constraints.All(cons => !cons.Entities.Contains(selPt));
-
-        // get all constraints associate with this point
-        var selPtCons = _constraints
-          .Where(cons => cons.Entities.Contains(selPt));
-        _selConstraints.Clear();
-        _selConstraints.AddRange(selPtCons);
-
-        _canShowPointConstraints = _canShowEntityConstraints = true;
-      }
-
-
-      // update entity constraints which depends on selection
-      var selDraws = _drawables
-        .Where(draw => draw.IsSelected)
-        .ToList();
-      if (selDraws.Count == 1)
-      {
-        // get entity
-        var selDrawEnt = selDraws.Single().Entity;
-
-        // get all constraints associate with this entity
-        var selDrawEntCons = _constraints
-          .Where(cons => cons.Entities.Contains(selDrawEnt));
-        _selConstraints.Clear();
-        _selConstraints.AddRange(selDrawEntCons);
-
-        _canShowEntityConstraints = true;
-      }
+      MouseDown_Select();
     }
 
     // drawing line
     // MouseDown[StartPt] --> drag [update preview] --> MouseUp[EndPt]
     if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Line)
     {
-      _lineStart = _mouseDown;
-      var startPt = new Entities.Point(_lineStart.X, _lineStart.Y, 0);
-      var endPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
-      var line = new Line(startPt, endPt);
-      _tempLine = new LineDrawer(line)
-      {
-        ShowPreview = true
-      };
-      _drawables.Add(_tempLine);
+      MouseDown_DrawLine(e);
     }
 
 
@@ -201,45 +136,7 @@ public partial class Index
     // MouseDown[CentrePt] --> drag [update line preview] --> MouseUp[StartPt] --> move [update arc preview] --> MouseDown[EndPt]
     if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Arc)
     {
-      if (_arcCentre == Point.Empty)
-      {
-        _arcCentre = _mouseDown;
-
-        var centrePt = _arcCentre.ToModel();
-        var startPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
-        var line = new Line(centrePt, startPt);
-        _tempLine = new LineDrawer(line)
-        {
-          ShowPreview = true
-        };
-        _drawables.Add(_tempLine);
-      }
-
-      if (_arcCentre != Point.Empty &&
-          _arcStart != Point.Empty &&
-          _tempArc is not null)
-      {
-        // finish arc
-        var centre = _arcCentre.ToModel();
-        var radPt = _arcCentre - new Size(_arcStart);
-        var rad = Math.Sqrt(radPt.X * radPt.X + radPt.Y * radPt.Y);
-        var radParam = new Param("Radius", rad);
-        var startAngle = Math.Atan2(_arcStart.Y - _arcCentre.Y, _arcStart.X - _arcCentre.X);
-        var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
-        var startAngleParam = new Param("StartAngle", startAngle);
-        var endAngleParam = new Param("EndAngle", endAngle);
-        var arc = new Arc(centre, radParam, startAngleParam, endAngleParam);
-        var arcDraw = new UpdatableArcDrawer(arc);
-        _drawables.Add(arcDraw);
-
-        // reset arc creation
-        _ = _drawables.Remove(_tempLine);
-        _ = _drawables.Remove(_tempArc);
-        _tempLine = null;
-        _tempArc = null;
-        _arcCentre = Point.Empty;
-        _arcStart = Point.Empty;
-      }
+      MouseDown_DrawArc(e);
     }
 
 
@@ -247,15 +144,160 @@ public partial class Index
     // MouseDown[CentrePt] --> drag [update preview] --> MouseUp[Radius]
     if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Circle)
     {
-      _circCentre = _mouseDown;
-      var circle = new Circle(_circCentre.ToModel(), new Param("Radius",0));
-      _tempCirc = new CircleDrawer(circle)
+      MouseDown_DrawCircle(e);
+    }
+  }
+
+  private void MouseDown_DrawCircle(MouseEventArgs e)
+  {
+    _circCentre = _mouseDown;
+    var circle = new Circle(_circCentre.ToModel(), new Param("Radius", 0));
+    _tempCirc = new CircleDrawer(circle)
+    {
+      ShowPreview = true
+    };
+    _drawables.Add(_tempCirc);
+  }
+
+  private void MouseDown_DrawArc(MouseEventArgs e)
+  {
+    if (_arcCentre == Point.Empty)
+    {
+      _arcCentre = _mouseDown;
+
+      var centrePt = _arcCentre.ToModel();
+      var startPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
+      var line = new Line(centrePt, startPt);
+      _tempLine = new LineDrawer(line)
       {
         ShowPreview = true
       };
-      _drawables.Add(_tempCirc);
+      _drawables.Add(_tempLine);
+    }
+
+    if (_arcCentre != Point.Empty &&
+        _arcStart != Point.Empty &&
+        _tempArc is not null)
+    {
+      // finish arc
+      var centre = _arcCentre.ToModel();
+      var radPt = _arcCentre - new Size(_arcStart);
+      var rad = Math.Sqrt(radPt.X * radPt.X + radPt.Y * radPt.Y);
+      var radParam = new Param("Radius", rad);
+      var startAngle = Math.Atan2(_arcStart.Y - _arcCentre.Y, _arcStart.X - _arcCentre.X);
+      var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
+      var startAngleParam = new Param("StartAngle", startAngle);
+      var endAngleParam = new Param("EndAngle", endAngle);
+      var arc = new Arc(centre, radParam, startAngleParam, endAngleParam);
+      var arcDraw = new UpdatableArcDrawer(arc);
+      _drawables.Add(arcDraw);
+
+      // reset arc creation
+      _ = _drawables.Remove(_tempLine);
+      _ = _drawables.Remove(_tempArc);
+      _tempLine = null;
+      _tempArc = null;
+      _arcCentre = Point.Empty;
+      _arcStart = Point.Empty;
     }
   }
+
+  private void MouseDown_DrawLine(MouseEventArgs e)
+  {
+    _lineStart = _mouseDown;
+    var startPt = new Entities.Point(_lineStart.X, _lineStart.Y, 0);
+    var endPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
+    var line = new Line(startPt, endPt);
+    _tempLine = new LineDrawer(line)
+    {
+      ShowPreview = true
+    };
+    _drawables.Add(_tempLine);
+  }
+
+  private void MouseDown_Select()
+  {
+    // get points under mouse
+    var selPtsNearMouse = _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.Point.IsNear(_currMouse))
+      .ToList();
+    if (selPtsNearMouse.Any())
+    {
+      // add points under mouse to current selections
+      selPtsNearMouse.ForEach(pt => pt.IsSelected = true);
+    }
+
+
+    // only select entities under mouse which do not have any points selected
+    var selDrawsNearMouse = _drawables
+      .Where(draw => !draw.SelectionPoints.Any(pt => pt.IsSelected))
+      .Where(draw => draw.IsNear(_currMouse))
+      .ToList();
+    if (selDrawsNearMouse.Any())
+    {
+      // add entities under mouse to current selections
+      selDrawsNearMouse.ForEach(draw => draw.IsSelected = true);
+    }
+
+
+    // nothing under mouse, so clear all selections
+    _canShowPointConstraints = _canShowEntityConstraints = false;
+
+    if (!selPtsNearMouse.Any() && !selDrawsNearMouse.Any())
+    {
+      _drawables
+        .SelectMany(draw => draw.SelectionPoints)
+        .ToList()
+        .ForEach(pt => pt.IsSelected = false);
+      _drawables
+        .ToList()
+        .ForEach(draw => draw.IsSelected = false);
+    }
+
+
+    // update point constraints which depends on selection
+    var selPts = _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList();
+    if (selPts.Count == 1)
+    {
+      var selPt = selPts.Single().Point;
+      _isPtFixed = _constraints.All(cons => !cons.Entities.Contains(selPt));
+
+      // get all constraints associate with this point
+      var selPtCons = _constraints
+        .Where(cons => cons.Entities.Contains(selPt));
+      _selConstraints.Clear();
+      _selConstraints.AddRange(selPtCons);
+
+      _canShowPointConstraints = _canShowEntityConstraints = true;
+    }
+
+
+    // update entity constraints which depends on selection
+    var selDraws = _drawables
+      .Where(draw => draw.IsSelected)
+      .ToList();
+    if (selDraws.Count == 1)
+    {
+      // get entity
+      var selDrawEnt = selDraws.Single().Entity;
+
+      // get all constraints associate with this entity
+      var selDrawEntCons = _constraints
+        .Where(cons => cons.Entities.Contains(selDrawEnt));
+      _selConstraints.Clear();
+      _selConstraints.AddRange(selDrawEntCons);
+
+      _canShowEntityConstraints = true;
+    }
+  }
+
+  #endregion
+
+  #region MouseMove
 
   private void MouseMoveCanvasAsync(MouseEventArgs e)
   {
@@ -278,72 +320,96 @@ public partial class Index
     // MouseDown[StartPt] --> drag [update preview] --> MouseUp[EndPt]
     if (_isMouseDown && _appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Line)
     {
-      _tempLine.Line.Point1.X.Value = _currMouse.X;
-      _tempLine.Line.Point1.Y.Value = _currMouse.Y;
+      MouseMove_DrawLine();
     }
 
     // drawing arc
     // MouseDown[CentrePt] --> drag [update line preview] --> MouseUp[StartPt] --> move [update arc preview] --> MouseDown[EndPt]
     if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Arc)
     {
-      // dragging to arc start point
-      if (_isMouseDown && _tempLine is not null)
-      {
-        _tempLine.Line.Point1.X.Value = _currMouse.X;
-        _tempLine.Line.Point1.Y.Value = _currMouse.Y;
-      }
-
-      if (_arcCentre != Point.Empty &&
-          _arcStart != Point.Empty &&
-          _tempArc is null)
-      {
-        var centre = _arcCentre.ToModel();
-        var radPt = _arcCentre - new Size(_arcStart);
-        var rad = Math.Sqrt(radPt.X * radPt.X + radPt.Y * radPt.Y);
-        var radParam = new Param("Radius", rad);
-        var startAngle = Math.Atan2(_arcStart.Y - _arcCentre.Y, _arcStart.X - _arcCentre.X);
-        var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
-        var startAngleParam = new Param("StartAngle", startAngle);
-        var endAngleParam = new Param("EndAngle", endAngle);
-        var arc = new Arc(centre, radParam, startAngleParam, endAngleParam);
-        _tempArc = new ArcDrawer(arc);
-        _drawables.Add(_tempArc);
-      }
-
-      if (_arcCentre != Point.Empty &&
-          _arcStart != Point.Empty &&
-          _tempArc is not null)
-      {
-        var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
-        _tempArc.Arc.EndAngle.Value = endAngle;
-      }
+      MouseMove_DrawArc();
     }
 
     // drawing circle
     // MouseDown[CentrePt] --> drag [update preview] --> MouseUp[Radius]
     if (_isMouseDown && _appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Circle)
     {
-      var currMouse = new Point(_currMouse.X, _currMouse.Y);
-      var radVecX = _tempCirc.Circle.Centre.X.Value - currMouse.ToModel().X.Value;
-      var radVecY = _tempCirc.Circle.Centre.Y.Value - currMouse.ToModel().Y.Value;
-      var radVec = Math.Sqrt(radVecX * radVecX + radVecY * radVecY);
-      _tempCirc.Circle.Radius.Value = radVec;
+      MouseMove_DrawCircle();
     }
 
     // drag selected points
     if (_isMouseDown && _appMode == ApplicationMode.Select)
     {
-      _drawables
-        .SelectMany(draw => draw.SelectionPoints)
-        .Where(pt => pt.IsSelected)
-        .ToList()
-        .ForEach(pt =>
-        {
-          pt.Point.X.Value = _currMouse.X;
-          pt.Point.Y.Value = _currMouse.Y;
-        });
+      MouseMove_DragPoints();
     }
   }
+
+  private void MouseMove_DragPoints()
+  {
+    _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList()
+      .ForEach(pt =>
+      {
+        pt.Point.X.Value = _currMouse.X;
+        pt.Point.Y.Value = _currMouse.Y;
+      });
+  }
+
+  private void MouseMove_DrawCircle()
+  {
+    var currMouse = new Point(_currMouse.X, _currMouse.Y);
+    var radVecX = _tempCirc.Circle.Centre.X.Value - currMouse.ToModel().X.Value;
+    var radVecY = _tempCirc.Circle.Centre.Y.Value - currMouse.ToModel().Y.Value;
+    var radVec = Math.Sqrt(radVecX * radVecX + radVecY * radVecY);
+    _tempCirc.Circle.Radius.Value = radVec;
+  }
+
+  private void MouseMove_DrawArc()
+  {
+    // dragging to arc start point
+    if (_isMouseDown && _tempLine is not null)
+    {
+      _tempLine.Line.Point1.X.Value = _currMouse.X;
+      _tempLine.Line.Point1.Y.Value = _currMouse.Y;
+    }
+
+    if (_arcCentre != Point.Empty &&
+        _arcStart != Point.Empty &&
+        _tempArc is null)
+    {
+      var centre = _arcCentre.ToModel();
+      var radPt = _arcCentre - new Size(_arcStart);
+      var rad = Math.Sqrt(radPt.X * radPt.X + radPt.Y * radPt.Y);
+      var radParam = new Param("Radius", rad);
+      var startAngle = Math.Atan2(_arcStart.Y - _arcCentre.Y, _arcStart.X - _arcCentre.X);
+      var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
+      var startAngleParam = new Param("StartAngle", startAngle);
+      var endAngleParam = new Param("EndAngle", endAngle);
+      var arc = new Arc(centre, radParam, startAngleParam, endAngleParam);
+      _tempArc = new ArcDrawer(arc);
+      _drawables.Add(_tempArc);
+    }
+
+    if (_arcCentre != Point.Empty &&
+        _arcStart != Point.Empty &&
+        _tempArc is not null)
+    {
+      var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
+      _tempArc.Arc.EndAngle.Value = endAngle;
+    }
+  }
+
+  private void MouseMove_DrawLine()
+  {
+    _tempLine.Line.Point1.X.Value = _currMouse.X;
+    _tempLine.Line.Point1.Y.Value = _currMouse.Y;
+  }
+
+  #endregion
+
+  #region MouseUp
 
   private void MouseUpCanvas(MouseEventArgs e)
   {
@@ -352,6 +418,73 @@ public partial class Index
     _isMouseDown = false;
 
     // clear previews
+    MouseUp_ClearPreviews(e);
+
+    // drawing line
+    // MouseDown[StartPt] --> drag [update preview] --> MouseUp[EndPt]
+    if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Line)
+    {
+      MouseUp_DrawLine(e);
+    }
+
+    // drawing arc
+    // MouseDown[CentrePt] --> drag [update line preview] --> MouseUp[StartPt] --> move [update arc preview] --> MouseDown[EndPt]
+    if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Arc)
+    {
+      MouseUp_DrawArc(e);
+    }
+
+    // drawing circle
+    // MouseDown[CentrePt] --> drag [update preview] --> MouseUp[Radius]
+    if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Circle)
+    {
+      MouseUp_DrawCircle(e);
+    }
+  }
+
+  private void MouseUp_DrawCircle(MouseEventArgs e)
+  {
+    // finish circle
+    var currMouse = new Point(_currMouse.X, _currMouse.Y);
+    var radVecX = _tempCirc.Circle.Centre.X.Value - currMouse.ToModel().X.Value;
+    var radVecY = _tempCirc.Circle.Centre.Y.Value - currMouse.ToModel().Y.Value;
+    var radVec = Math.Sqrt(radVecX * radVecX + radVecY * radVecY);
+    var circle = new Circle(_circCentre.ToModel(), new Param("Radius", radVec));
+    var circDrawer = new UpdatableCircleDrawer(circle);
+    _drawables.Add(circDrawer);
+
+    // reset circle creation
+    _drawables.Remove(_tempCirc);
+    _tempCirc = null;
+    _circCentre = Point.Empty;
+  }
+
+  private void MouseUp_DrawArc(MouseEventArgs e)
+  {
+    if (_arcCentre != Point.Empty &&
+        _arcStart == Point.Empty)
+    {
+      _arcStart = _currMouse;
+    }
+  }
+
+  private void MouseUp_DrawLine(MouseEventArgs e)
+  {
+    // finish line
+    var startPt = _lineStart.ToModel();
+    var endPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
+    var line = new Line(startPt, endPt);
+    var lineDrawer = new LineDrawer(line);
+    _drawables.Add(lineDrawer);
+
+    // reset line creation
+    _drawables.Remove(_tempLine);
+    _tempLine = null;
+    _lineStart = Point.Empty;
+  }
+
+  private void MouseUp_ClearPreviews(MouseEventArgs e)
+  {
     _drawables
       .ToList()
       .ForEach(draw => draw.ShowPreview = false);
@@ -359,54 +492,9 @@ public partial class Index
       .SelectMany(draw => draw.SelectionPoints)
       .ToList()
       .ForEach(pt => pt.ShowPreview = false);
-
-    // drawing line
-    // MouseDown[StartPt] --> drag [update preview] --> MouseUp[EndPt]
-    if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Line)
-    {
-      // finish line
-      var startPt = _lineStart.ToModel();
-      var endPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
-      var line = new Line(startPt, endPt);
-      var lineDrawer = new LineDrawer(line);
-      _drawables.Add(lineDrawer);
-
-      // reset line creation
-      _drawables.Remove(_tempLine);
-      _tempLine = null;
-      _lineStart = Point.Empty;
-    }
-
-    // drawing arc
-    // MouseDown[CentrePt] --> drag [update line preview] --> MouseUp[StartPt] --> move [update arc preview] --> MouseDown[EndPt]
-    if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Arc)
-    {
-      if (_arcCentre != Point.Empty && 
-          _arcStart == Point.Empty)
-      {
-        _arcStart = _currMouse;
-      }
-    }
-
-    // drawing circle
-    // MouseDown[CentrePt] --> drag [update preview] --> MouseUp[Radius]
-    if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Circle)
-    {
-      // finish circle
-      var currMouse = new Point(_currMouse.X, _currMouse.Y);
-      var radVecX = _tempCirc.Circle.Centre.X.Value - currMouse.ToModel().X.Value;
-      var radVecY = _tempCirc.Circle.Centre.Y.Value - currMouse.ToModel().Y.Value;
-      var radVec = Math.Sqrt(radVecX * radVecX + radVecY * radVecY);
-      var circle = new Circle(_circCentre.ToModel(), new Param("Radius", radVec));
-      var circDrawer = new UpdatableCircleDrawer(circle);
-      _drawables.Add(circDrawer);
-
-      // reset circle creation
-      _drawables.Remove(_tempCirc);
-      _tempCirc = null;
-      _circCentre = Point.Empty;
-    }
   }
+
+  #endregion
 
   private void OnDelete()
   {
@@ -422,56 +510,35 @@ public partial class Index
     _constraints.Clear();
   }
 
+  #region Apply Constraints
+
   private void OnApply()
   {
-    #if false
     switch (_selConstraintType)
     {
       case ConstraintType.Free:
       case ConstraintType.Fixed:
       {
-        var isFree = _selConstraintType == ConstraintType.Free;
-        _drawables
-          .SelectMany(draw => draw.SelectionPoints)
-          .Where(pt => pt.IsSelected)
-          .ToList()
-          .ForEach(pt => pt.Point.X.Free = pt.Point.Y.Free = isFree);
+        Apply_FixedFree();
       }
         break;
 
       case ConstraintType.Vertical:
       case ConstraintType.Horizontal:
       {
-        var constraints = _drawables
-          .OfType<LineDrawer>()
-          .Where(ine => ine.IsSelected)
-          .Select(line => _selConstraintType == ConstraintType.Vertical ? line.Line.IsVertical() : line.Line.IsHorizontal());
-        _constraints.AddRange(constraints);
+        Apply_HorizontalVertical();
       }
         break;
 
       case ConstraintType.LineLength:
       {
-        var constraints = _drawables
-          .OfType<LineDrawer>()
-          .Where(ine => ine.IsSelected)
-          .Select(line => line.Line.HasLength(_value));
-        _constraints.AddRange(constraints);
+        Apply_LineLength();
       }
         break;
 
       case ConstraintType.RadiusValue:
       {
-        var circCons = _drawables
-          .OfType<CircleDrawer>()
-          .Where(circ => circ.IsSelected)
-          .Select(circ => circ.Circle.HasRadius(_value));
-        _constraints.AddRange(circCons);
-        var arcCons = _drawables
-          .OfType<ArcDrawer>()
-          .Where(arc => arc.IsSelected)
-          .Select(arc => arc.Arc.HasRadius(_value));
-        _constraints.AddRange(arcCons);
+        Apply_Radius();
       }
         break;
 
@@ -480,218 +547,47 @@ public partial class Index
       case ConstraintType.Collinear:
       case ConstraintType.EqualLength:
       {
-        var selLines = _drawables
-          .OfType<LineDrawer>()
-          .Where(line => line.IsSelected)
-          .ToList();
-        if (selLines.Count != 2)
+        if (Apply_ParallelPerpendicularCollinearEqualLength())
         {
-          _toaster.Add("Must select 2 lines", MatToastType.Danger, "Failed to add constraint");
           return;
         }
-
-        var line1 = selLines[0].Line;
-        var line2 = selLines[1].Line;
-        var cons = _selConstraintType switch
-        {
-          ConstraintType.Parallel => line1.IsParallelTo(line2),
-          ConstraintType.Perpendicular => line1.IsPerpendicularTo(line2),
-          ConstraintType.Collinear => line1.IsCollinearTo(line2),
-          ConstraintType.EqualLength => line1.IsEqualInLengthTo(line2),
-          _ => throw new ArgumentOutOfRangeException()
-        };
-        _constraints.Add(cons);
       }
         break;
 
       case ConstraintType.Tangent:
       {
-        var selLines = _drawables
-          .OfType<LineDrawer>()
-          .Where(line => line.IsSelected)
-          .ToList();
-        var selCircs = _drawables
-          .OfType<CircleDrawer>()
-          .Where(circ => circ.IsSelected)
-          .ToList();
-        var selArcs = _drawables
-          .OfType<ArcDrawer>()
-          .Where(arc => arc.IsSelected)
-          .ToList();
-
-        if (selLines.Count != 1)
+        if (Apply_Tangent())
         {
           return;
         }
-
-        Constraint cons = null;
-
-        if (selCircs.Count == 1 && selArcs.Count != 1)
-        {
-          cons = selLines[0].Line.IsTangentTo(selCircs[0].Circle);
-        }
-
-        if (selCircs.Count != 1 && selArcs.Count == 1)
-        {
-          cons = selLines[0].Line.IsTangentTo(selArcs[0].Arc);
-        }
-
-        if (cons is null)
-        {
-          _toaster.Add("Must select 1 line + 1 circle OR 1 line + 1 arc", MatToastType.Danger, "Failed to add constraint");
-          return;
-        }
-
-        _constraints.Add(cons);
       }
         break;
 
       case ConstraintType.Coincident:
       {
-        var selPts = _drawables
-          .SelectMany(draw => draw.SelectionPoints)
-          .Where(pt => pt.IsSelected)
-          .ToList();
-
-        Constraint cons = null;
-
-        if (selPts.Count == 2)
+        if (Apply_Coincident())
         {
-          cons = selPts[0].Point.IsCoincidentWith(selPts[1].Point);
-        }
-
-        if (selPts.Count == 1)
-        {
-          var selPt = selPts.Single().Point;
-          var selLines = _drawables
-            .OfType<LineDrawer>()
-            .Where(line => line.IsSelected)
-            .ToList();
-          var selCircs = _drawables
-            .OfType<CircleDrawer>()
-            .Where(circ => circ.IsSelected)
-            .ToList();
-          var selArcs = _drawables
-            .OfType<ArcDrawer>()
-            .Where(arc => arc.IsSelected)
-            .ToList();
-
-          if (selLines.Count == 1)
-          {
-            cons = selPt.IsCoincidentWith(selLines.Single().Line);
-          }
-          else if (selCircs.Count == 1)
-          {
-            cons = selPt.IsCoincidentWith(selCircs.Single().Circle);
-          }
-          else if (selArcs.Count == 1)
-          {
-            cons = selPt.IsCoincidentWith(selArcs.Single().Arc);
-          }
-        }
-
-        if (cons is null)
-        {
-          _toaster.Add("Must select 2 points OR 1 point + 1 line OR 1 point + 1 circle OR 1 point + 1 arc", MatToastType.Danger, "Failed to add constraint");
           return;
         }
-
-        _constraints.Add(cons);
       }
         break;
 
       case ConstraintType.CoincidentMidPoint:
       {
-        var selPts = _drawables
-          .SelectMany(draw => draw.SelectionPoints)
-          .Where(pt => pt.IsSelected)
-          .ToList();
-
-        Constraint cons = null;
-
-        if (selPts.Count == 1)
+        if (Apply_CoincidentMidPoint())
         {
-          var selPt = selPts.Single().Point;
-          var selLines = _drawables
-            .OfType<LineDrawer>()
-            .Where(line => line.IsSelected)
-            .ToList();
-          var selArcs = _drawables
-            .OfType<ArcDrawer>()
-            .Where(arc => arc.IsSelected)
-            .ToList();
-
-          if (selLines.Count == 1)
-          {
-            cons = selPt.IsCoincidentWithMidPoint(selLines.Single().Line);
-          }
-          else if (selArcs.Count == 1)
-          {
-            cons = selPt.IsCoincidentWithMidPoint(selArcs.Single().Arc);
-          }
-        }
-
-        if (cons is null)
-        {
-          _toaster.Add("Must select 1 point + 1 line OR 1 point + 1 circle OR 1 point + 1 ard", MatToastType.Danger, "Failed to add constraint");
           return;
         }
-
-        _constraints.Add(cons);
       }
         break;
 
       case ConstraintType.Concentric:
       case ConstraintType.EqualRadius:
       {
-        var selCircs = _drawables
-          .OfType<CircleDrawer>()
-          .Where(circ => circ.IsSelected)
-          .ToList();
-        var selArcs = _drawables
-          .OfType<ArcDrawer>()
-          .Where(arc => arc.IsSelected)
-          .ToList();
-
-        Constraint cons = null;
-
-        if (selCircs.Count == 2 && selArcs.Count == 0)
+        if (Apply_ConcentricEqualRadius())
         {
-          cons = _selConstraintType switch
-          {
-            ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selCircs[1].Circle),
-            ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selCircs[1].Circle),
-            _ => throw new ArgumentOutOfRangeException()
-          };
-        }
-
-        if (selCircs.Count == 1 && selArcs.Count == 1)
-        {
-          cons = _selConstraintType switch
-          {
-            ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selArcs[0].Arc),
-            ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selArcs[0].Arc),
-            _ => throw new ArgumentOutOfRangeException()
-          };
-        }
-
-        if (selCircs.Count == 0 && selArcs.Count == 2)
-        {
-          cons = _selConstraintType switch
-          {
-            ConstraintType.Concentric => selArcs[0].Arc.IsConcentricWith(selArcs[1].Arc),
-            ConstraintType.EqualRadius => selArcs[0].Arc.IsEqualInRadiusTo(selArcs[1].Arc),
-            _ => throw new ArgumentOutOfRangeException()
-          };
-        }
-
-        if (cons is null)
-        {
-          _toaster.Add("Must select 2 circles OR 2 arcs OR 1 circle + 1 arc", MatToastType.Danger, "Failed to add constraint");
           return;
         }
-
-        _constraints.Add(cons);
       }
         break;
 
@@ -699,132 +595,417 @@ public partial class Index
       case ConstraintType.DistanceHorizontal:
       case ConstraintType.DistanceVertical:
       {
-        var selPts = _drawables
-          .SelectMany(draw => draw.SelectionPoints)
-          .Where(pt => pt.IsSelected)
-          .ToList();
-
-        Constraint cons = null;
-
-        if (selPts.Count == 2)
+        if (Apply_DistanceHorizontalVertical())
         {
-          var selPt1 = selPts[0].Point;
-          var selPt2 = selPts[1].Point;
-          cons = _selConstraintType switch
-          {
-            ConstraintType.Distance => selPt1.HasDistance(selPt2, _value),
-            ConstraintType.DistanceHorizontal => selPt1.HasDistanceHorizontal(selPt2, _value),
-            ConstraintType.DistanceVertical => selPt1.HasDistanceVertical(selPt2, _value),
-            _ => throw new ArgumentOutOfRangeException()
-          };
-        }
-
-        if (selPts.Count == 1)
-        {
-          var selPt = selPts.Single().Point;
-          var selLines = _drawables
-            .OfType<LineDrawer>()
-            .Where(line => line.IsSelected)
-            .ToList();
-
-          if (selLines.Count == 1)
-          {
-            var selLine = selLines.Single().Line;
-            cons = _selConstraintType switch
-            {
-              ConstraintType.Distance => selPt.HasDistance(selLine, _value),
-              ConstraintType.DistanceHorizontal => selPt.HasDistanceHorizontal(selLine, _value),
-              ConstraintType.DistanceVertical => selPt.HasDistanceVertical(selLine, _value),
-              _ => throw new ArgumentOutOfRangeException()
-            };
-          }
-        }
-
-        if (cons is null)
-        {
-          _toaster.Add("Must select 2 points OR 1 point + 1 line", MatToastType.Danger, "Failed to add constraint");
           return;
         }
-
-        _constraints.Add(cons);
       }
         break;
 
       case ConstraintType.InternalAngle:
       case ConstraintType.ExternalAngle:
       {
-        var selLines = _drawables
-          .OfType<LineDrawer>()
-          .Where(line => line.IsSelected)
-          .ToList();
-        if (selLines.Count != 2)
+        if (Apply_InternalExternalAngle())
         {
-          _toaster.Add("Must select 2 points", MatToastType.Danger, "Failed to add constraint");
           return;
         }
-
-        var line1 = selLines[0].Line;
-        var line2 = selLines[1].Line;
-        var angleRad = _value * Math.PI / 180d;
-        var angle = new Parameter(angleRad, false);
-        var cons = _selConstraintType switch
-        {
-          ConstraintType.InternalAngle => line1.HasInternalAngle(line2, angle),
-          ConstraintType.ExternalAngle => line1.HasExternalAngle(line2, angle),
-          _ => throw new ArgumentOutOfRangeException()
-        };
-        _constraints.Add(cons);
       }
         break;
 
       case ConstraintType.OnQuadrant:
       {
-        var selPts = _drawables
-          .SelectMany(draw => draw.SelectionPoints)
-          .Where(pt => pt.IsSelected)
-          .ToList();
-        var selCircs = _drawables
-          .OfType<CircleDrawer>()
-          .Where(circ => circ.IsSelected)
-          .ToList();
-
-        if (selPts.Count != 1 || selCircs.Count != 1 || _value > 4)
+        if (Apply_OnQuadrant())
         {
-          _toaster.Add("Must select 1 point + 1 circle + value < 4", MatToastType.Danger, "Failed to add constraint");
           return;
         }
-
-        Constraint cons = null;
-
-        // Quadrants are defined:
-        //    0 --> east
-        //    1 --> north
-        //    2 --> west
-        //    3 --. south
-        // but UI min value is 1, so have to subtract 1
-        // NOTE:  north and south are reversed in UI
-        //        as canvas y axis runs down screen
-        var updatedQuad = _value switch
-        {
-          1 => 0,
-          2 => 3,
-          3 => 2,
-          4 => 1,
-          _ => throw new ArgumentOutOfRangeException()
-        };
-        var selPt = selPts.Single().Point;
-        var selCirc = selCircs.Single().Circle;
-        cons = new PointOnCircleQuadConstraint(selPt, selCirc, new Parameter(updatedQuad, false));
-
-        _constraints.Add(cons);
       }
         break;
 
       default:
         throw new ArgumentOutOfRangeException();
     }
-    #endif
+
     _toaster.Add(_selConstraintType.ToString(), MatToastType.Info, "Added constraint");
+  }
+
+  private bool Apply_OnQuadrant()
+  {
+    var selPts = _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList();
+    var selCircs = _drawables
+      .OfType<CircleDrawer>()
+      .Where(circ => circ.IsSelected)
+      .ToList();
+
+    if (selPts.Count != 1 || selCircs.Count != 1 || _value > 4)
+    {
+      _toaster.Add("Must select 1 point + 1 circle + value < 4", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    Constraint cons = null;
+
+    // Quadrants are defined:
+    //    0 --> east
+    //    1 --> north
+    //    2 --> west
+    //    3 --. south
+    // but UI min value is 1, so have to subtract 1
+    // NOTE:  north and south are reversed in UI
+    //        as canvas y axis runs down screen
+    var updatedQuad = _value switch
+    {
+      1 => 0,
+      2 => 3,
+      3 => 2,
+      4 => 1,
+      _ => throw new ArgumentOutOfRangeException()
+    };
+    var selPt = selPts.Single().Point;
+    var selCirc = selCircs.Single().Circle;
+    // cons = new PointOnCircleQuadConstraint(selPt, selCirc, new Parameter(updatedQuad, false));
+    //
+    // _constraints.Add(cons);
+    return false;
+  }
+
+  private bool Apply_InternalExternalAngle()
+  {
+    var selLines = _drawables
+      .OfType<LineDrawer>()
+      .Where(line => line.IsSelected)
+      .ToList();
+    if (selLines.Count != 2)
+    {
+      _toaster.Add("Must select 2 points", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    var line1 = selLines[0].Line;
+    var line2 = selLines[1].Line;
+    var angleRad = _value * Math.PI / 180d;
+    // var angle = new Parameter(angleRad, false);
+    // var cons = _selConstraintType switch
+    // {
+    //   ConstraintType.InternalAngle => line1.HasInternalAngle(line2, angle),
+    //   ConstraintType.ExternalAngle => line1.HasExternalAngle(line2, angle),
+    //   _ => throw new ArgumentOutOfRangeException()
+    // };
+    // _constraints.Add(cons);
+    return false;
+  }
+
+  private bool Apply_DistanceHorizontalVertical()
+  {
+    var selPts = _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList();
+
+    Constraint cons = null;
+
+    if (selPts.Count == 2)
+    {
+      var selPt1 = selPts[0].Point;
+      var selPt2 = selPts[1].Point;
+      cons = _selConstraintType switch
+      {
+        // ConstraintType.Distance => selPt1.HasDistance(selPt2, _value),
+        // ConstraintType.DistanceHorizontal => selPt1.HasDistanceHorizontal(selPt2, _value),
+        // ConstraintType.DistanceVertical => selPt1.HasDistanceVertical(selPt2, _value),
+        _ => throw new ArgumentOutOfRangeException()
+      };
+    }
+
+    if (selPts.Count == 1)
+    {
+      var selPt = selPts.Single().Point;
+      var selLines = _drawables
+        .OfType<LineDrawer>()
+        .Where(line => line.IsSelected)
+        .ToList();
+
+      if (selLines.Count == 1)
+      {
+        var selLine = selLines.Single().Line;
+        cons = _selConstraintType switch
+        {
+          // ConstraintType.Distance => selPt.HasDistance(selLine, _value),
+          // ConstraintType.DistanceHorizontal => selPt.HasDistanceHorizontal(selLine, _value),
+          // ConstraintType.DistanceVertical => selPt.HasDistanceVertical(selLine, _value),
+          _ => throw new ArgumentOutOfRangeException()
+        };
+      }
+    }
+
+    if (cons is null)
+    {
+      _toaster.Add("Must select 2 points OR 1 point + 1 line", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    _constraints.Add(cons);
+    return false;
+  }
+
+  private bool Apply_ConcentricEqualRadius()
+  {
+    var selCircs = _drawables
+      .OfType<CircleDrawer>()
+      .Where(circ => circ.IsSelected)
+      .ToList();
+    var selArcs = _drawables
+      .OfType<ArcDrawer>()
+      .Where(arc => arc.IsSelected)
+      .ToList();
+
+    Constraint cons = null;
+
+    if (selCircs.Count == 2 && selArcs.Count == 0)
+    {
+      cons = _selConstraintType switch
+      {
+        // ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selCircs[1].Circle),
+        // ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selCircs[1].Circle),
+        _ => throw new ArgumentOutOfRangeException()
+      };
+    }
+
+    if (selCircs.Count == 1 && selArcs.Count == 1)
+    {
+      cons = _selConstraintType switch
+      {
+        // ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selArcs[0].Arc),
+        // ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selArcs[0].Arc),
+        _ => throw new ArgumentOutOfRangeException()
+      };
+    }
+
+    if (selCircs.Count == 0 && selArcs.Count == 2)
+    {
+      cons = _selConstraintType switch
+      {
+        // ConstraintType.Concentric => selArcs[0].Arc.IsConcentricWith(selArcs[1].Arc),
+        // ConstraintType.EqualRadius => selArcs[0].Arc.IsEqualInRadiusTo(selArcs[1].Arc),
+        _ => throw new ArgumentOutOfRangeException()
+      };
+    }
+
+    if (cons is null)
+    {
+      _toaster.Add("Must select 2 circles OR 2 arcs OR 1 circle + 1 arc", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    _constraints.Add(cons);
+    return false;
+  }
+
+  private bool Apply_CoincidentMidPoint()
+  {
+    var selPts = _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList();
+
+    Constraint cons = null;
+
+    if (selPts.Count == 1)
+    {
+      var selPt = selPts.Single().Point;
+      var selLines = _drawables
+        .OfType<LineDrawer>()
+        .Where(line => line.IsSelected)
+        .ToList();
+      var selArcs = _drawables
+        .OfType<ArcDrawer>()
+        .Where(arc => arc.IsSelected)
+        .ToList();
+
+      if (selLines.Count == 1)
+      {
+        // cons = selPt.IsCoincidentWithMidPoint(selLines.Single().Line);
+      }
+      else if (selArcs.Count == 1)
+      {
+        // cons = selPt.IsCoincidentWithMidPoint(selArcs.Single().Arc);
+      }
+    }
+
+    if (cons is null)
+    {
+      _toaster.Add("Must select 1 point + 1 line OR 1 point + 1 circle OR 1 point + 1 ard", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    _constraints.Add(cons);
+    return false;
+  }
+
+  private bool Apply_Coincident()
+  {
+    var selPts = _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList();
+
+    Constraint cons = null;
+
+    if (selPts.Count == 2)
+    {
+      // cons = selPts[0].Point.IsCoincidentWith(selPts[1].Point);
+    }
+
+    if (selPts.Count == 1)
+    {
+      var selPt = selPts.Single().Point;
+      var selLines = _drawables
+        .OfType<LineDrawer>()
+        .Where(line => line.IsSelected)
+        .ToList();
+      var selCircs = _drawables
+        .OfType<CircleDrawer>()
+        .Where(circ => circ.IsSelected)
+        .ToList();
+      var selArcs = _drawables
+        .OfType<ArcDrawer>()
+        .Where(arc => arc.IsSelected)
+        .ToList();
+
+      if (selLines.Count == 1)
+      {
+        // cons = selPt.IsCoincidentWith(selLines.Single().Line);
+      }
+      else if (selCircs.Count == 1)
+      {
+        // cons = selPt.IsCoincidentWith(selCircs.Single().Circle);
+      }
+      else if (selArcs.Count == 1)
+      {
+        // cons = selPt.IsCoincidentWith(selArcs.Single().Arc);
+      }
+    }
+
+    if (cons is null)
+    {
+      _toaster.Add("Must select 2 points OR 1 point + 1 line OR 1 point + 1 circle OR 1 point + 1 arc", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    _constraints.Add(cons);
+    return false;
+  }
+
+  private bool Apply_Tangent()
+  {
+    var selLines = _drawables
+      .OfType<LineDrawer>()
+      .Where(line => line.IsSelected)
+      .ToList();
+    var selCircs = _drawables
+      .OfType<CircleDrawer>()
+      .Where(circ => circ.IsSelected)
+      .ToList();
+    var selArcs = _drawables
+      .OfType<ArcDrawer>()
+      .Where(arc => arc.IsSelected)
+      .ToList();
+
+    if (selLines.Count != 1)
+    {
+      return true;
+    }
+
+    Constraint cons = null;
+
+    if (selCircs.Count == 1 && selArcs.Count != 1)
+    {
+      cons = selLines[0].Line.IsTangentTo(selCircs[0].Circle);
+    }
+
+    if (selCircs.Count != 1 && selArcs.Count == 1)
+    {
+      // cons = selLines[0].Line.IsTangentTo(selArcs[0].Arc);
+    }
+
+    if (cons is null)
+    {
+      _toaster.Add("Must select 1 line + 1 circle OR 1 line + 1 arc", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    _constraints.Add(cons);
+    return false;
+  }
+
+  private bool Apply_ParallelPerpendicularCollinearEqualLength()
+  {
+    var selLines = _drawables
+      .OfType<LineDrawer>()
+      .Where(line => line.IsSelected)
+      .ToList();
+    if (selLines.Count != 2)
+    {
+      _toaster.Add("Must select 2 lines", MatToastType.Danger, "Failed to add constraint");
+      return true;
+    }
+
+    var line1 = selLines[0].Line;
+    var line2 = selLines[1].Line;
+    // var cons = _selConstraintType switch
+    // {
+    //   ConstraintType.Parallel => line1.IsParallelTo(line2),
+    //   ConstraintType.Perpendicular => line1.IsPerpendicularTo(line2),
+    //   ConstraintType.Collinear => line1.IsCollinearTo(line2),
+    //   ConstraintType.EqualLength => line1.IsEqualInLengthTo(line2),
+    //   _ => throw new ArgumentOutOfRangeException()
+    // };
+    // _constraints.Add(cons);
+    return false;
+  }
+
+  private void Apply_Radius()
+  {
+    // var circCons = _drawables
+    //   .OfType<CircleDrawer>()
+    //   .Where(circ => circ.IsSelected)
+    //   .Select(circ => circ.Circle.HasRadius(_value));
+    // _constraints.AddRange(circCons);
+    // var arcCons = _drawables
+    //   .OfType<ArcDrawer>()
+    //   .Where(arc => arc.IsSelected)
+    //   .Select(arc => arc.Arc.HasRadius(_value));
+    // _constraints.AddRange(arcCons);
+  }
+
+  private void Apply_LineLength()
+  {
+    // var constraints = _drawables
+    //   .OfType<LineDrawer>()
+    //   .Where(ine => ine.IsSelected)
+    //   .Select(line => line.Line.HasLength(_value));
+    // _constraints.AddRange(constraints);
+  }
+
+  private void Apply_HorizontalVertical()
+  {
+    var constraints = _drawables
+      .OfType<LineDrawer>()
+      .Where(ine => ine.IsSelected)
+      .Select(line => _selConstraintType == ConstraintType.Vertical ? line.Line.IsVertical() : line.Line.IsHorizontal());
+    _constraints.AddRange(constraints);
+  }
+
+  private void Apply_FixedFree()
+  {
+    // var isFree = _selConstraintType == ConstraintType.Free;
+    // _drawables
+    //   .SelectMany(draw => draw.SelectionPoints)
+    //   .Where(pt => pt.IsSelected)
+    //   .ToList()
+    //   .ForEach(pt => pt.Point.X.Free = pt.Point.Y.Free = isFree);
   }
 
   private void OnClearAll()
@@ -832,6 +1013,8 @@ public partial class Index
     _constraints.Clear();
     _toaster.Add("No constraints in system", MatToastType.Info, "Cleared constraints");
   }
+
+  #endregion
 
   private void OnSolve()
   {
@@ -848,9 +1031,9 @@ public partial class Index
     var selPt = _drawables
       .SelectMany(draw => draw.SelectionPoints)
       .Single(pt => pt.IsSelected);
-    #if false
+#if false
     selPt.Point.X.Free = selPt.Point.Y.Free = true;
-    #endif
+#endif
     _isPtFixed = false;
   }
 
