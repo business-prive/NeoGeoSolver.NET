@@ -10,6 +10,7 @@ using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using Microsoft.VisualBasic;
 using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Entities;
 using NeoGeoSolver.NET.Solver;
@@ -149,15 +150,13 @@ public partial class Index
       if (selPts.Count == 1)
       {
         var selPt = selPts.Single().Point;
-        #if false
-        _isPtFixed = !selPt.X.Free && !selPt.Y.Free;
+        _isPtFixed = _constraints.All(cons => !cons.Entities.Contains(selPt));
 
         // get all constraints associate with this point
         var selPtCons = _constraints
-          .Where(cons => cons.Items.Contains(selPt));
+          .Where(cons => cons.Entities.Contains(selPt));
         _selConstraints.Clear();
         _selConstraints.AddRange(selPtCons);
-        #endif
 
         _canShowPointConstraints = _canShowEntityConstraints = true;
       }
@@ -172,13 +171,11 @@ public partial class Index
         // get entity
         var selDrawEnt = selDraws.Single().Entity;
 
-        #if false
         // get all constraints associate with this entity
         var selDrawEntCons = _constraints
-          .Where(cons => cons.Items.Contains(selDrawEnt));
+          .Where(cons => cons.Entities.Contains(selDrawEnt));
         _selConstraints.Clear();
         _selConstraints.AddRange(selDrawEntCons);
-        #endif
 
         _canShowEntityConstraints = true;
       }
@@ -838,18 +835,20 @@ public partial class Index
 
   private void OnSolve()
   {
-    #if false
-    var error = Solver.Solver.Solve(constraints: _constraints.ToArray());
-    _toaster.Add($"Error: {error:E3}", MatToastType.Info, "Solver completed");
-    #endif
+    var eqns = _constraints.SelectMany(cons => cons.Equations);
+    var eqnSys = new EquationSystem();
+    eqnSys.AddEquations(eqns);
+    // TODO   add parameters
+    var result = eqnSys.Solve();
+    _toaster.Add($"Result: {result}", MatToastType.Info, "Solver completed");
   }
 
   private void OnDeleteSelectedPointConstraint()
   {
-    #if false
     var selPt = _drawables
       .SelectMany(draw => draw.SelectionPoints)
       .Single(pt => pt.IsSelected);
+    #if false
     selPt.Point.X.Free = selPt.Point.Y.Free = true;
     #endif
     _isPtFixed = false;
