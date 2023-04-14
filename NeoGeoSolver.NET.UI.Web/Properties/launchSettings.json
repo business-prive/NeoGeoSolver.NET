@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "SketchSolve.UI.Web": {
+    "NeoGeoSolver.NET.UI.Web": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": false,
