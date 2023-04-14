@@ -19,4 +19,12 @@ public class ArcRadius : Value
       yield return _arc.Radius.Expr - value.Value;
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _arc;
+    }
+  }
 }

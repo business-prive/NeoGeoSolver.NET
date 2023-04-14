@@ -5,13 +5,13 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class CirclesEqualRadius : Value
 {
-  private readonly Circle _c0;
-  private readonly Circle _c1;
+  private readonly Circle _circle0;
+  private readonly Circle _circle1;
 
-  public CirclesEqualRadius(Circle c0, Circle c1)
+  public CirclesEqualRadius(Circle circle0, Circle circle1)
   {
-    _c0 = c0;
-    _c1 = c1;
+    _circle0 = circle0;
+    _circle1 = circle1;
     value.Value = 1.0;
   }
 
@@ -19,7 +19,16 @@ public class CirclesEqualRadius : Value
   {
     get
     {
-      yield return _c0.RadiusExpr() - _c1.RadiusExpr() * value;
+      yield return _circle0.RadiusExpr() - _circle1.RadiusExpr() * value;
+    }
+  }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _circle0;
+      yield return _circle1;
     }
   }
 }

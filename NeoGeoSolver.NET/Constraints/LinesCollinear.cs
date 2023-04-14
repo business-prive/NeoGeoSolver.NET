@@ -42,4 +42,13 @@ public class LinesCollinear : Constraint
       }
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _line0;
+      yield return _line1;
+    }
+  }
 }

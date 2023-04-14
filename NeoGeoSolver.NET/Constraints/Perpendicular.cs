@@ -25,13 +25,13 @@ public class Perpendicular : Constraint
     }
   }
 
-  private readonly Line _l0;
-  private readonly Line _l1;
+  private readonly Line _line0;
+  private readonly Line _line1;
 
-  public Perpendicular(Line l0, Line l1)
+  public Perpendicular(Line line0, Line line1)
   {
-    _l0 = l0;
-    _l1 = l1;
+    _line0 = line0;
+    _line1 = line1;
     ChooseBestOption();
   }
 
@@ -39,8 +39,8 @@ public class Perpendicular : Constraint
   {
     get
     {
-      var d0 = _l0.Point0.Expr - _l0.Point1.Expr;
-      var d1 = _l1.Point0.Expr - _l1.Point1.Expr;
+      var d0 = _line0.Point0.Expr - _line0.Point1.Expr;
+      var d1 = _line1.Point0.Expr - _line1.Point1.Expr;
 
       var angle = ConstraintExp.Angle2d(d0, d1);
       switch (option)
@@ -52,6 +52,15 @@ public class Perpendicular : Constraint
           yield return angle + Math.PI / 2.0;
           break;
       }
+    }
+  }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _line0;
+      yield return _line1;
     }
   }
 }

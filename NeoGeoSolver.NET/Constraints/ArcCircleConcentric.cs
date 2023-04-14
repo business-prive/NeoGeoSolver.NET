@@ -5,16 +5,16 @@ namespace NeoGeoSolver.NET.Constraints;
 
 public class ArcCircleConcentric : Constraint
 {
-  private readonly Arc _a0;
-  private readonly Circle _c1;
+  private readonly Arc _arc;
+  private readonly Circle _circle;
   private readonly PointsDistance _dist_A0_C1;
 
-  public ArcCircleConcentric(Arc a0, Circle c1)
+  public ArcCircleConcentric(Arc arc, Circle circle)
   {
-    _a0 = a0;
-    _c1 = c1;
+    _arc = arc;
+    _circle = circle;
 
-    _dist_A0_C1 = new PointsDistance(_a0.Centre, _c1.Centre);
+    _dist_A0_C1 = new PointsDistance(_arc.Centre, _circle.Centre);
     _dist_A0_C1.SetValue(0);
   }
 
@@ -26,6 +26,15 @@ public class ArcCircleConcentric : Constraint
       {
         yield return expr;
       }
+    }
+  }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _arc;
+      yield return _circle;
     }
   }
 }

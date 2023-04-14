@@ -7,13 +7,13 @@ public class PointsHorizontalVertical : Constraint
 {
   public readonly HorizontalVerticalOrientation Orientation = HorizontalVerticalOrientation.Ox;
 
-  private readonly Point _p0;
-  private readonly Point _p1;
+  private readonly Point _point0;
+  private readonly Point _point1;
 
-  public PointsHorizontalVertical(Point p0, Point p1, HorizontalVerticalOrientation orientation)
+  public PointsHorizontalVertical(Point point0, Point point1, HorizontalVerticalOrientation orientation)
   {
-    _p0 = p0;
-    _p1 = p1;
+    _point0 = point0;
+    _point1 = point1;
      Orientation = orientation;
   }
 
@@ -24,15 +24,24 @@ public class PointsHorizontalVertical : Constraint
       switch (Orientation)
       {
         case HorizontalVerticalOrientation.Ox:
-          yield return _p0.Expr.x - _p1.Expr.x;
+          yield return _point0.Expr.x - _point1.Expr.x;
           break;
         case HorizontalVerticalOrientation.Oy:
-          yield return _p0.Expr.y - _p1.Expr.y;
+          yield return _point0.Expr.y - _point1.Expr.y;
           break;
         case HorizontalVerticalOrientation.Oz:
-          yield return _p0.Expr.z - _p1.Expr.z;
+          yield return _point0.Expr.z - _point1.Expr.z;
           break;
       }
+    }
+  }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _point0;
+      yield return _point1;
     }
   }
 }

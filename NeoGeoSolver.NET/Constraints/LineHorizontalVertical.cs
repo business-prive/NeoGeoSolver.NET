@@ -33,4 +33,12 @@ public class LineHorizontalVertical : Constraint
       }
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _line;
+    }
+  }
 }

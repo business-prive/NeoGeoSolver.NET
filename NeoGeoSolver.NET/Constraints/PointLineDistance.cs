@@ -23,4 +23,13 @@ public class PointLineDistance : Value
       yield return ConstraintExp.PointLineDistance(_point.Expr, _line.Point0.Expr, _line.Point1.Expr) - value;
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _point;
+      yield return _line;
+    }
+  }
 }

@@ -20,4 +20,12 @@ public class LineLength : Value
       yield return _line.LengthExpr() - value;
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _line;
+    }
+  }
 }

@@ -20,4 +20,12 @@ public class CircleDiameter : Value
       yield return _circle.RadiusExpr() * 2.0 - value.Expr;
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _circle;
+    }
+  }
 }

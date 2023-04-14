@@ -1,4 +1,5 @@
-﻿using NeoGeoSolver.NET.Solver;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
@@ -18,6 +19,14 @@ public class EqualValue : Value
     get
     {
       yield return _val0.GetValueParam().Expr - _val1.GetValueParam().Expr - value;
+    }
+  }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield break;
     }
   }
 }

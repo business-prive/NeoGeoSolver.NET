@@ -1,4 +1,5 @@
-﻿using NeoGeoSolver.NET.Solver;
+﻿using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
 
 namespace NeoGeoSolver.NET.Constraints;
 
@@ -11,6 +12,8 @@ public abstract class Constraint
       yield break;
     }
   }
+
+  public abstract IEnumerable<Entity> Entities { get; }
 
   private enum Option
   {

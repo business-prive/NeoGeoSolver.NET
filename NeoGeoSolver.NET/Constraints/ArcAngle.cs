@@ -43,4 +43,12 @@ public class ArcAngle : Value
       yield return angle - value;
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _arc;
+    }
+  }
 }

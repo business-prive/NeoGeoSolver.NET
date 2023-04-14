@@ -26,13 +26,13 @@ public class LinesAngle : Value
     }
   }
 
-  private readonly Line _l0;
-  private readonly Line _l1;
+  private readonly Line _line0;
+  private readonly Line _line1;
 
-  public LinesAngle(Line l0, Line l1)
+  public LinesAngle(Line line0, Line line1)
   {
-    _l0 = l0;
-    _l1 = l1;
+    _line0 = line0;
+    _line1 = line1;
     Satisfy();
   }
 
@@ -48,13 +48,22 @@ public class LinesAngle : Value
     }
   }
 
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _line0;
+      yield return _line1;
+    }
+  }
+
   private ExpressionVector[] GetPointsExp()
   {
     var p = new ExpressionVector[4];
-    var l0 = _l0;
+    var l0 = _line0;
     p[0] = l0.Point0.Expr;
     p[1] = l0.Point1.Expr;
-    var l1 = _l1;
+    var l1 = _line1;
     p[2] = l1.Point0.Expr;
     p[3] = l1.Point1.Expr;
     if (Supplementary)

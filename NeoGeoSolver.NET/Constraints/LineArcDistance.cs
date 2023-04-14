@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using NeoGeoSolver.NET.Entities;
 using NeoGeoSolver.NET.Solver;
 
@@ -50,6 +51,15 @@ public class LineArcDistance : Value
           yield return ConstraintExp.PointLineDistance(_arc.Centre.Expr, _line.Point0.Expr, _line.Point1.Expr) + _arc.Radius.Expr + value;
           break;
       }
+    }
+  }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _line;
+      yield return _arc;
     }
   }
 }

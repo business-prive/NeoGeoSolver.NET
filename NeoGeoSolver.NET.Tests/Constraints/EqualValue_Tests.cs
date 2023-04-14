@@ -29,5 +29,13 @@ public sealed class EqualValue_Tests
     {
       SetValue(val);
     }
+
+    public override IEnumerable<Entity> Entities
+    {
+      get
+      {
+        yield break;
+      }
+    }
   }
 }

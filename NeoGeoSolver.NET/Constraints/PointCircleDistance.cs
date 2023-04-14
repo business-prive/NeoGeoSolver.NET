@@ -26,4 +26,13 @@ public class PointCircleDistance : Value
       yield return (pPos - cCen).Magnitude() - cRad - value.Expr;
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _point;
+      yield return _circle;
+    }
+  }
 }

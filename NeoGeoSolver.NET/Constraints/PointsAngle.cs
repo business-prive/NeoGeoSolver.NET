@@ -54,6 +54,17 @@ public class PointsAngle : Value
     }
   }
 
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _points[0];
+      yield return _points[1];
+      yield return _points[2];
+      yield return _points[3];
+    }
+  }
+
   private ExpressionVector[] GetPointsExp()
   {
     var p = new ExpressionVector[4];

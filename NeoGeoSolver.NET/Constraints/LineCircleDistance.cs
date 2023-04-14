@@ -52,4 +52,13 @@ public class LineCircleDistance : Value
       }
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _line;
+      yield return _circle;
+    }
+  }
 }

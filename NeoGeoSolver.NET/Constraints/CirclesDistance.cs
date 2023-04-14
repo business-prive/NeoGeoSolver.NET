@@ -26,13 +26,13 @@ public class CirclesDistance : Value
     }
   }
 
-  private readonly Circle _c0;
-  private readonly Circle _c1;
+  private readonly Circle _circle0;
+  private readonly Circle _circle1;
 
-  public CirclesDistance(Circle c0, Circle c1)
+  public CirclesDistance(Circle circle0, Circle circle1)
   {
-    _c0 = c0;
-    _c1 = c1;
+    _circle0 = circle0;
+    _circle1 = circle1;
     value.Value = 1;
     ChooseBestOption();
     Satisfy();
@@ -49,8 +49,8 @@ public class CirclesDistance : Value
   {
     get
     {
-      var c0 = _c0;
-      var c1 = _c1;
+      var c0 = _circle0;
+      var c1 = _circle1;
       var r0 = c0.RadiusExpr();
       var r1 = c1.RadiusExpr();
       if (IsCentersCoincident(c0, c1))
@@ -80,6 +80,15 @@ public class CirclesDistance : Value
             break;
         }
       }
+    }
+  }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _circle0;
+      yield return _circle1;
     }
   }
 }

@@ -21,4 +21,13 @@ public class ArcsEqualRadius : Constraint
       yield return _arc0.Radius.Expr - _arc1.Radius.Expr;
     }
   }
+
+  public override IEnumerable<Entity> Entities
+  {
+    get
+    {
+      yield return _arc0;
+      yield return _arc1;
+    }
+  }
 }
