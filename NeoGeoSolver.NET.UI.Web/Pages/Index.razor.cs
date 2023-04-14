@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Entities;
+using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.UI.Web.Interface;
 using NeoGeoSolver.NET.UI.Web.Model;
 
@@ -179,14 +180,13 @@ public partial class Index
       }
     }
 
-
     // drawing line
     // MouseDown[StartPt] --> drag [update preview] --> MouseUp[EndPt]
     if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Line)
     {
       _lineStart = _mouseDown;
-      var startPt = new Model.Point(_lineStart.X, _lineStart.Y);
-      var endPt = new Model.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y);
+      var startPt = new Entities.Point(_lineStart.X, _lineStart.Y, 0);
+      var endPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
       var line = new Line(startPt, endPt);
       _tempLine = new LineDrawer(line)
       {
@@ -205,7 +205,7 @@ public partial class Index
         _arcCentre = _mouseDown;
 
         var centrePt = _arcCentre.ToModel();
-        var startPt = new Model.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y);
+        var startPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
         var line = new Line(centrePt, startPt);
         _tempLine = new LineDrawer(line)
         {
@@ -222,11 +222,11 @@ public partial class Index
         var centre = _arcCentre.ToModel();
         var radPt = _arcCentre - new Size(_arcStart);
         var rad = Math.Sqrt(radPt.X * radPt.X + radPt.Y * radPt.Y);
-        var radParam = new Parameter(rad);
+        var radParam = new Param("Radius", rad);
         var startAngle = Math.Atan2(_arcStart.Y - _arcCentre.Y, _arcStart.X - _arcCentre.X);
         var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
-        var startAngleParam = new Parameter(startAngle);
-        var endAngleParam = new Parameter(endAngle);
+        var startAngleParam = new Param("StartAngle", startAngle);
+        var endAngleParam = new Param("EndAngle", endAngle);
         var arc = new Arc(centre, radParam, startAngleParam, endAngleParam);
         var arcDraw = new UpdatableArcDrawer(arc);
         _drawables.Add(arcDraw);
@@ -247,7 +247,7 @@ public partial class Index
     if (_appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Circle)
     {
       _circCentre = _mouseDown;
-      var circle = new Circle(_circCentre.ToModel(), new Parameter(0));
+      var circle = new Circle(_circCentre.ToModel(), new Param("Radius",0));
       _tempCirc = new CircleDrawer(circle)
       {
         ShowPreview = true
@@ -277,8 +277,8 @@ public partial class Index
     // MouseDown[StartPt] --> drag [update preview] --> MouseUp[EndPt]
     if (_isMouseDown && _appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Line)
     {
-      _tempLine.Line.P2.X.Value = _currMouse.X;
-      _tempLine.Line.P2.Y.Value = _currMouse.Y;
+      _tempLine.Line.Point1.X.Value = _currMouse.X;
+      _tempLine.Line.Point1.Y.Value = _currMouse.Y;
     }
 
     // drawing arc
@@ -288,8 +288,8 @@ public partial class Index
       // dragging to arc start point
       if (_isMouseDown && _tempLine is not null)
       {
-        _tempLine.Line.P2.X.Value = _currMouse.X;
-        _tempLine.Line.P2.Y.Value = _currMouse.Y;
+        _tempLine.Line.Point1.X.Value = _currMouse.X;
+        _tempLine.Line.Point1.Y.Value = _currMouse.Y;
       }
 
       if (_arcCentre != Point.Empty &&
@@ -299,11 +299,11 @@ public partial class Index
         var centre = _arcCentre.ToModel();
         var radPt = _arcCentre - new Size(_arcStart);
         var rad = Math.Sqrt(radPt.X * radPt.X + radPt.Y * radPt.Y);
-        var radParam = new Parameter(rad);
+        var radParam = new Param("Radius", rad);
         var startAngle = Math.Atan2(_arcStart.Y - _arcCentre.Y, _arcStart.X - _arcCentre.X);
         var endAngle = Math.Atan2(_currMouse.Y - _arcCentre.Y, _currMouse.X - _arcCentre.X);
-        var startAngleParam = new Parameter(startAngle);
-        var endAngleParam = new Parameter(endAngle);
+        var startAngleParam = new Param("StartAngle", startAngle);
+        var endAngleParam = new Param("EndAngle", endAngle);
         var arc = new Arc(centre, radParam, startAngleParam, endAngleParam);
         _tempArc = new ArcDrawer(arc);
         _drawables.Add(_tempArc);
@@ -323,8 +323,10 @@ public partial class Index
     if (_isMouseDown && _appMode == ApplicationMode.Draw && _drawEnt == DrawableEntity.Circle)
     {
       var currMouse = new Point(_currMouse.X, _currMouse.Y);
-      var radVec = _tempCirc.Circle.Center - currMouse.ToModel();
-      _tempCirc.Circle.Rad.Value = radVec.Length;
+      var radVecX = _tempCirc.Circle.Centre.X.Value - currMouse.ToModel().X.Value;
+      var radVecY = _tempCirc.Circle.Centre.Y.Value - currMouse.ToModel().Y.Value;
+      var radVec = Math.Sqrt(radVecX * radVecX + radVecY * radVecY);
+      _tempCirc.Circle.Radius.Value = radVec;
     }
 
     // drag selected points
@@ -363,7 +365,7 @@ public partial class Index
     {
       // finish line
       var startPt = _lineStart.ToModel();
-      var endPt = new Model.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y);
+      var endPt = new Entities.Point(e.ClientX - CanvasPos.X, e.ClientY - CanvasPos.Y, 0);
       var line = new Line(startPt, endPt);
       var lineDrawer = new LineDrawer(line);
       _drawables.Add(lineDrawer);
@@ -391,8 +393,10 @@ public partial class Index
     {
       // finish circle
       var currMouse = new Point(_currMouse.X, _currMouse.Y);
-      var radVec = _tempCirc.Circle.Center - currMouse.ToModel();
-      var circle = new Circle(_circCentre.ToModel(), new Parameter(radVec.Length));
+      var radVecX = _tempCirc.Circle.Centre.X.Value - currMouse.ToModel().X.Value;
+      var radVecY = _tempCirc.Circle.Centre.Y.Value - currMouse.ToModel().Y.Value;
+      var radVec = Math.Sqrt(radVecX * radVecX + radVecY * radVecY);
+      var circle = new Circle(_circCentre.ToModel(), new Param("Radius", radVec));
       var circDrawer = new UpdatableCircleDrawer(circle);
       _drawables.Add(circDrawer);
 
@@ -518,7 +522,7 @@ public partial class Index
           return;
         }
 
-        BaseConstraint cons = null;
+        Constraint cons = null;
 
         if (selCircs.Count == 1 && selArcs.Count != 1)
         {
@@ -547,7 +551,7 @@ public partial class Index
           .Where(pt => pt.IsSelected)
           .ToList();
 
-        BaseConstraint cons = null;
+        Constraint cons = null;
 
         if (selPts.Count == 2)
         {
@@ -601,7 +605,7 @@ public partial class Index
           .Where(pt => pt.IsSelected)
           .ToList();
 
-        BaseConstraint cons = null;
+        Constraint cons = null;
 
         if (selPts.Count == 1)
         {
@@ -698,7 +702,7 @@ public partial class Index
           .Where(pt => pt.IsSelected)
           .ToList();
 
-        BaseConstraint cons = null;
+        Constraint cons = null;
 
         if (selPts.Count == 2)
         {
@@ -817,7 +821,7 @@ public partial class Index
       default:
         throw new ArgumentOutOfRangeException();
     }
-
+    
     _toaster.Add(_selConstraintType.ToString(), MatToastType.Info, "Added constraint");
   }
 
@@ -829,16 +833,20 @@ public partial class Index
 
   private void OnSolve()
   {
+    #if false
     var error = Solver.Solver.Solve(constraints: _constraints.ToArray());
     _toaster.Add($"Error: {error:E3}", MatToastType.Info, "Solver completed");
+    #endif
   }
 
   private void OnDeleteSelectedPointConstraint()
   {
+    #if false
     var selPt = _drawables
       .SelectMany(draw => draw.SelectionPoints)
       .Single(pt => pt.IsSelected);
     selPt.Point.X.Free = selPt.Point.Y.Free = true;
+    #endif
     _isPtFixed = false;
   }
 
