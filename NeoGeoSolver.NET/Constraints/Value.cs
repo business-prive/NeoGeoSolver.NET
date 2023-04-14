@@ -5,7 +5,6 @@ namespace NeoGeoSolver.NET.Constraints;
 public abstract class Value : Constraint
 {
   protected readonly Param value = new("value");
-  public bool Reference { get; set; }
 
   public double GetValue()
   {
