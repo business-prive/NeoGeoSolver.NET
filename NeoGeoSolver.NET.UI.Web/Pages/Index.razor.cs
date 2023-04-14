@@ -149,6 +149,7 @@ public partial class Index
       if (selPts.Count == 1)
       {
         var selPt = selPts.Single().Point;
+        #if false
         _isPtFixed = !selPt.X.Free && !selPt.Y.Free;
 
         // get all constraints associate with this point
@@ -156,6 +157,7 @@ public partial class Index
           .Where(cons => cons.Items.Contains(selPt));
         _selConstraints.Clear();
         _selConstraints.AddRange(selPtCons);
+        #endif
 
         _canShowPointConstraints = _canShowEntityConstraints = true;
       }
@@ -170,11 +172,13 @@ public partial class Index
         // get entity
         var selDrawEnt = selDraws.Single().Entity;
 
+        #if false
         // get all constraints associate with this entity
         var selDrawEntCons = _constraints
           .Where(cons => cons.Items.Contains(selDrawEnt));
         _selConstraints.Clear();
         _selConstraints.AddRange(selDrawEntCons);
+        #endif
 
         _canShowEntityConstraints = true;
       }
@@ -423,6 +427,7 @@ public partial class Index
 
   private void OnApply()
   {
+    #if false
     switch (_selConstraintType)
     {
       case ConstraintType.Free:
@@ -821,7 +826,7 @@ public partial class Index
       default:
         throw new ArgumentOutOfRangeException();
     }
-    
+    #endif
     _toaster.Add(_selConstraintType.ToString(), MatToastType.Info, "Added constraint");
   }
 
