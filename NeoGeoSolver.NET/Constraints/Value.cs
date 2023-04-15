@@ -33,10 +33,6 @@ public abstract class Value : Constraint
   public bool Satisfy()
   {
     var result = OnSatisfy();
-    if (!result)
-    {
-      // TODO   Debug.LogWarning(GetType() + " satisfy failed!");
-    }
 
     return result;
   }

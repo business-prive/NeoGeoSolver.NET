@@ -49,7 +49,6 @@ public abstract class Constraint
       var exprs = Equations.ToList();
 
       var curValue = exprs.Sum(e => Math.Abs(e.Eval()));
-      // TODO		Debug.Log(String.Format("check option {0} (min: {1}, cur: {2})\n", optionInternal, min_value, cur_value));
       if (minValue < 0.0 || curValue < minValue)
       {
         minValue = curValue;
@@ -58,6 +57,5 @@ public abstract class Constraint
     }
 
     optionInternal = (Enum) Enum.Parse(type, names[bestOption]);
-    // TODO		Debug.Log("best option = " + optionInternal.ToString());
   }
 }

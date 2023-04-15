@@ -197,7 +197,6 @@ public class ExpressionParser
     }
 
     var msg = error + " (error in \"" + str + "\")";
-    // TODO		Debug.Log(msg);
     throw new Exception(msg);
   }
 
