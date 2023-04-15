@@ -941,15 +941,15 @@ public partial class Index
 
     var line1 = selLines[0].Line;
     var line2 = selLines[1].Line;
-    // var cons = _selConstraintType switch
-    // {
-    //   ConstraintType.Parallel => line1.IsParallelTo(line2),
-    //   ConstraintType.Perpendicular => line1.IsPerpendicularTo(line2),
-    //   ConstraintType.Collinear => line1.IsCollinearTo(line2),
-    //   ConstraintType.EqualLength => line1.IsEqualInLengthTo(line2),
-    //   _ => throw new ArgumentOutOfRangeException()
-    // };
-    // _constraints.Add(cons);
+    var cons = _selConstraintType switch
+    {
+      ConstraintType.Parallel => line1.IsParallelTo(line2),
+      ConstraintType.Perpendicular => line1.IsPerpendicularTo(line2),
+      ConstraintType.Collinear => line1.IsCollinearTo(line2),
+      ConstraintType.EqualLength => line1.IsEqualInLengthTo(line2),
+      _ => throw new ArgumentOutOfRangeException()
+    };
+    _constraints.Add(cons);
     return false;
   }
 
