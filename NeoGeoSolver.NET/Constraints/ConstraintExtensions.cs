@@ -45,4 +45,11 @@ public static class ConstraintExtensions
     cons.SetValue(0);
     return cons;
   }
+  
+  public static Constraint IsConcentricWith(this Circle circle0, Circle circle1) => new CirclesConcentric(circle0, circle1);
+  public static Constraint IsEqualInRadiusTo(this Circle circle0, Circle circle1) => new CirclesEqualRadius(circle0, circle1);
+  public static Constraint IsConcentricWith(this Circle circle, Arc arc1) => new ArcCircleConcentric(arc1, circle);
+  public static Constraint IsEqualInRadiusTo(this Circle circle, Arc arc1) => new ArcCircleEqualRadius(arc1, circle);
+  public static Constraint IsConcentricWith(this Arc arc0, Arc arc1) => new ArcsConcentric(arc1, arc0);
+  public static Constraint IsEqualInRadiusTo(this Arc arc0, Arc arc1) => new ArcsEqualRadius(arc1, arc0);
 }

@@ -754,8 +754,8 @@ public partial class Index
     {
       cons = _selConstraintType switch
       {
-        // ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selCircs[1].Circle),
-        // ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selCircs[1].Circle),
+        ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selCircs[1].Circle),
+        ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selCircs[1].Circle),
         _ => throw new ArgumentOutOfRangeException()
       };
     }
@@ -764,8 +764,8 @@ public partial class Index
     {
       cons = _selConstraintType switch
       {
-        // ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selArcs[0].Arc),
-        // ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selArcs[0].Arc),
+        ConstraintType.Concentric => selCircs[0].Circle.IsConcentricWith(selArcs[0].Arc),
+        ConstraintType.EqualRadius => selCircs[0].Circle.IsEqualInRadiusTo(selArcs[0].Arc),
         _ => throw new ArgumentOutOfRangeException()
       };
     }
@@ -774,8 +774,8 @@ public partial class Index
     {
       cons = _selConstraintType switch
       {
-        // ConstraintType.Concentric => selArcs[0].Arc.IsConcentricWith(selArcs[1].Arc),
-        // ConstraintType.EqualRadius => selArcs[0].Arc.IsEqualInRadiusTo(selArcs[1].Arc),
+        ConstraintType.Concentric => selArcs[0].Arc.IsConcentricWith(selArcs[1].Arc),
+        ConstraintType.EqualRadius => selArcs[0].Arc.IsEqualInRadiusTo(selArcs[1].Arc),
         _ => throw new ArgumentOutOfRangeException()
       };
     }
