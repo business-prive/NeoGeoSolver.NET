@@ -82,4 +82,17 @@ public static class ConstraintExtensions
     cons.SetValue(dist);
     return cons;
   }
+
+  public static Constraint HasRadius(this Circle circle, int radius)
+  {
+    var cons = new CircleDiameter(circle);
+    cons.SetValue(2 * radius);
+    return cons;
+  }
+  public static Constraint HasRadius(this Arc arc, int radius)
+  {
+    var cons = new ArcRadius(arc);
+    cons.SetValue(radius);
+    return cons;
+  }
 }

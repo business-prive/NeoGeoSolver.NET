@@ -954,16 +954,16 @@ public partial class Index
 
   private void Apply_Radius()
   {
-    // var circCons = _drawables
-    //   .OfType<CircleDrawer>()
-    //   .Where(circ => circ.IsSelected)
-    //   .Select(circ => circ.Circle.HasRadius(_value));
-    // _constraints.AddRange(circCons);
-    // var arcCons = _drawables
-    //   .OfType<ArcDrawer>()
-    //   .Where(arc => arc.IsSelected)
-    //   .Select(arc => arc.Arc.HasRadius(_value));
-    // _constraints.AddRange(arcCons);
+    var circCons = _drawables
+      .OfType<CircleDrawer>()
+      .Where(circ => circ.IsSelected)
+      .Select(circ => circ.Circle.HasRadius(_value));
+    _constraints.AddRange(circCons);
+    var arcCons = _drawables
+      .OfType<ArcDrawer>()
+      .Where(arc => arc.IsSelected)
+      .Select(arc => arc.Arc.HasRadius(_value));
+    _constraints.AddRange(arcCons);
   }
 
   private void Apply_LineLength()
