@@ -673,11 +673,10 @@ public partial class Index
     var line1 = selLines[0].Line;
     var line2 = selLines[1].Line;
     var angleRad = _value * Math.PI / 180d;
-    var angle = new Param("angle", angleRad);
     var cons = _selConstraintType switch
     {
-      ConstraintType.InternalAngle => line1.HasInternalAngle(line2, angle),
-      ConstraintType.ExternalAngle => line1.HasExternalAngle(line2, angle),
+      ConstraintType.InternalAngle => line1.HasInternalAngle(line2, angleRad),
+      ConstraintType.ExternalAngle => line1.HasExternalAngle(line2, angleRad),
       _ => throw new ArgumentOutOfRangeException()
     };
     _constraints.Add(cons);
@@ -699,9 +698,9 @@ public partial class Index
       var selPt2 = selPts[1].Point;
       cons = _selConstraintType switch
       {
-        // ConstraintType.Distance => selPt1.HasDistance(selPt2, _value),
-        // ConstraintType.DistanceHorizontal => selPt1.HasDistanceHorizontal(selPt2, _value),
-        // ConstraintType.DistanceVertical => selPt1.HasDistanceVertical(selPt2, _value),
+        ConstraintType.Distance => selPt1.HasDistance(selPt2, _value),
+        // TODO  ConstraintType.DistanceHorizontal => selPt1.HasDistanceHorizontal(selPt2, _value),
+        // TODO  ConstraintType.DistanceVertical => selPt1.HasDistanceVertical(selPt2, _value),
         _ => throw new ArgumentOutOfRangeException()
       };
     }
@@ -719,9 +718,9 @@ public partial class Index
         var selLine = selLines.Single().Line;
         cons = _selConstraintType switch
         {
-          // ConstraintType.Distance => selPt.HasDistance(selLine, _value),
-          // ConstraintType.DistanceHorizontal => selPt.HasDistanceHorizontal(selLine, _value),
-          // ConstraintType.DistanceVertical => selPt.HasDistanceVertical(selLine, _value),
+          ConstraintType.Distance => selPt.HasDistance(selLine, _value),
+          // TODO   ConstraintType.DistanceHorizontal => selPt.HasDistanceHorizontal(selLine, _value),
+          // TODO   ConstraintType.DistanceVertical => selPt.HasDistanceVertical(selLine, _value),
           _ => throw new ArgumentOutOfRangeException()
         };
       }
@@ -813,11 +812,11 @@ public partial class Index
 
       if (selLines.Count == 1)
       {
-        // cons = selPt.IsCoincidentWithMidPoint(selLines.Single().Line);
+        // TODO   cons = selPt.IsCoincidentWithMidPoint(selLines.Single().Line);
       }
       else if (selArcs.Count == 1)
       {
-        // cons = selPt.IsCoincidentWithMidPoint(selArcs.Single().Arc);
+        // TODO   cons = selPt.IsCoincidentWithMidPoint(selArcs.Single().Arc);
       }
     }
 

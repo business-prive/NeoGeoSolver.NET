@@ -54,19 +54,32 @@ public static class ConstraintExtensions
   public static Constraint IsConcentricWith(this Arc arc0, Arc arc1) => new ArcsConcentric(arc1, arc0);
   public static Constraint IsEqualInRadiusTo(this Arc arc0, Arc arc1) => new ArcsEqualRadius(arc1, arc0);
 
-  public static Constraint HasInternalAngle(this Line line0, Line line1, Param angle)
+  public static Constraint HasInternalAngle(this Line line0, Line line1, double angle)
   {
     var cons = new LinesAngle(line0, line1);
-    cons.SetValue(angle.Value);
+    cons.SetValue(angle);
     return cons;
   }
-  public static Constraint HasExternalAngle(this Line line0, Line line1, Param angle)
+  public static Constraint HasExternalAngle(this Line line0, Line line1, double angle)
   {
     var cons = new LinesAngle(line0, line1)
     {
       Supplementary = true
     };
-    cons.SetValue(angle.Value);
+    cons.SetValue(angle);
+    return cons;
+  }
+
+  public static Constraint HasDistance(this Point pt0, Point pt1, int dist)
+  {
+    var cons = new PointsDistance(pt0, pt1);
+    cons.SetValue(dist);
+    return cons;
+  }
+  public static Constraint HasDistance(this Point pt, Line line, int dist)
+  {
+    var cons = new PointLineDistance(pt, line);
+    cons.SetValue(dist);
     return cons;
   }
 }
