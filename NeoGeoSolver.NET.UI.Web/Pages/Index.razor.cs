@@ -652,9 +652,9 @@ public partial class Index
     };
     var selPt = selPts.Single().Point;
     var selCirc = selCircs.Single().Circle;
-    // TODO   cons = new PointOnCircleQuadConstraint(selPt, selCirc, new Parameter(updatedQuad, false));
-    //
-    // _constraints.Add(cons);
+    cons = new PointOnCircleQuadConstraint(selPt, selCirc, updatedQuad);
+    
+    _constraints.Add(cons);
     return false;
   }
 
