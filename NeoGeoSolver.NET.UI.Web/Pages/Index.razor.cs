@@ -64,6 +64,7 @@ public partial class Index
 
   private ConstraintType _selConstraintType;
   private readonly List<Constraint> _constraints = new();
+  private readonly List<Param> _params = new();
 
   private bool _canShowPointConstraints;
   private bool _isPtFixed;
@@ -1008,7 +1009,8 @@ public partial class Index
   private void OnClearAll()
   {
     _constraints.Clear();
-    _toaster.Add("No constraints in system", MatToastType.Info, "Cleared constraints");
+    _params.Clear();
+    _toaster.Add("No constraints/params in system", MatToastType.Info, "Cleared all");
   }
 
   #endregion
@@ -1018,7 +1020,7 @@ public partial class Index
     var eqns = _constraints.SelectMany(cons => cons.Equations);
     var eqnSys = new EquationSystem();
     eqnSys.AddEquations(eqns);
-    // TODO   add parameters
+    eqnSys.AddParameters(_params);
     var result = eqnSys.Solve();
     _toaster.Add($"Result: {result}", MatToastType.Info, "Solver completed");
   }
