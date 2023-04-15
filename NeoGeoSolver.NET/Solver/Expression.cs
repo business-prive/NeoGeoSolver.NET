@@ -74,9 +74,11 @@ public class Expression
       return One;
     }
 
-    var result = new Expression();
-    result.Value = value;
-    result.op = Op.Const;
+    var result = new Expression
+    {
+      Value = value,
+      op = Op.Const
+    };
     return result;
   }
 
@@ -630,10 +632,12 @@ public class Expression
 
   public Expression DeepClone()
   {
-    var result = new Expression();
-    result.op = op;
-    result.param = param;
-    result.Value = Value;
+    var result = new Expression
+    {
+      op = op,
+      param = param,
+      Value = Value
+    };
     if (a != null)
     {
       result.a = a.DeepClone();

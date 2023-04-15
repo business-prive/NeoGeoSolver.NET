@@ -23,8 +23,10 @@ public abstract class Value : Constraint
 
   protected virtual bool OnSatisfy()
   {
-    var sys = new EquationSystem();
-    sys.revertWhenNotConverged = false;
+    var sys = new EquationSystem
+    {
+      revertWhenNotConverged = false
+    };
     sys.AddParameter(value);
     sys.AddEquations(Equations);
     return sys.Solve() == EquationSystem.SolveResult.Okay;
