@@ -968,11 +968,11 @@ public partial class Index
 
   private void Apply_LineLength()
   {
-    // var constraints = _drawables
-    //   .OfType<LineDrawer>()
-    //   .Where(ine => ine.IsSelected)
-    //   .Select(line => line.Line.HasLength(_value));
-    // _constraints.AddRange(constraints);
+    var constraints = _drawables
+      .OfType<LineDrawer>()
+      .Where(ine => ine.IsSelected)
+      .Select(line => line.Line.HasLength(_value));
+    _constraints.AddRange(constraints);
   }
 
   private void Apply_HorizontalVertical()

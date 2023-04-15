@@ -95,4 +95,10 @@ public static class ConstraintExtensions
     cons.SetValue(radius);
     return cons;
   }
+  public static Constraint HasLength(this Line line, int length)
+  {
+    var cons = new LineLength(line);
+    cons.SetValue(length);
+    return cons;
+  }
 }
