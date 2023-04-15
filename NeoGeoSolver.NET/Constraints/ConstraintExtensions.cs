@@ -7,14 +7,14 @@ public static class ConstraintExtensions
 {
   public static Constraint IsHorizontal(this Line line) => new LineHorizontalVertical(line, HorizontalVerticalOrientation.Oy);
   public static Constraint IsVertical(this Line line) => new LineHorizontalVertical(line, HorizontalVerticalOrientation.Ox);
-  
+
   public static Constraint IsTangentTo(this Line line, Circle circle)
   {
     var constr = new LineCircleDistance(line, circle);
     constr.SetValue(0);
     return constr;
   }
-  
+
   public static Constraint IsTangentTo(this Line line, Arc arc)
   {
     var constr = new LineArcDistance(line, arc);
@@ -28,25 +28,28 @@ public static class ConstraintExtensions
   public static Constraint IsEqualInLengthTo(this Line line0, Line line1) => new LinesEqualLength(line0, line1);
 
   public static Constraint IsCoincidentWithConstraint(this Point pt0, Point pt1) => new PointsCoincident(pt0, pt1);
+
   public static Constraint IsCoincidentWith(this Point pt0, Line line)
   {
     var cons = new PointLineDistance(pt0, line);
     cons.SetValue(0);
     return cons;
   }
+
   public static Constraint IsCoincidentWith(this Point pt0, Circle circle)
   {
     var cons = new PointCircleDistance(pt0, circle);
     cons.SetValue(0);
     return cons;
   }
+
   public static Constraint IsCoincidentWith(this Point pt0, Arc arc)
   {
     var cons = new PointArcDistance(pt0, arc);
     cons.SetValue(0);
     return cons;
   }
-  
+
   public static Constraint IsConcentricWith(this Circle circle0, Circle circle1) => new CirclesConcentric(circle0, circle1);
   public static Constraint IsEqualInRadiusTo(this Circle circle0, Circle circle1) => new CirclesEqualRadius(circle0, circle1);
   public static Constraint IsConcentricWith(this Circle circle, Arc arc1) => new ArcCircleConcentric(arc1, circle);
@@ -60,6 +63,7 @@ public static class ConstraintExtensions
     cons.SetValue(angle);
     return cons;
   }
+
   public static Constraint HasExternalAngle(this Line line0, Line line1, double angle)
   {
     var cons = new LinesAngle(line0, line1)
@@ -76,6 +80,7 @@ public static class ConstraintExtensions
     cons.SetValue(dist);
     return cons;
   }
+
   public static Constraint HasDistance(this Point pt, Line line, int dist)
   {
     var cons = new PointLineDistance(pt, line);
@@ -89,16 +94,32 @@ public static class ConstraintExtensions
     cons.SetValue(2 * radius);
     return cons;
   }
+
   public static Constraint HasRadius(this Arc arc, int radius)
   {
     var cons = new ArcRadius(arc);
     cons.SetValue(radius);
     return cons;
   }
+
   public static Constraint HasLength(this Line line, int length)
   {
     var cons = new LineLength(line);
     cons.SetValue(length);
+    return cons;
+  }
+
+  public static Constraint HasDistanceHorizontal(this Point pt0, Point pt1, int dist)
+  {
+    var cons = new PointsDistanceHorizontal(pt0, pt1);
+    cons.SetValue(dist);
+    return cons;
+  }
+
+  public static Constraint HasDistanceVertical(this Point pt0, Point pt1, int dist)
+  {
+    var cons = new PointsDistanceVertical(pt0, pt1);
+    cons.SetValue(dist);
     return cons;
   }
 }
