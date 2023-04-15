@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Excubo.Blazor.Canvas;
 using Excubo.Blazor.Canvas.Contexts;
@@ -10,16 +9,14 @@ using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Microsoft.VisualBasic;
 using NeoGeoSolver.NET.Constraints;
 using NeoGeoSolver.NET.Entities;
 using NeoGeoSolver.NET.Solver;
 using NeoGeoSolver.NET.UI.Web.Interface;
 using NeoGeoSolver.NET.UI.Web.Model;
+using Point = System.Drawing.Point;
 
 namespace NeoGeoSolver.NET.UI.Web.Pages;
-
-using Point = System.Drawing.Point;
 
 public partial class Index
 {
