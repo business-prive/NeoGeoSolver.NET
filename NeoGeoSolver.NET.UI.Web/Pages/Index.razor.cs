@@ -914,7 +914,7 @@ public partial class Index
 
     if (selCircs.Count != 1 && selArcs.Count == 1)
     {
-      // cons = selLines[0].Line.IsTangentTo(selArcs[0].Arc);
+      cons = selLines[0].Line.IsTangentTo(selArcs[0].Arc);
     }
 
     if (cons is null)

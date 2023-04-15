@@ -13,6 +13,13 @@ public static class ConstraintExtensions
     constr.SetValue(0);
     return constr;
   }
+  
+  public static LineArcDistance IsTangentTo(this Line line, Arc arc)
+  {
+    var constr = new LineArcDistance(line, arc);
+    constr.SetValue(0);
+    return constr;
+  }
 
   public static Perpendicular IsPerpendicularTo(this Line line0, Line line1) => new Perpendicular(line0, line1);
 
