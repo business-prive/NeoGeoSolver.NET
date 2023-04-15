@@ -515,9 +515,14 @@ public partial class Index
     switch (_selConstraintType)
     {
       case ConstraintType.Free:
+      {
+        Apply_Free();
+      }
+        break;
+
       case ConstraintType.Fixed:
       {
-        Apply_FixedFree();
+        Apply_Fixed();
       }
         break;
 
@@ -996,14 +1001,27 @@ public partial class Index
     _constraints.AddRange(constraints);
   }
 
-  private void Apply_FixedFree()
+  private void Apply_Fixed()
   {
-    // var isFree = _selConstraintType == ConstraintType.Free;
-    // _drawables
-    //   .SelectMany(draw => draw.SelectionPoints)
-    //   .Where(pt => pt.IsSelected)
-    //   .ToList()
-    //   .ForEach(pt => pt.Point.X.Free = pt.Point.Y.Free = isFree);
+    _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList()
+      .ForEach(pt =>
+      {
+        _params.Remove(pt.Point.X);
+        _params.Remove(pt.Point.Y);
+        _params.Remove(pt.Point.Z);
+      });
+  }
+
+  private void Apply_Free()
+  {
+    _drawables
+      .SelectMany(draw => draw.SelectionPoints)
+      .Where(pt => pt.IsSelected)
+      .ToList()
+      .ForEach(pt => _params.AddRange(new[] {pt.Point.X, pt.Point.Y, pt.Point.Z}));
   }
 
   private void OnClearAll()
