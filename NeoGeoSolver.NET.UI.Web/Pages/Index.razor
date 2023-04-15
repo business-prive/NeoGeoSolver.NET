@@ -94,10 +94,10 @@
               </MatExpansionPanelSummary>
               <MatExpansionPanelDetails Style="@(_canShowPointConstraints ? "" : "visibility: hidden")">
                 <MatCheckbox
-                  @bind-Value="@_isPtFixed"
-                  Label="Fixed"
+                  @bind-Value="@_isPtFree"
+                  Label="Free"
                   Disabled="true"/>
-                <MatIconButton OnClick="OnDeleteSelectedPointConstraint" Outlined="true" Icon="clear" Disabled="!_isPtFixed"/>
+                <MatIconButton OnClick="OnDeleteSelectedPointConstraint" Outlined="true" Icon="clear" Disabled="!_isPtFree"/>
               </MatExpansionPanelDetails>
             </MatExpansionPanel>
 

@@ -67,7 +67,7 @@ public partial class Index
   private readonly List<Param> _params = new();
 
   private bool _canShowPointConstraints;
-  private bool _isPtFixed;
+  private bool _isPtFree;
 
   private bool _canShowEntityConstraints;
   private readonly List<Constraint> _selConstraints = new();
@@ -262,7 +262,9 @@ public partial class Index
     if (selPts.Count == 1)
     {
       var selPt = selPts.Single().Point;
-      _isPtFixed = _constraints.All(cons => !cons.Entities.Contains(selPt));
+      _isPtFree = _params.Contains(selPt.X) &&
+                   _params.Contains(selPt.Y) &&
+                   _params.Contains(selPt.Z);
 
       // get all constraints associate with this point
       var selPtCons = _constraints
@@ -1048,10 +1050,10 @@ public partial class Index
     var selPt = _drawables
       .SelectMany(draw => draw.SelectionPoints)
       .Single(pt => pt.IsSelected);
-#if false
-    selPt.Point.X.Free = selPt.Point.Y.Free = true;
-#endif
-    _isPtFixed = false;
+    _ = _params.Remove(selPt.Point.X);
+    _ = _params.Remove(selPt.Point.Y);
+    _ = _params.Remove(selPt.Point.Z);
+    _isPtFree = true;
   }
 
   private void OnDeleteSelectedEntityConstraint(Constraint cons)
