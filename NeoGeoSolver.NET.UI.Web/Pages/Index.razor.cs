@@ -263,8 +263,8 @@ public partial class Index
     {
       var selPt = selPts.Single().Point;
       _isPtFree = _params.Contains(selPt.X) &&
-                   _params.Contains(selPt.Y) &&
-                   _params.Contains(selPt.Z);
+                  _params.Contains(selPt.Y) &&
+                  _params.Contains(selPt.Z);
 
       // get all constraints associate with this point
       var selPtCons = _constraints
@@ -517,113 +517,95 @@ public partial class Index
     switch (_selConstraintType)
     {
       case ConstraintType.Free:
-      {
         Apply_Free();
-      }
         break;
 
       case ConstraintType.Fixed:
-      {
         Apply_Fixed();
-      }
         break;
 
       case ConstraintType.Vertical:
       case ConstraintType.Horizontal:
-      {
         Apply_HorizontalVertical();
-      }
         break;
 
       case ConstraintType.LineLength:
-      {
         Apply_LineLength();
-      }
         break;
 
       case ConstraintType.RadiusValue:
-      {
         Apply_Radius();
-      }
         break;
 
       case ConstraintType.Parallel:
       case ConstraintType.Perpendicular:
       case ConstraintType.Collinear:
       case ConstraintType.EqualLength:
-      {
         if (Apply_ParallelPerpendicularCollinearEqualLength())
         {
           return;
         }
-      }
+
         break;
 
       case ConstraintType.Tangent:
-      {
         if (Apply_Tangent())
         {
           return;
         }
-      }
+
         break;
 
       case ConstraintType.Coincident:
-      {
         if (Apply_Coincident())
         {
           return;
         }
-      }
+
         break;
 
       case ConstraintType.CoincidentMidPoint:
-      {
         if (Apply_CoincidentMidPoint())
         {
           return;
         }
-      }
+
         break;
 
       case ConstraintType.Concentric:
       case ConstraintType.EqualRadius:
-      {
         if (Apply_ConcentricEqualRadius())
         {
           return;
         }
-      }
+
         break;
 
       case ConstraintType.Distance:
       case ConstraintType.DistanceHorizontal:
       case ConstraintType.DistanceVertical:
-      {
         if (Apply_DistanceHorizontalVertical())
         {
           return;
         }
-      }
+
         break;
 
       case ConstraintType.InternalAngle:
       case ConstraintType.ExternalAngle:
-      {
         if (Apply_InternalExternalAngle())
         {
           return;
         }
-      }
+
         break;
 
       case ConstraintType.OnQuadrant:
-      {
         if (Apply_OnQuadrant())
         {
           return;
         }
-      }
+
         break;
 
       default:
