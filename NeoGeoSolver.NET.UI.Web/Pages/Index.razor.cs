@@ -673,14 +673,14 @@ public partial class Index
     var line1 = selLines[0].Line;
     var line2 = selLines[1].Line;
     var angleRad = _value * Math.PI / 180d;
-    // var angle = new Parameter(angleRad, false);
-    // var cons = _selConstraintType switch
-    // {
-    //   ConstraintType.InternalAngle => line1.HasInternalAngle(line2, angle),
-    //   ConstraintType.ExternalAngle => line1.HasExternalAngle(line2, angle),
-    //   _ => throw new ArgumentOutOfRangeException()
-    // };
-    // _constraints.Add(cons);
+    var angle = new Param("angle", angleRad);
+    var cons = _selConstraintType switch
+    {
+      ConstraintType.InternalAngle => line1.HasInternalAngle(line2, angle),
+      ConstraintType.ExternalAngle => line1.HasExternalAngle(line2, angle),
+      _ => throw new ArgumentOutOfRangeException()
+    };
+    _constraints.Add(cons);
     return false;
   }
 
