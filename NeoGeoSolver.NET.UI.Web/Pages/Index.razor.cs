@@ -842,7 +842,7 @@ public partial class Index
 
     if (selPts.Count == 2)
     {
-      // cons = selPts[0].Point.IsCoincidentWith(selPts[1].Point);
+      cons = selPts[0].Point.IsCoincidentWithConstraint(selPts[1].Point);
     }
 
     if (selPts.Count == 1)
@@ -862,16 +862,16 @@ public partial class Index
         .ToList();
 
       if (selLines.Count == 1)
-      {
-        // cons = selPt.IsCoincidentWith(selLines.Single().Line);
+      { 
+        cons = selPt.IsCoincidentWith(selLines.Single().Line);
       }
       else if (selCircs.Count == 1)
       {
-        // cons = selPt.IsCoincidentWith(selCircs.Single().Circle);
+        cons = selPt.IsCoincidentWith(selCircs.Single().Circle);
       }
       else if (selArcs.Count == 1)
       {
-        // cons = selPt.IsCoincidentWith(selArcs.Single().Arc);
+        cons = selPt.IsCoincidentWith(selArcs.Single().Arc);
       }
     }
 
