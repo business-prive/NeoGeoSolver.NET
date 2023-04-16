@@ -812,7 +812,7 @@ public partial class Index
 
       if (selLines.Count == 1)
       {
-        // TODO   cons = selPt.IsCoincidentWithMidPoint(selLines.Single().Line);
+        cons = selPt.IsCoincidentWithMidPoint(selLines.Single().Line);
       }
       else if (selArcs.Count == 1)
       {

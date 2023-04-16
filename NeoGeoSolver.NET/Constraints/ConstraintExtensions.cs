@@ -122,4 +122,7 @@ public static class ConstraintExtensions
     cons.SetValue(dist);
     return cons;
   }
+
+  public static Constraint IsCoincidentWithMidPoint(this Point point, Line line) => new PointOnLineMidpoint(point, line);
 }
+
