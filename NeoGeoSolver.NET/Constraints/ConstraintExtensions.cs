@@ -124,5 +124,6 @@ public static class ConstraintExtensions
   }
 
   public static Constraint IsCoincidentWithMidPoint(this Point point, Line line) => new PointOnLineMidpoint(point, line);
+  public static Constraint IsCoincidentWithMidPoint(this Point point, Arc arc) => new PointOnArcMidpoint(point, arc);
 }
 

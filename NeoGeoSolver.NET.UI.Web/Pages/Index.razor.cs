@@ -653,7 +653,7 @@ public partial class Index
     var selPt = selPts.Single().Point;
     var selCirc = selCircs.Single().Circle;
     cons = new PointOnCircleQuadConstraint(selPt, selCirc, updatedQuad);
-    
+
     _constraints.Add(cons);
     return false;
   }
@@ -816,7 +816,7 @@ public partial class Index
       }
       else if (selArcs.Count == 1)
       {
-        // TODO   cons = selPt.IsCoincidentWithMidPoint(selArcs.Single().Arc);
+        cons = selPt.IsCoincidentWithMidPoint(selArcs.Single().Arc);
       }
     }
 
@@ -861,7 +861,7 @@ public partial class Index
         .ToList();
 
       if (selLines.Count == 1)
-      { 
+      {
         cons = selPt.IsCoincidentWith(selLines.Single().Line);
       }
       else if (selCircs.Count == 1)
