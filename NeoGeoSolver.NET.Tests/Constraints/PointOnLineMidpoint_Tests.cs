@@ -25,5 +25,4 @@ public sealed class PointOnLineMidpoint_Tests
       point.Y.Value.Should().BeApproximately(5, 1e-6);
     }
   }
-  
 }
