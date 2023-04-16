@@ -1,5 +1,4 @@
 # NeoGeoSolver
-
 ![screenshot-ui](docs/screenshot.png)
 
 This project provdes a geometric constraint solver for CAD systems
@@ -10,12 +9,22 @@ as a set of reusable C# components.
 
 ## Getting started
 ```bash
+# clone repo
 $ git clone https://github.com/TrevorDArcyEvans/NeoGeoSolver.NET.git
+
+# build
 $ cd NeoGeoSolver.NET
 $ dotnet restore
 $ dotnet build
+
+# run tests
 $ dotnet test
+
+# run UI
+$ cd NeoGeoSolver.NET.UI.Web
+$ dotnet run
 ```
+open [NeoGeoSolver.NET](https://localhost:5051/)
 
 ## Supported constraints
 * arc circle concentric
@@ -30,6 +39,17 @@ $ dotnet test
 * point on arc
 * point on circle
 * point to line distance
+* point to point vertical distance
+* point to point horizontal distance
+* point to line vertical distance
+* point to line horizontal distance
+* point on midpoint of a line
+* point on midpoint of an arc
+* point on a quadrant point of a circle
+  * +x (parameter = 0)
+  * +y (parameter = 1)
+  * -x (parameter = 2)
+  * -y (parameter = 3)
 * circles concentric
 * circle diameter
 * circles equal diameter
@@ -46,14 +66,11 @@ $ dotnet test
 * equal value (might be useful?)
 
 ## Unsupported constraints
-* point to point vertical distance
-* point to point horizontal distance
-* point to line vertical distance
-* point to line horizontal distance
+all done for the moment
 
 ## Further work
 * ~~change arc definition to centre-radius-start_angle-end_angle~~
-* implement unsupported constraints
+* ~~implement unsupported constraints~~
 * ~~remove unused constraints~~
   * ~~tangent (use line-entity distance with zero distance)~~
   * ~~point on (use point-entity distance with zero distance)~~
@@ -64,7 +81,8 @@ $ dotnet test
   * ~~ellipse + ellipsearc (not normally used in CAD)~~
 * ~~more unit tests for solver~~
   * ~~multiple constraints~~
-* portable UI aka test harness
+* ~~portable UI aka test harness~~
+* document solver internals
 
 ## Further information
 * [Geometric constraint solving - Wikipedia](https://en.wikipedia.org/wiki/Geometric_constraint_solving)
@@ -80,7 +98,6 @@ $ dotnet test
 * [SketchSolve.NET](https://github.com/TrevorDArcyEvans/SketchSolve.NET)
 
 ## Acknowledgements
-
 This repository was forked from [BimCAD](https://github.com/BimCad-online/BimCADOnline) which
 in turn was forked from [NoteCAD](https://github.com/NoteCAD/NoteCAD);
 which I suspect was based on [geosolver-python](https://github.com/imuli/geosolver-python)
