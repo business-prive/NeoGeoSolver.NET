@@ -125,5 +125,18 @@ public static class ConstraintExtensions
 
   public static Constraint IsCoincidentWithMidPoint(this Point point, Line line) => new PointOnLineMidpoint(point, line);
   public static Constraint IsCoincidentWithMidPoint(this Point point, Arc arc) => new PointOnArcMidpoint(point, arc);
+
+  public static Constraint HasDistanceHorizontal(this Point point, Line line, int dist)
+  {
+    var cons = new PointLineDistanceHorizontal(point, line);
+    cons.SetValue(dist);
+    return cons;
+  }
+  public static Constraint HasDistanceVertical(this Point point, Line line, int dist)
+  {
+    var cons = new PointLineDistanceVertical(point, line);
+    cons.SetValue(dist);
+    return cons;
+  }
 }
 

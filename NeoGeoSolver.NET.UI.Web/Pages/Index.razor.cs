@@ -719,8 +719,8 @@ public partial class Index
         cons = _selConstraintType switch
         {
           ConstraintType.Distance => selPt.HasDistance(selLine, _value),
-          // TODO   ConstraintType.DistanceHorizontal => selPt.HasDistanceHorizontal(selLine, _value),
-          // TODO   ConstraintType.DistanceVertical => selPt.HasDistanceVertical(selLine, _value),
+          ConstraintType.DistanceHorizontal => selPt.HasDistanceHorizontal(selLine, _value),
+          ConstraintType.DistanceVertical => selPt.HasDistanceVertical(selLine, _value),
           _ => throw new ArgumentOutOfRangeException()
         };
       }
