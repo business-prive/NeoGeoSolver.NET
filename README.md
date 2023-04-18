@@ -7,6 +7,9 @@ as a set of reusable C# components.
 ## Prerequisites
 * .NET 7
 
+### Optional
+* Docker
+
 ## Getting started
 ```bash
 # clone repo
@@ -25,6 +28,13 @@ $ cd NeoGeoSolver.NET.UI.Web
 $ dotnet run
 ```
 open [NeoGeoSolver.NET](https://localhost:5051/)
+
+### Docker
+```bash
+$ docker build -t neo-geo-solver .
+$ docker run -p 5051:80 neo-geo-solver
+```
+open [NeoGeoSolver.NET](http://localhost:5051/)
 
 ## Supported constraints
 * arc circle concentric
@@ -82,6 +92,7 @@ all done for the moment
 * ~~more unit tests for solver~~
   * ~~multiple constraints~~
 * ~~portable UI aka test harness~~
+* ~~support Docker~~
 * document solver internals
 
 ## Further information
