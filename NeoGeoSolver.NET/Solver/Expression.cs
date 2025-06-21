@@ -659,4 +659,70 @@ public class Expression
   {
     return op;
   }
+
+  public override bool Equals(object obj)
+  {
+    if (ReferenceEquals(this, obj))
+      return true;
+  
+    if (obj is not Expression other)
+      return false;
+  
+    if (op != other.op)
+      return false;
+  
+    switch (op)
+    {
+      case Op.Const:
+        return Value.Equals(other.Value);
+  
+      case Op.Param:
+        return param == other.param;
+  
+      case Op.Neg:
+      case Op.Pos:
+      case Op.Sin:
+      case Op.Cos:
+      case Op.ASin:
+      case Op.ACos:
+      case Op.Sqrt:
+      case Op.Sqr:
+      case Op.Abs:
+      case Op.Sign:
+      case Op.Exp:
+      case Op.Sinh:
+      case Op.Cosh:
+      case Op.SFres:
+      case Op.CFres:
+        return Equals(a, other.a);
+  
+      case Op.Add:
+      case Op.Sub:
+      case Op.Mul:
+      case Op.Div:
+      case Op.Atan2:
+        return Equals(a, other.a) && Equals(b, other.b);
+  
+      case Op.Undefined:
+      default:
+        return true;
+    }
+  }
+  
+  public static bool operator ==(Expression left, Expression right)
+  {
+    if (ReferenceEquals(left, right))
+      return true;
+  
+    if (left is null || right is null)
+      return false;
+  
+    return left.Equals(right);
+  }
+  
+  public static bool operator !=(Expression left, Expression right)
+  {
+    return !(left == right);
+  }
+  
 }

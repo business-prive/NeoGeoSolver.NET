@@ -334,4 +334,35 @@ public class EquationSystem
 
     return SolveResult.DidntConvege;
   }
+
+    public bool IsParameterConstrained(Param p)
+    {
+        int parameterIndex = _parameters.IndexOf(p);
+        if (parameterIndex == -1) return true;
+        double[,] jacobian = (double[,])_a.Clone();
+
+        int rows = jacobian.GetLength(0);
+        int cols = jacobian.GetLength(1);
+
+        double[,] AFull = (double[,])jacobian.Clone();
+        int rankFull = GaussianMethod.Rank(AFull);
+
+        double[,] AReduced = new double[rows, cols - 1];
+        for (int r = 0; r < rows; r++)
+        {
+            int colOffset = 0;
+            for (int c = 0; c < cols; c++)
+            {
+                if (c == parameterIndex)
+                {
+                    colOffset = 1;
+                    continue;
+                }
+                AReduced[r, c - colOffset] = jacobian[r, c];
+            }
+        }
+
+        int rankReduced = GaussianMethod.Rank(AReduced);
+        return rankReduced < rankFull;
+    }
 }
